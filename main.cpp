@@ -2,25 +2,37 @@
 #include <QDebug>
 #include <QString>
 
+#include "commandhandler.h"
+#include "hardwarecontroller.h"
+
 extern "C" {
 #include "webserver.h"
 }
 
-QString g_String;
+static CommandHandler* g_Handler = 0;
 
 const char* handlePost(const char* data, int len, int* respLen)
 {
-    qDebug() << data;
+    static QByteArray respData;
 
-    g_String = "{\"data\" : \"2\"}";
+    if (g_Handler)
+    {
+        respData = g_Handler->parseCommand(QByteArray(data, len));
+    }
 
-    *respLen = g_String.length();
-    return g_String.toLatin1().data();
+    *respLen = respData.length();
+    return respData.data();
 }
 
 int main(int argc, char *argv[])
 {
+    HardwareController hardwareControl;
+    g_Handler = new CommandHandler(&hardwareControl);
+
     int i = serverMain(argc, argv, handlePost);
+
+    delete g_Handler;
+
     return i;
 }
 

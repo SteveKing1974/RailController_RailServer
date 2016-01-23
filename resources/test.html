@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Slider - Vertical slider</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  
+  <script>
+
+    function sliderChanged(value) {
+    $( "#radio" ).buttonset("option", "disabled", value!=0);
+    $( "#amount" ).val( value + 10);
+    var a = $("#radio1").prop("checked")
+    $.post( "setValue",
+        { "func": "setValue", "value": value, "forward": $("#radio1").prop("checked"), "backward": $("#radio2").prop("checked") },
+        function( data ) {
+              console.log( data );
+            }, "json")
+            .fail(function() {
+                    console.log( "error" );
+                    });
+    $( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
+    }
+
+  $(function() {
+    $( "#radio" ).buttonset().buttonset('option', 'disabled', true );
+  });
+
+
+  $(function() {
+    $( "#slider-vertical" ).slider({
+      orientation: "vertical",
+      range: "min",
+      min: 0,
+      max: 100,
+      value: 60,
+	
+      slide: function( event, ui ) {
+        sliderChanged(ui.value)
+    },
+      change: function( event, ui ) {
+        sliderChanged(ui.value)
+    }
+  })
+  });
+
+  </script>
+</head>
+<body>
+ 
+<p>
+  <label for="amount">Volume:</label>
+  <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+</p>
+<p>
+<div id="slider-vertical" style="height:200px;"></div>
+</p>
+ <p>
+   <div id="radio">
+    <input type="radio" id="radio1" name="radio"><label for="radio1">Forward</label>
+    <input type="radio" id="radio2" name="radio"><label for="radio2">Backward</label>
+  </div>
+</p>
+
+ 
+
+</body>
+</html>
