@@ -9,38 +9,16 @@
   
   <script>
 
-    function sliderChanged(value) {
-    $( "#radio" ).buttonset("option", "disabled", value!=0);
+        function handlerServerData(data) {
+                                    console.log( "success ", data.direction, data.directionEnabled);
+                                    $("#forwardButton").prop("checked", data.direction == 0)
+                                    $("#backwardButton").prop("checked", data.direction == 1)
+                                    $("#forwardButton").prop("disabled", data.directionEnabled!=true)
+                                    $("#backwardButton").prop("disabled", data.directionEnabled!=true)
 
-    var a = $("#radio1").prop("checked")
-    $.ajax({
-        type: "GET",
-        url: "/railControl?",
-        data: { "func": "setValue", "value": value, "forward": $("#radio1").prop("checked"), "backward": $("#radio2").prop("checked") },
-        dataType:"json",
-        success: function(data, textStatus, jqXHR) { console.log( "success " + data); },
-        error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
-    });
-//    $.put( "setValue",
-//        { "func": "setValue", "value": value, "forward": $("#radio1").prop("checked"), "backward": $("#radio2").prop("checked") },
-//        function( data ) {
-//              console.log( data );
-//            }, "json")
-//            .fail(function() {
-//                    console.log( "error" );
-//                    });
-    $( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
-    }
-
-   function getInitValue() {
-                    $.ajax({
-                              type: "GET",
-                              url: "/railControl/controller1",
-                              dataType:"json",
-                              success: function(data, textStatus, jqXHR) {
-                                    console.log( "success " + data.speed);
-                                    $( "#radio" ).buttonset().buttonset('option', 'disabled', data.speed>0 );
+                                    //$( "#radio" ).buttonset().buttonset('option', 'disabled', data.directionEnabled!=true );
                                     $( "#amount" ).val( data.speed );
+
                                     $( "#slider-vertical" ).slider({
                                       orientation: "vertical",
                                       range: "min",
@@ -56,7 +34,27 @@
                                         sliderChanged(ui.value)
                                     }
                                   });
-                                },
+                                }
+
+    function sliderChanged(value) {
+        $.ajax({
+            type: "PUT",
+            url: "/railControl/outerLoop",
+            data: { "speed": value, "direction": $("#forwardButton").prop("checked") ? 0 : 1 },
+            dataType:"json",
+            success: function(data, textStatus, jqXHR) { handlerServerData(data); },
+            error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+        });
+    }
+
+   function getInitValue() {
+                    $.ajax({
+                              type: "GET",
+                              url: "/railControl/outerLoop",
+                              dataType:"json",
+                              success: function(data, textStatus, jqXHR) {
+                                    handlerServerData(data);
+                                    },
                               error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
                           });
                      }
@@ -71,7 +69,7 @@
 <body>
  
 <p>
-  <label for="amount">Volume:</label>
+  <label for="amount">Speed:</label>
   <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
 </p>
 <p>
@@ -79,8 +77,8 @@
 </p>
  <p>
    <div id="radio">
-    <input type="radio" id="radio1" name="radio"><label for="radio1">Forward</label>
-    <input type="radio" id="radio2" name="radio"><label for="radio2">Backward</label>
+    <input type="radio" id="forwardButton" name="radio"><label for="radio1">Forward</label>
+    <input type="radio" id="backwardButton" name="radio"><label for="radio2">Backward</label>
   </div>
 </p>
 

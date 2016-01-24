@@ -1,7 +1,7 @@
 #include "speedcontroller.h"
 
 SpeedController::SpeedController() :
-    m_Direction(SpeedController::eSpeedForward),
+    m_Direction(SpeedController::eSpeedBackward),
     m_Speed(0)
 {
 

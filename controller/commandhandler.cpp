@@ -13,9 +13,30 @@ QByteArray CommandHandler::getCommand(const QByteArray &url)
 {
     const QList<QByteArray> splitPath = url.split('/');
 
-    qDebug() << splitPath;
+    QJsonObject obj;
 
-    return QByteArray("{\"speed\" : \"0\"}");
+    if (splitPath.length()>2)
+    {
+        const SpeedController* pCtrl = m_pController->getController(splitPath.at(2));
+
+        if (pCtrl != 0)
+        {
+            obj.insert("speed", pCtrl->speed());
+            obj.insert("direction", pCtrl->direction());
+            obj.insert("directionEnabled", pCtrl->speed()==0);
+            obj.insert("speedEnabled", true);
+        }
+        else
+        {
+            obj.insert("error", QString("Invalid controller: " + splitPath.at(2)));
+        }
+    }
+    else
+    {
+        obj.insert("error", QString("Badly formed path: " + url));
+    }
+
+    return QJsonDocument(obj).toJson();
 }
 
 QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &data)

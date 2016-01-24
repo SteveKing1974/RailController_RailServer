@@ -2,7 +2,7 @@
 #define HARDWARECONTROLLER_H
 
 #include <QObject>
-#include <QStringList>
+#include <QByteArray>
 #include <QHash>
 #include "pointcontroller.h"
 #include "speedcontroller.h"
@@ -14,19 +14,19 @@ public:
     explicit HardwareController(QObject *parent = 0);
     ~HardwareController();
 
-    QStringList allPoints() const;
-    QStringList allControllers() const;
+    QList<QByteArray> allPoints() const;
+    QList<QByteArray> allControllers() const;
 
-    PointController* getPoint(const QString& name) const;
-    SpeedController* getController(const QString& name) const;
+    PointController* getPoint(const QByteArray& name) const;
+    SpeedController* getController(const QByteArray& name) const;
 
 signals:
 
 public slots:
 
 private:
-    QHash<QString, PointController*> m_Points;
-    QHash<QString, SpeedController*> m_Controllers;
+    QHash<QByteArray, PointController*> m_Points;
+    QHash<QByteArray, SpeedController*> m_Controllers;
 };
 
 #endif // HARDWARECONTROLLER_H

@@ -47,17 +47,17 @@ HardwareController::~HardwareController()
     qDeleteAll(m_Controllers);
 }
 
-QStringList HardwareController::allPoints() const
+QList<QByteArray> HardwareController::allPoints() const
 {
     return m_Points.keys();
 }
 
-QStringList HardwareController::allControllers() const
+QList<QByteArray> HardwareController::allControllers() const
 {
     return m_Controllers.keys();
 }
 
-PointController *HardwareController::getPoint(const QString &name) const
+PointController *HardwareController::getPoint(const QByteArray &name) const
 {
     if (m_Points.contains(name))
     {
@@ -67,7 +67,7 @@ PointController *HardwareController::getPoint(const QString &name) const
     return 0;
 }
 
-SpeedController *HardwareController::getController(const QString &name) const
+SpeedController *HardwareController::getController(const QByteArray &name) const
 {
     if (m_Controllers.contains(name))
     {
