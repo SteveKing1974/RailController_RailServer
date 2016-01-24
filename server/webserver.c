@@ -243,11 +243,39 @@ int CRYPTO_thread_setup();
 void CRYPTO_thread_cleanup();
 
 push_callback g_PushFunc = 0;
-int wildcard_handler(struct soap* soap)
+get_callback g_GetFunc = 0;
+
+int myGetHandler(struct soap* soap)
 {
     const char *buf;
     size_t len;
 
+    buf = soap_get_http_body(soap, &len);
+
+    if (g_GetFunc!=0)
+    {
+        const char* outbuf;
+        size_t outLen;
+
+        outbuf = g_GetFunc(soap->path, buf, len, &outLen);
+        soap_response(soap, SOAP_FILE);
+        soap->http_content = "application/json"; // a jpeg image
+        soap_send(soap, outbuf);
+    }
+    else
+    {
+        soap_response(soap, SOAP_ERR);
+    }
+
+    soap_end_send(soap);
+
+    return SOAP_OK;
+}
+
+int myHandler(struct soap* soap)
+{
+    const char *buf;
+    size_t len;
 
     buf = soap_get_http_body(soap, &len);
 
@@ -256,7 +284,7 @@ int wildcard_handler(struct soap* soap)
         const char* outbuf;
         size_t outLen;
 
-        outbuf = g_PushFunc(buf, len, &outLen);
+        outbuf = g_PushFunc(strncmp("POST", soap->msgbuf, 4)==0, soap->path, buf, len, &outLen);
         soap_response(soap, SOAP_FILE);
         soap->http_content = "application/json"; // a jpeg image
         soap_send(soap, outbuf);
@@ -273,7 +301,7 @@ int wildcard_handler(struct soap* soap)
 
 struct http_post_handlers myhandlers[] =
 {
-    { "*",       wildcard_handler },
+    { "*",       myHandler },
     { NULL }
 };
 
@@ -318,13 +346,14 @@ SOAP_FMAC5 int SOAP_FMAC6 soap_serve(struct soap *soap)
  *
 \******************************************************************************/
 
-int serverMain(int argc, char **argv, push_callback handlerFunc)
+int serverMain(int argc, char **argv, push_callback handlerFunc, get_callback getHandler)
 {
     struct soap soap;
     SOAP_SOCKET master;
     int port = 0;
 
     g_PushFunc = handlerFunc;
+    g_GetFunc = getHandler;
 
     start = time(NULL);
 
@@ -824,6 +853,8 @@ int http_get_handler(struct soap *soap)
     if (options[OPTION_v].selected)
         fprintf(stderr, "HTTP GET Request '%s' to host '%s' path '%s'\n", soap->endpoint, soap->host, soap->path);
     /* Note: soap->path always starts with '/' */
+    if (!strncmp(soap->path, "/railControl", 12))
+        return myGetHandler(soap);
     if (strchr(soap->path + 1, '/') || strchr(soap->path + 1, '\\'))	/* we don't like snooping in dirs */
         return 403; /* HTTP forbidden */
     if (!soap_tag_cmp(soap->path, "*.html"))
@@ -838,8 +869,6 @@ int http_get_handler(struct soap *soap)
         return copy_file(soap, soap->path + 1, "image/png");
     if (!soap_tag_cmp(soap->path, "*.ico"))
         return copy_file(soap, soap->path + 1, "image/ico");
-    if (!strncmp(soap->path, "/calc?", 6))
-        return calcget(soap);
     if (!strncmp(soap->path, "/genivia", 8))
     { (SOAP_SNPRINTF(soap->endpoint, sizeof(soap->endpoint), strlen(soap->path) + 10), "http://genivia.com%s", soap->path + 8); /* redirect */
         return 307; /* Temporary Redirect */

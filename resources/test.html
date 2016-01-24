@@ -11,39 +11,59 @@
 
     function sliderChanged(value) {
     $( "#radio" ).buttonset("option", "disabled", value!=0);
-    $( "#amount" ).val( value + 10);
+
     var a = $("#radio1").prop("checked")
-    $.post( "setValue",
-        { "func": "setValue", "value": value, "forward": $("#radio1").prop("checked"), "backward": $("#radio2").prop("checked") },
-        function( data ) {
-              console.log( data );
-            }, "json")
-            .fail(function() {
-                    console.log( "error" );
-                    });
+    $.ajax({
+        type: "GET",
+        url: "/railControl?",
+        data: { "func": "setValue", "value": value, "forward": $("#radio1").prop("checked"), "backward": $("#radio2").prop("checked") },
+        dataType:"json",
+        success: function(data, textStatus, jqXHR) { console.log( "success " + data); },
+        error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+    });
+//    $.put( "setValue",
+//        { "func": "setValue", "value": value, "forward": $("#radio1").prop("checked"), "backward": $("#radio2").prop("checked") },
+//        function( data ) {
+//              console.log( data );
+//            }, "json")
+//            .fail(function() {
+//                    console.log( "error" );
+//                    });
     $( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
     }
 
-  $(function() {
-    $( "#radio" ).buttonset().buttonset('option', 'disabled', true );
-  });
+   function getInitValue() {
+                    $.ajax({
+                              type: "GET",
+                              url: "/railControl/controller1",
+                              dataType:"json",
+                              success: function(data, textStatus, jqXHR) {
+                                    console.log( "success " + data.speed);
+                                    $( "#radio" ).buttonset().buttonset('option', 'disabled', data.speed>0 );
+                                    $( "#amount" ).val( data.speed );
+                                    $( "#slider-vertical" ).slider({
+                                      orientation: "vertical",
+                                      range: "min",
+                                      min: 0,
+                                      max: 100,
+                                      value:   data.speed
+                                ,
+
+                                      slide: function( event, ui ) {
+                                        sliderChanged(ui.value)
+                                    },
+                                      change: function( event, ui ) {
+                                        sliderChanged(ui.value)
+                                    }
+                                  });
+                                },
+                              error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+                          });
+                     }
 
 
   $(function() {
-    $( "#slider-vertical" ).slider({
-      orientation: "vertical",
-      range: "min",
-      min: 0,
-      max: 100,
-      value: 60,
-	
-      slide: function( event, ui ) {
-        sliderChanged(ui.value)
-    },
-      change: function( event, ui ) {
-        sliderChanged(ui.value)
-    }
-  })
+    getInitValue()
   });
 
   </script>
