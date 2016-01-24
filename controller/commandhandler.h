@@ -8,12 +8,14 @@ class CommandHandler
 public:
     CommandHandler(HardwareController* pControl);
 
-    QByteArray getCommand(const QByteArray& url);
+    QByteArray getCommand(const QByteArray& url) const;
 
-    QByteArray putCommand(const QByteArray& url, const QByteArray& data);
+    QByteArray putCommand(const QByteArray& url, const QByteArray& data) const;
 
 private:
     HardwareController* m_pController;
+
+    SpeedController *controllerFromUrl(const QByteArray &url, QJsonObject &obj) const;
 };
 
 #endif // COMMANDHANDLER_H

@@ -9,22 +9,17 @@ CommandHandler::CommandHandler(HardwareController *pControl) :
 {
 }
 
-QByteArray CommandHandler::getCommand(const QByteArray &url)
+SpeedController* CommandHandler::controllerFromUrl(const QByteArray& url, QJsonObject& obj) const
 {
     const QList<QByteArray> splitPath = url.split('/');
 
-    QJsonObject obj;
-
     if (splitPath.length()>2)
     {
-        const SpeedController* pCtrl = m_pController->getController(splitPath.at(2));
+        SpeedController* pCtrl = m_pController->getController(splitPath.at(2));
 
         if (pCtrl != 0)
         {
-            obj.insert("speed", pCtrl->speed());
-            obj.insert("direction", pCtrl->direction());
-            obj.insert("directionEnabled", pCtrl->speed()==0);
-            obj.insert("speedEnabled", true);
+            return pCtrl;
         }
         else
         {
@@ -36,20 +31,54 @@ QByteArray CommandHandler::getCommand(const QByteArray &url)
         obj.insert("error", QString("Badly formed path: " + url));
     }
 
+    return 0;
+}
+
+QByteArray CommandHandler::getCommand(const QByteArray &url) const
+{
+    QJsonObject obj;
+
+    const SpeedController* pCtrl = controllerFromUrl(url, obj);
+
+    if (pCtrl != 0)
+    {
+        obj.insert("speed", pCtrl->speed());
+        obj.insert("direction", pCtrl->direction());
+        obj.insert("directionEnabled", pCtrl->speed()==0);
+        obj.insert("speedEnabled", true);
+    }
+
     return QJsonDocument(obj).toJson();
 }
 
-QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &data)
+QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &data) const
 {
-    QByteArray copyOfCommand = data;
-    copyOfCommand.replace("=", "\": \"");
-    copyOfCommand.replace("&", "\" , \"");
-    copyOfCommand.push_front("{ \"");
-    copyOfCommand.push_back("\" }");
-    QJsonDocument doc = QJsonDocument::fromJson(copyOfCommand);
+    QJsonObject obj;
 
-    qDebug() << doc.toJson() << url;
-    return QByteArray("{\"data\" : \"2\"}");
+    SpeedController* pCtrl = controllerFromUrl(url, obj);
+
+    if (pCtrl != 0)
+    {
+        QByteArray copyOfCommand = data;
+        copyOfCommand.replace("=", "\": \"");
+        copyOfCommand.replace("&", "\" , \"");
+        copyOfCommand.push_front("{ \"");
+        copyOfCommand.push_back("\" }");
+        QJsonDocument doc = QJsonDocument::fromJson(copyOfCommand);
+
+        qDebug() << doc.toJson() << doc.object().value("speed").toString().toInt();
+        pCtrl->setSpeed(doc.object().value("speed").toString().toInt());
+        pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(doc.object().value("direction").toString().toInt()));
+
+
+        obj.insert("speed", pCtrl->speed());
+        obj.insert("direction", pCtrl->direction());
+        obj.insert("directionEnabled", pCtrl->speed()==0);
+        obj.insert("speedEnabled", true);
+    }
+
+    qDebug() << QJsonDocument(obj).toJson();
+    return QJsonDocument(obj).toJson();
 }
 
 
