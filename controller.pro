@@ -9,11 +9,12 @@ TEMPLATE = app
 
 #DEFINES += WITH_NONAMESPACES
 
-GSOAPDIR = ../../../../Code/gsoap-2.8/gsoap
+GSOAPDIR = ../../gsoap-2.8/gsoap
 
 INCLUDEPATH += $$GSOAPDIR/plugin \
                 ./server \
-                ./controller
+                ./controller \
+                /usr/local/include
 
 SOURCES += ./server/webserver.c \
             ./server/options.c \
@@ -39,6 +40,10 @@ SOURCES += main.cpp
 *pi*: {
     target.path = /home/pi/Rail
     INSTALLS += target
+
+    conf.files=./resources/test.html
+    conf.path=/home/pi/Rail
+    INSTALLS+=conf
 
     INCLUDEPATH += ./wiringPi/wiringPi/
 
