@@ -10,7 +10,7 @@ public:
         eSpeedBackward
     };
 
-    SpeedController();
+    SpeedController(int in1, int in2, int pwm);
 
     bool setDirection(SpeedDirection dir);
     SpeedDirection direction() const;
@@ -21,6 +21,10 @@ public:
 private:
     SpeedDirection m_Direction;
     int m_Speed;
+
+    const int m_In1;
+    const int m_In2;
+    const int m_PWM;
 };
 
 #endif // SPEEDCONTROLLER_H

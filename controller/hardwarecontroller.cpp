@@ -1,44 +1,108 @@
 #include "hardwarecontroller.h"
 #include "wiringPi.h"
 #include "mcp23s17.h"
+#include "softPwm.h"
 
-const int k_IOExtenderA = 128;
-const int k_IOExtenderB = k_IOExtenderA + 16;
-const int k_IOExtenderC = k_IOExtenderB + 16;
+const int k_PortsPerExtender = 16;
+enum {
+    CONTROLLER1_IN1 = 5,
+    CONTROLLER1_IN2 = 6,
+    CONTROLLER1_PWM = 13,
 
+    CONTROLLER2_IN1 = 19,
+    CONTROLLER2_IN2 = 26,
+    CONTROLLER2_PWM = 12,
+
+    CONTROLLER3_IN1 = 16,
+    CONTROLLER3_IN2 = 20,
+    CONTROLLER3_PWM = 21,
+
+    CONTROLLER1_2_STDBY = 23,
+    CONTROLLER3_4_STDBY = 24,
+
+    EXTENDERA       = 128,
+    RELAY_1         = EXTENDERA,
+    RELAY_2,
+    RELAY_3,
+    RELAY_4,
+    RELAY_5,
+    RELAY_6,
+    RELAY_7,
+    RELAY_8,
+    RELAY_9,
+    RELAY_10,
+    RELAY_11,
+    RELAY_12,
+    RELAY_13,
+    RELAY_14,
+    RELAY_15,
+    RELAY_16,
+
+    EXTENDERB       = EXTENDERA + k_PortsPerExtender,
+    RELAY_17        = EXTENDERB,
+    RELAY_18,
+    RELAY_19,
+    RELAY_20,
+    RELAY_21,
+    RELAY_22,
+    RELAY_23,
+    RELAY_24,
+    RELAY_25,
+    RELAY_26,
+    RELAY_27,
+    RELAY_28,
+    RELAY_29,
+    RELAY_30,
+    RELAY_31,
+    RELAY_32,
+
+    EXTENDERC       = EXTENDERB + k_PortsPerExtender,
+    RELAY_33        = EXTENDERC,
+    RELAY_34,
+    RELAY_35,
+    RELAY_36,
+    RELAY_37,
+    RELAY_38,
+    RELAY_39,
+    RELAY_40
+};
 HardwareController::HardwareController(QObject *parent) : QObject(parent)
 {
     wiringPiSetup () ;
-    mcp23s17Setup(k_IOExtenderA, 0, 0);
-    mcp23s17Setup(k_IOExtenderB, 0, 1);
-    mcp23s17Setup(k_IOExtenderC, 0, 2);
+    mcp23s17Setup(EXTENDERA, 0, 0);
+    mcp23s17Setup(EXTENDERB, 0, 1);
+    mcp23s17Setup(EXTENDERC, 0, 2);
 
-    for (int i=0; i<16; i++)
-    {
-        pinMode (k_IOExtenderA + i, OUTPUT) ;
-        digitalWrite (k_IOExtenderA + i, HIGH);
-    }
+    // Put controllers into standby until setup is done
+    pinMode(CONTROLLER1_2_STDBY, OUTPUT);
+    digitalWrite(CONTROLLER1_2_STDBY, LOW);
+    pinMode(CONTROLLER3_4_STDBY, OUTPUT);
+    digitalWrite(CONTROLLER3_4_STDBY, LOW);
 
-    m_Controllers.insert("outerLoop", new SpeedController);
-    m_Controllers.insert("innerLoop", new SpeedController);
-    m_Controllers.insert("station", new SpeedController);
+    m_Controllers.insert("outerLoop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM));
+    m_Controllers.insert("innerLoop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM));
+    m_Controllers.insert("station", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM));
 
 
-    m_Points.insert("innerStationSwitch", new PointController("innerStationSwitch", k_IOExtenderA, k_IOExtenderA + 1));
-    m_Points.insert("innerSwitchLeft", new PointController("innerSwitchLeft", k_IOExtenderA + 2, k_IOExtenderA + 3));
-    m_Points.insert("innerSwitchRight", new PointController("innerSwitchRight", k_IOExtenderA + 4, k_IOExtenderA + 5));
-    m_Points.insert("leftSidingSwitch", new PointController("leftSidingSwitch", k_IOExtenderA + 6, k_IOExtenderA + 7));
-    m_Points.insert("leftSidingSwitch2", new PointController("leftSidingSwitch2", k_IOExtenderA + 8, k_IOExtenderA + 9));
-    m_Points.insert("outerSwitchLeft", new PointController("outerSwitchLeft", k_IOExtenderA + 10, k_IOExtenderA + 11));
-    m_Points.insert("outerSwitchRight", new PointController("outerSwitchRight", k_IOExtenderA + 12, k_IOExtenderA + 13));
-    m_Points.insert("rightSidingSwitch2", new PointController("rightSidingSwitch2", k_IOExtenderA + 14, k_IOExtenderA + 15));
+    m_Points.insert("innerStationSwitch", new PointController("innerStationSwitch", RELAY_1, RELAY_2));
+    m_Points.insert("innerSwitchLeft", new PointController("innerSwitchLeft", RELAY_3, RELAY_4));
+    m_Points.insert("innerSwitchRight", new PointController("innerSwitchRight", RELAY_5, RELAY_6));
+    m_Points.insert("leftSidingSwitch", new PointController("leftSidingSwitch", RELAY_7, RELAY_8));
+    m_Points.insert("leftSidingSwitch2", new PointController("leftSidingSwitch2", RELAY_9, RELAY_10));
+    m_Points.insert("outerSwitchLeft", new PointController("outerSwitchLeft", RELAY_11, RELAY_12));
+    m_Points.insert("outerSwitchRight", new PointController("outerSwitchRight", RELAY_13, RELAY_14));
+    m_Points.insert("rightSidingSwitch2", new PointController("rightSidingSwitch2", RELAY_15, RELAY_16));
 
-    m_Points.insert("stationInnerLoopSwitchLeft", new PointController("stationInnerLoopSwitchLeft", k_IOExtenderB, k_IOExtenderB + 1));
-    m_Points.insert("stationInnerLoopSwitchRight", new PointController("stationInnerLoopSwitchRight", k_IOExtenderB + 2, k_IOExtenderB + 3));
-    m_Points.insert("stationOuterEntrance", new PointController("stationOuterEntrance", k_IOExtenderB + 4, k_IOExtenderB + 5));
-    m_Points.insert("stationOuterLoopSwitchLeft", new PointController("stationOuterLoopSwitchLeft", k_IOExtenderB + 6, k_IOExtenderB + 7));
-    m_Points.insert("stationOuterSidingPoints", new PointController("stationOuterSidingPoints", k_IOExtenderB + 8, k_IOExtenderB + 9));
-    m_Points.insert("stationOuterToInner", new PointController("stationOuterToInner", k_IOExtenderB + 10, k_IOExtenderB + 11));
+    m_Points.insert("stationInnerLoopSwitchLeft", new PointController("stationInnerLoopSwitchLeft", RELAY_17, RELAY_18));
+    m_Points.insert("stationInnerLoopSwitchRight", new PointController("stationInnerLoopSwitchRight", RELAY_19, RELAY_20));
+    m_Points.insert("stationOuterEntrance", new PointController("stationOuterEntrance", RELAY_21, RELAY_22));
+    m_Points.insert("stationOuterLoopSwitchLeft", new PointController("stationOuterLoopSwitchLeft", RELAY_23, RELAY_24));
+    m_Points.insert("stationOuterSidingPoints", new PointController("stationOuterSidingPoints", RELAY_25, RELAY_26));
+    m_Points.insert("stationOuterToInner", new PointController("stationOuterToInner", RELAY_27, RELAY_28));
+
+    // Controllers can come out of standby now
+    digitalWrite(CONTROLLER1_2_STDBY, HIGH);
+    digitalWrite(CONTROLLER3_4_STDBY, HIGH);
 }
 
 HardwareController::~HardwareController()

@@ -8,7 +8,14 @@ PointController::PointController() :
     m_PowerLine(-1),
     m_ControlLine(-1)
 {
+    if (m_PowerLine>=0 && m_ControlLine>=0)
+    {
+        pinMode (m_PowerLine, OUTPUT) ;
+        digitalWrite (m_PowerLine, HIGH);
 
+        pinMode (m_ControlLine, OUTPUT) ;
+        digitalWrite (m_ControlLine, HIGH);
+    }
 }
 
 PointController::PointController(const QString &name, int powerLine, int controlLine) :
