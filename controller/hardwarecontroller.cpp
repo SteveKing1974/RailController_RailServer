@@ -17,6 +17,10 @@ enum {
     CONTROLLER3_IN2 = 20,
     CONTROLLER3_PWM = 21,
 
+    CONTROLLER4_IN1 = 18,
+    CONTROLLER4_IN2 = 23,
+    CONTROLLER4_PWM = 24,
+
     CONTROLLER1_2_STDBY = 23,
     CONTROLLER3_4_STDBY = 24,
 
@@ -81,24 +85,25 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
 
     m_Controllers.insert("outerLoop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM));
     m_Controllers.insert("innerLoop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM));
-    m_Controllers.insert("station", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM));
+    m_Controllers.insert("stationOuter", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM));
+    m_Controllers.insert("stationInner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM));
 
 
-    m_Points.insert("innerStationSwitch", new PointController("innerStationSwitch", RELAY_1, RELAY_2));
-    m_Points.insert("innerSwitchLeft", new PointController("innerSwitchLeft", RELAY_3, RELAY_4));
-    m_Points.insert("innerSwitchRight", new PointController("innerSwitchRight", RELAY_5, RELAY_6));
-    m_Points.insert("leftSidingSwitch", new PointController("leftSidingSwitch", RELAY_7, RELAY_8));
-    m_Points.insert("leftSidingSwitch2", new PointController("leftSidingSwitch2", RELAY_9, RELAY_10));
-    m_Points.insert("outerSwitchLeft", new PointController("outerSwitchLeft", RELAY_11, RELAY_12));
-    m_Points.insert("outerSwitchRight", new PointController("outerSwitchRight", RELAY_13, RELAY_14));
-    m_Points.insert("rightSidingSwitch2", new PointController("rightSidingSwitch2", RELAY_15, RELAY_16));
+    m_Points.insert("innerStationSwitch", new PointController(RELAY_1, RELAY_2));
+    m_Points.insert("innerSwitchLeft", new PointController(RELAY_3, RELAY_4));
+    m_Points.insert("innerSwitchRight", new PointController(RELAY_5, RELAY_6));
+    m_Points.insert("leftSidingSwitch", new PointController(RELAY_7, RELAY_8));
+    m_Points.insert("leftSidingSwitch2", new PointController(RELAY_9, RELAY_10));
+    m_Points.insert("outerSwitchLeft", new PointController(RELAY_11, RELAY_12));
+    m_Points.insert("outerSwitchRight", new PointController(RELAY_13, RELAY_14));
+    m_Points.insert("rightSidingSwitch2", new PointController(RELAY_15, RELAY_16));
 
-    m_Points.insert("stationInnerLoopSwitchLeft", new PointController("stationInnerLoopSwitchLeft", RELAY_17, RELAY_18));
-    m_Points.insert("stationInnerLoopSwitchRight", new PointController("stationInnerLoopSwitchRight", RELAY_19, RELAY_20));
-    m_Points.insert("stationOuterEntrance", new PointController("stationOuterEntrance", RELAY_21, RELAY_22));
-    m_Points.insert("stationOuterLoopSwitchLeft", new PointController("stationOuterLoopSwitchLeft", RELAY_23, RELAY_24));
-    m_Points.insert("stationOuterSidingPoints", new PointController("stationOuterSidingPoints", RELAY_25, RELAY_26));
-    m_Points.insert("stationOuterToInner", new PointController("stationOuterToInner", RELAY_27, RELAY_28));
+    m_Points.insert("stationInnerLoopSwitchLeft", new PointController(RELAY_17, RELAY_18));
+    m_Points.insert("stationInnerLoopSwitchRight", new PointController(RELAY_19, RELAY_20));
+    m_Points.insert("stationOuterEntrance", new PointController(RELAY_21, RELAY_22));
+    m_Points.insert("stationOuterLoopSwitchLeft", new PointController(RELAY_23, RELAY_24));
+    m_Points.insert("stationOuterRightSiding1", new PointController(RELAY_25, RELAY_26));
+    m_Points.insert("stationOuterLoopSwitchRight", new PointController(RELAY_27, RELAY_28));
 
     // Controllers can come out of standby now
     digitalWrite(CONTROLLER1_2_STDBY, HIGH);

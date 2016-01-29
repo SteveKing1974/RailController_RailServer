@@ -25,7 +25,10 @@ SOURCES += ./server/webserver.c \
             $$GSOAPDIR/stdsoap2.c \
             ./server/soapC.c \
     controller/speedcontroller.cpp \
-    controller/commandhandler.cpp
+    controller/commandhandler.cpp \
+    controller/layoutnode.cpp \
+    controller/switchcontroller.cpp \
+    controller/panelboard.cpp
 
 SOURCES +=  ./controller/hardwarecontroller.cpp \
             ./controller/pointcontroller.cpp
@@ -33,7 +36,10 @@ SOURCES +=  ./controller/hardwarecontroller.cpp \
 HEADERS +=  ./controller/hardwarecontroller.h \
             ./controller/pointcontroller.h \
     controller/speedcontroller.h \
-    controller/commandhandler.h
+    controller/commandhandler.h \
+    controller/layoutnode.h \
+    controller/switchcontroller.h \
+    controller/panelboard.h
 
 SOURCES += main.cpp
 

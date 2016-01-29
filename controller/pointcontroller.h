@@ -12,12 +12,13 @@ public:
     };
 
     PointController();
-    PointController(const QString& name, int powerLine, int controlLine);
+    PointController(int powerLine, int controlLine);
 
-    void setDirection(PointController::PointDirection dir) const;
+    void setDirection(PointController::PointDirection dir);
+    PointController::PointDirection direction() const;
 
 private:
-    const QString m_Name;
+    PointDirection m_Direction;
     const int m_PowerLine;
     const int m_ControlLine;
 };

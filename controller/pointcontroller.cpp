@@ -4,7 +4,7 @@
 
 #include <QDebug>
 PointController::PointController() :
-    m_Name(),
+    m_Direction(ePointLeft),
     m_PowerLine(-1),
     m_ControlLine(-1)
 {
@@ -18,20 +18,22 @@ PointController::PointController() :
     }
 }
 
-PointController::PointController(const QString &name, int powerLine, int controlLine) :
-    m_Name(name),
+PointController::PointController(int powerLine, int controlLine) :
+    m_Direction(ePointLeft),
     m_PowerLine(powerLine),
     m_ControlLine(controlLine)
 {
     digitalWrite (m_PowerLine, HIGH);
 }
 
-void PointController::setDirection(PointController::PointDirection dir) const
+void PointController::setDirection(PointController::PointDirection dir)
 {
-    if (m_Name.isEmpty() || m_PowerLine<0 || m_ControlLine<0)
+    if (m_PowerLine<0 || m_ControlLine<0)
     {
         return;
     }
+
+    m_Direction = dir;
 
     const int val = (dir == ePointLeft) ? HIGH : LOW;
     qDebug() << "Set control:" << val;
@@ -42,5 +44,10 @@ void PointController::setDirection(PointController::PointDirection dir) const
     delay(500);
     qDebug() << "Set power high";
     digitalWrite (m_PowerLine, HIGH);
+}
+
+PointController::PointDirection PointController::direction() const
+{
+    return m_Direction;
 }
 
