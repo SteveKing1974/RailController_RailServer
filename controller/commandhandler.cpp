@@ -4,8 +4,9 @@
 
 #include <QDebug>
 
-CommandHandler::CommandHandler(HardwareController *pControl) :
-    m_pController(pControl)
+CommandHandler::CommandHandler(HardwareController *pControl, PanelBoard* pPanel) :
+    m_pController(pControl),
+    m_pPanel(pPanel)
 {
 }
 
@@ -36,16 +37,54 @@ SpeedController* CommandHandler::controllerFromUrl(const QByteArray& url, QJsonO
 
 QByteArray CommandHandler::getCommand(const QByteArray &url) const
 {
+    const QList<QByteArray> splitPath = url.split('/');
+
     QJsonObject obj;
 
-    const SpeedController* pCtrl = controllerFromUrl(url, obj);
-
-    if (pCtrl != 0)
+    if (splitPath.length()>=2)
     {
-        obj.insert("speed", pCtrl->speed());
-        obj.insert("direction", pCtrl->direction());
-        obj.insert("directionEnabled", pCtrl->speed()==0);
-        obj.insert("speedEnabled", true);
+        const QString commandName(splitPath.at(1));
+
+        if (commandName.compare("panel", Qt::CaseInsensitive))
+        {
+            const QList<QByteArray> keys = m_pPanel->allNodes();
+            foreach (const QByteArray& key, keys)
+            {
+                obj.insert(key, m_pPanel->getLightState(key));
+            }
+
+        }
+        else if (commandName.compare("controller", Qt::CaseInsensitive))
+        {
+            if (splitPath.length()>=3)
+            {
+                SpeedController* pCtrl = m_pController->getController(splitPath.at(2));
+
+                if (pCtrl != 0)
+                {
+                    obj.insert("speed", pCtrl->speed());
+                    obj.insert("direction", pCtrl->direction());
+                    obj.insert("directionEnabled", pCtrl->speed()==0);
+                    obj.insert("speedEnabled", true);
+                }
+                else
+                {
+                    obj.insert("error", QString("Invalid controller: " + splitPath.at(2)));
+                }
+            }
+            else
+            {
+                obj.insert("error", QString("Missing controller name"));
+            }
+        }
+        else
+        {
+            obj.insert("error", QString("Unknown object: " + commandName));
+        }
+    }
+    else
+    {
+        obj.insert("error", QString("Badly formed path: " + url));
     }
 
     return QJsonDocument(obj).toJson();

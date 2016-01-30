@@ -39,7 +39,8 @@ HEADERS +=  ./controller/hardwarecontroller.h \
     controller/commandhandler.h \
     controller/layoutnode.h \
     controller/switchcontroller.h \
-    controller/panelboard.h
+    controller/panelboard.h \
+    dummyWiringPi/softPwm.h
 
 SOURCES += main.cpp
 

@@ -2,11 +2,12 @@
 #define COMMANDHANDLER_H
 
 #include "hardwarecontroller.h"
+#include "panelboard.h"
 
 class CommandHandler
 {
 public:
-    CommandHandler(HardwareController* pControl);
+    CommandHandler(HardwareController* pControl, PanelBoard *pPanel);
 
     QByteArray getCommand(const QByteArray& url) const;
 
@@ -14,6 +15,7 @@ public:
 
 private:
     HardwareController* m_pController;
+    PanelBoard* m_pPanel;
 
     SpeedController *controllerFromUrl(const QByteArray &url, QJsonObject &obj) const;
 };

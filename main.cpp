@@ -4,6 +4,7 @@
 
 #include "commandhandler.h"
 #include "hardwarecontroller.h"
+#include "panelboard.h"
 
 extern "C" {
 #include "webserver.h"
@@ -41,7 +42,8 @@ const char* handleGet(const char* url, const char* , int , int* respLen)
 int main(int argc, char *argv[])
 {
     HardwareController hardwareControl;
-    g_Handler = new CommandHandler(&hardwareControl);
+    PanelBoard panelBoard(&hardwareControl);
+    g_Handler = new CommandHandler(&hardwareControl, &panelBoard);
 
     int i = serverMain(argc, argv, handlePost, handleGet);
 

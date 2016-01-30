@@ -123,17 +123,114 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     stationSidingLeft2->setNext(pCtrl->getPoint("outerSwitchLeft"), dummyLeftBetweenPoints, 0);
     stationSidingLeft3->setNext(pCtrl->getPoint("outerSwitchLeft"), 0, dummyLeftBetweenPoints);
 
-    //LayoutNode* pOuterController = new LayoutCon;
-    //m_ControlNodes.insert()
+    m_AllNodes.insert("dummyOuter", dummyOuter);
+    m_AllNodes.insert("outerRight", outerRight);
+    m_AllNodes.insert("outerLeft", outerLeft);
+    m_AllNodes.insert("outerCenter", outerCenter);
+    m_AllNodes.insert("outerToInnerLeft", outerToInnerLeft);
+    m_AllNodes.insert("outerToInnerRight", outerToInnerRight);
+
+    m_AllNodes.insert("dummyInner", dummyInner);
+    m_AllNodes.insert("innerBetweenPoints", innerBetweenPoints);
+    m_AllNodes.insert("innerRight", innerRight);
+    m_AllNodes.insert("innerLeft", innerLeft);
+    m_AllNodes.insert("innerCenter", innerCenter);
+    m_AllNodes.insert("innerToStation", innerToStation);
+
+    m_AllNodes.insert("dummyStationOuter", dummyStationOuter);
+    m_AllNodes.insert("stationOuterBetweenPoints", stationOuterBetweenPoints);
+    m_AllNodes.insert("stationOuterRight", stationOuterRight);
+    m_AllNodes.insert("stationOuterLeft", stationOuterLeft);
+    m_AllNodes.insert("stationOuterCenter", stationOuterCenter);
+    m_AllNodes.insert("stationSidingRight1", stationSidingRight1);
+    m_AllNodes.insert("dummyRightBetweenSidings", dummyRightBetweenSidings);
+
+    m_AllNodes.insert("stationSidingRight2", stationSidingRight2);
+    m_AllNodes.insert("stationSidingRight3", stationSidingRight3);
+    m_AllNodes.insert("stationOuterToInnerLeft", stationOuterToInnerLeft);
+    m_AllNodes.insert("stationOuterToInnerRight", stationOuterToInnerRight);
+
+    m_AllNodes.insert("dummyStationInner", dummyStationInner);
+    m_AllNodes.insert("stationInnerRight", stationInnerRight);
+    m_AllNodes.insert("stationInnerCenter", stationInnerCenter);
+    m_AllNodes.insert("dummyLeftBetweenPoints", dummyLeftBetweenPoints);
+    m_AllNodes.insert("stationSidingLeft1", stationSidingLeft1);
+    m_AllNodes.insert("dummyLeftBetweenSidings", dummyLeftBetweenSidings);
+    m_AllNodes.insert("stationSidingLeft2", stationSidingLeft2);
+    m_AllNodes.insert("stationSidingLeft3", stationSidingLeft3);
+
+    LayoutNode* pOuterController = new LayoutNode();
+    LayoutNode* pInnerController = new LayoutNode();
+    LayoutNode* pOuterStationController = new LayoutNode();
+    LayoutNode* pInnerStationController = new LayoutNode();
+
+    pOuterController->setNext(dummyOuter);
+    pOuterController->setNext(outerCenter);
+
+    pInnerController->setNext(dummyInner);
+    pInnerController->setNext(innerCenter);
+
+    pOuterStationController->setNext(dummyStationOuter);
+    pOuterStationController->setNext(stationOuterCenter);
+
+    pInnerStationController->setNext(dummyStationInner);
+    pInnerStationController->setNext(stationInnerCenter);
+
+    m_ControlNodes.insert(pCtrl->getController("outerLoop"), pOuterController);
+    m_ControlNodes.insert(pCtrl->getController("innerLoop"), pInnerController);
+    m_ControlNodes.insert(pCtrl->getController("stationOuter"), pOuterStationController);
+    m_ControlNodes.insert(pCtrl->getController("stationInner"), pInnerStationController);
+}
+
+PanelBoard::~PanelBoard()
+{
+    qDeleteAll(m_AllNodes);
+    qDeleteAll(m_ControlNodes);
 }
 
 void PanelBoard::refresh()
 {
+    QHash<QByteArray, LayoutNode*>::iterator i = m_AllNodes.begin();
+    while (i!=m_AllNodes.end())
+    {
+        i.value()->setState(0);
+        ++i;
+    }
 
+    QHash<SpeedController*, LayoutNode*>::iterator ctrl = m_ControlNodes.begin();
+    while (ctrl!=m_ControlNodes.end())
+    {
+        const int id = ctrl.key()->id();
+        updateNode(ctrl.value()->next(), id);
+        updateNode(ctrl.value()->prev(), id);
+        ++ctrl;
+    }
 }
 
 int PanelBoard::getLightState(const QByteArray &lightName) const
 {
+    if (m_AllNodes.contains(lightName))
+    {
+        return m_AllNodes.value(lightName)->state();
+    }
 
+    return 0;
+}
+
+QList<QByteArray> PanelBoard::allNodes() const
+{
+    return m_AllNodes.keys();
+}
+
+void PanelBoard::updateNode(LayoutNode *pNode, int value)
+{
+    if (pNode)
+    {
+        if (pNode->state()!=value)
+        {
+            updateNode(pNode->next(), value);
+            updateNode(pNode->prev(), value);
+        }
+    }
 }
 

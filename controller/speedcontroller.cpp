@@ -2,12 +2,13 @@
 #include "wiringPi.h"
 #include "softPwm.h"
 
-SpeedController::SpeedController(int in1, int in2, int pwm) :
+SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID) :
     m_Direction(SpeedController::eSpeedBackward),
     m_Speed(0),
     m_In1(in1),
     m_In2(in2),
-    m_PWM(pwm)
+    m_PWM(pwm),
+    m_ID(controllerID)
 {
     pinMode(m_In1, OUTPUT);
     digitalWrite(m_In1, LOW);
@@ -78,5 +79,10 @@ bool SpeedController::setSpeed(int speed)
 int SpeedController::speed() const
 {
     return m_Speed;
+}
+
+int SpeedController::id() const
+{
+    return m_ID;
 }
 

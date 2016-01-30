@@ -13,12 +13,17 @@ class PanelBoard
 {
 public:
     PanelBoard(const HardwareController* pCtrl);
+    ~PanelBoard();
 
     void refresh();
 
     int getLightState(const QByteArray& lightName) const;
 
+    QList<QByteArray> allNodes() const;
+
 private:
+    void updateNode(LayoutNode* pNode, int value);
+
     QHash<SpeedController*, LayoutNode*> m_ControlNodes;
 
     QHash<QByteArray, LayoutNode*> m_AllNodes;
