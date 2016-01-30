@@ -12,10 +12,11 @@ public:
     };
 
     PointController();
-    PointController(int powerLine, int controlLine);
+    PointController(int powerLine, int controlLine, PointDirection defaultDirection = ePointLeft);
 
     void setDirection(PointController::PointDirection dir);
     PointController::PointDirection direction() const;
+    void toggle();
 
 private:
     PointDirection m_Direction;

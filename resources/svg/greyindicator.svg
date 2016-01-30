@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg3621"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="greyindicator.svg">
+  <defs
+     id="defs3623" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="224.92027"
+     inkscape:cy="853.51969"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer3"
+     showgrid="false"
+     inkscape:window-width="1855"
+     inkscape:window-height="1056"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3626">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#333333"
+       id="path3629"
+       cx="155.35715"
+       cy="129.32649"
+       rx="34.642853"
+       ry="34.107143"
+       inkscape:export-xdpi="21.109945"
+       inkscape:export-ydpi="21.109945" />
+    <ellipse
+       style="fill:#000000"
+       id="path3631"
+       cx="155.35713"
+       cy="129.14792"
+       rx="31.071428"
+       ry="30.357141"
+       inkscape:export-xdpi="21.109945"
+       inkscape:export-ydpi="21.109945" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Layer 2">
+    <ellipse
+       style="fill:#b3b3b3"
+       id="path3631-8"
+       cx="155.53571"
+       cy="128.96936"
+       rx="28.75"
+       ry="28.392857"
+       inkscape:export-xdpi="21.109945"
+       inkscape:export-ydpi="21.109945" />
+  </g>
+</svg>

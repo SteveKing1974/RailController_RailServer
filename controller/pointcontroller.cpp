@@ -18,12 +18,14 @@ PointController::PointController() :
     }
 }
 
-PointController::PointController(int powerLine, int controlLine) :
-    m_Direction(ePointLeft),
+PointController::PointController(int powerLine, int controlLine, PointDirection defaultDirection) :
+    m_Direction(static_cast<PointDirection>(-1)),
     m_PowerLine(powerLine),
     m_ControlLine(controlLine)
 {
     digitalWrite (m_PowerLine, HIGH);
+
+    setDirection(defaultDirection);
 }
 
 void PointController::setDirection(PointController::PointDirection dir)
@@ -49,5 +51,17 @@ void PointController::setDirection(PointController::PointDirection dir)
 PointController::PointDirection PointController::direction() const
 {
     return m_Direction;
+}
+
+void PointController::toggle()
+{
+    if (m_Direction==ePointLeft)
+    {
+        setDirection(ePointRight);
+    }
+    else
+    {
+        setDirection(ePointLeft);
+    }
 }
 

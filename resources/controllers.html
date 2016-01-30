@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Controllers</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  
+    <script>
+
+        function handlerServerData(data) {
+                                    $("#forwardButton").prop("checked", data.direction == 0)
+                                    $("#backwardButton").prop("checked", data.direction == 1)
+                                    $("#forwardButton").prop("disabled", data.directionEnabled!=true)
+                                    $("#backwardButton").prop("disabled", data.directionEnabled!=true)
+                                    $( "#slider-vertical" ).prop("value", data.speed)
+
+                                    $( "#amount" ).val( data.speed );
+
+
+                                }
+
+        function directionChanged() {
+            sliderChanged($( "#slider-vertical" ).prop("value"))
+        }
+
+        function sliderChanged(value) {
+            $.ajax({
+                type: "PUT",
+                url: "/railControl/controller/outerLoop",
+                data: { "speed": value, "direction": $("#forwardButton").prop("checked") ? 0 : 1 },
+                dataType:"json",
+                success: function(data, textStatus, jqXHR) { handlerServerData(data); },
+                error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+            });
+        }
+
+       function getInitValue() {
+                        $.ajax({
+                                  type: "GET",
+                                  url: "/railControl/controller/outerLoop",
+                                  dataType:"json",
+                                  success: function(data, textStatus, jqXHR) {
+                                        handlerServerData(data);
+                                        },
+                                  error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+                              });
+                         }
+
+
+          $(function() {
+              $("#forwardButton").on('change', directionChanged)
+              $("#backwardButton").on('change', directionChanged)
+              $( "#slider-vertical" ).slider({
+                orientation: "vertical",
+                range: "min",
+                min: 0,
+                max: 100,
+                value:   0
+            ,
+
+                slide: function( event, ui ) {
+                  sliderChanged(ui.value)
+              }
+            });
+            getInitValue()
+          });
+
+  </script>
+</head>
+
+<body>
+<div class="a" style="position:relative; height: 70px">
+    <a class="btn btn-default btn-lg" href="panel.html" role="button">Panel</a>
+    <a class="btn btn-primary btn-lg" href="controllers.html" role="button">Controllers</a>
+</div>
+
+<div style="width: 100%">
+    <div style="width: 50%; margin: 0 auto;">
+        <p>
+            <label for="amount">Speed:</label>
+            <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+        <p>
+            <div id="slider-vertical" style="height:200px;"></div>
+        </p>
+        <p>
+            <div id="radio">
+                <input type="radio" id="forwardButton" name="radio"><label for="radio1">Forward</label>
+                <input type="radio" id="backwardButton" name="radio"><label for="radio2">Backward</label>
+            </div>
+        </p>
+    </div>
+</div>
+ 
+
+</body>
+</html>

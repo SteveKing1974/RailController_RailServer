@@ -855,8 +855,8 @@ int http_get_handler(struct soap *soap)
     /* Note: soap->path always starts with '/' */
     if (!strncmp(soap->path, "/railControl", 12))
         return myGetHandler(soap);
-    if (strchr(soap->path + 1, '/') || strchr(soap->path + 1, '\\'))	/* we don't like snooping in dirs */
-        return 403; /* HTTP forbidden */
+//    if (strchr(soap->path + 1, '/') || strchr(soap->path + 1, '\\'))	/* we don't like snooping in dirs */
+//        return 403; /* HTTP forbidden */
     if (!soap_tag_cmp(soap->path, "*.html"))
         return copy_file(soap, soap->path + 1, "text/html");
     if (!soap_tag_cmp(soap->path, "*.xml"))

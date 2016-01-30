@@ -37,15 +37,13 @@ SpeedController* CommandHandler::controllerFromUrl(const QByteArray& url, QJsonO
 
 QByteArray CommandHandler::getCommand(const QByteArray &url) const
 {
-    const QList<QByteArray> splitPath = url.split('/');
+    const QList<QByteArray> splitPath = url.toLower().split('/');
 
     QJsonObject obj;
 
-    if (splitPath.length()>=2)
+    if (splitPath.length()>=3)
     {
-        const QString commandName(splitPath.at(1));
-
-        if (commandName.compare("panel", Qt::CaseInsensitive))
+        if (splitPath.at(2) == "panel")
         {
             const QList<QByteArray> keys = m_pPanel->allNodes();
             foreach (const QByteArray& key, keys)
@@ -54,11 +52,11 @@ QByteArray CommandHandler::getCommand(const QByteArray &url) const
             }
 
         }
-        else if (commandName.compare("controller", Qt::CaseInsensitive))
+        else if (splitPath.at(2) == "controller")
         {
-            if (splitPath.length()>=3)
+            if (splitPath.length()>=4)
             {
-                SpeedController* pCtrl = m_pController->getController(splitPath.at(2));
+                SpeedController* pCtrl = m_pController->getController(splitPath.at(3));
 
                 if (pCtrl != 0)
                 {
@@ -69,7 +67,7 @@ QByteArray CommandHandler::getCommand(const QByteArray &url) const
                 }
                 else
                 {
-                    obj.insert("error", QString("Invalid controller: " + splitPath.at(2)));
+                    obj.insert("error", QString("Invalid controller: " + splitPath.at(3)));
                 }
             }
             else
@@ -79,7 +77,7 @@ QByteArray CommandHandler::getCommand(const QByteArray &url) const
         }
         else
         {
-            obj.insert("error", QString("Unknown object: " + commandName));
+            obj.insert("error", QString("Unknown object: " + splitPath.at(2)));
         }
     }
     else
@@ -92,31 +90,78 @@ QByteArray CommandHandler::getCommand(const QByteArray &url) const
 
 QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &data) const
 {
+    const QList<QByteArray> splitPath = url.toLower().split('/');
+
     QJsonObject obj;
 
-    SpeedController* pCtrl = controllerFromUrl(url, obj);
+    qDebug() << "Put" << splitPath;
 
-    if (pCtrl != 0)
+    if (splitPath.length()>=3)
     {
-        QByteArray copyOfCommand = data;
-        copyOfCommand.replace("=", "\": \"");
-        copyOfCommand.replace("&", "\" , \"");
-        copyOfCommand.push_front("{ \"");
-        copyOfCommand.push_back("\" }");
-        QJsonDocument doc = QJsonDocument::fromJson(copyOfCommand);
+        if (splitPath.at(2) == "panel")
+        {
+            PointController* pPoint = m_pController->getPoint(splitPath.at(3));
+            if (pPoint)
+            {
+                pPoint->toggle();
+                m_pPanel->refresh();
+                const QList<QByteArray> keys = m_pPanel->allNodes();
+                foreach (const QByteArray& key, keys)
+                {
+                    obj.insert(key, m_pPanel->getLightState(key));
+                }
+            }
+            else
+            {
+                obj.insert("error", QString("Invalid point: " + splitPath.at(3)));
+            }
 
-        qDebug() << doc.toJson() << doc.object().value("speed").toString().toInt();
-        pCtrl->setSpeed(doc.object().value("speed").toString().toInt());
-        pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(doc.object().value("direction").toString().toInt()));
+        }
+        else if (splitPath.at(2) == "controller")
+        {
+            if (splitPath.length()>=4)
+            {
+                SpeedController* pCtrl = m_pController->getController(splitPath.at(3));
+
+                if (pCtrl != 0)
+                {
+                    QByteArray copyOfCommand = data;
+                    copyOfCommand.replace("=", "\": \"");
+                    copyOfCommand.replace("&", "\" , \"");
+                    copyOfCommand.push_front("{ \"");
+                    copyOfCommand.push_back("\" }");
+                    QJsonDocument doc = QJsonDocument::fromJson(copyOfCommand);
+
+                    qDebug() << doc.toJson() << doc.object().value("speed").toString().toInt();
+                    pCtrl->setSpeed(doc.object().value("speed").toString().toInt());
+                    pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(doc.object().value("direction").toString().toInt()));
 
 
-        obj.insert("speed", pCtrl->speed());
-        obj.insert("direction", pCtrl->direction());
-        obj.insert("directionEnabled", pCtrl->speed()==0);
-        obj.insert("speedEnabled", true);
+                    obj.insert("speed", pCtrl->speed());
+                    obj.insert("direction", pCtrl->direction());
+                    obj.insert("directionEnabled", pCtrl->speed()==0);
+                    obj.insert("speedEnabled", true);
+                }
+                else
+                {
+                    obj.insert("error", QString("Invalid controller: " + splitPath.at(3)));
+                }
+            }
+            else
+            {
+                obj.insert("error", QString("Missing controller name"));
+            }
+        }
+        else
+        {
+            obj.insert("error", QString("Unknown object: " + splitPath.at(2)));
+        }
+    }
+    else
+    {
+        obj.insert("error", QString("Badly formed path: " + url));
     }
 
-    qDebug() << QJsonDocument(obj).toJson();
     return QJsonDocument(obj).toJson();
 }
 

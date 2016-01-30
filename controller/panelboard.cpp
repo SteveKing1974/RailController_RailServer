@@ -1,5 +1,7 @@
 #include "panelboard.h"
 
+#include <QDebug>
+
 PanelBoard::PanelBoard(const HardwareController *pCtrl)
 {
     LayoutNode* dummyOuter = new LayoutNode();
@@ -45,83 +47,92 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     LayoutNode* stationSidingLeft3 = new LayoutNode();
 
 
-    dummyOuter->setNext(pCtrl->getPoint("outerSwitchRight"), outerRight, 0);
+    dummyOuter->setNext(pCtrl->getPoint("downmaincrossovera"), outerRight, 0);
+    dummyOuter->setPrev(outerCenter);
 
-    outerRight->setPrev(pCtrl->getPoint("outerSwitchRight"), dummyOuter, outerToInnerRight);
+    outerRight->setPrev(pCtrl->getPoint("downmaincrossovera"), dummyOuter, outerToInnerRight);
     outerRight->setNext(outerLeft);
 
     outerLeft->setPrev(outerRight);
-    outerLeft->setNext(pCtrl->getPoint("outerSwitchLeft"), outerToInnerLeft, outerCenter);
+    outerLeft->setNext(pCtrl->getPoint("upmaincrossovera"), outerToInnerLeft, outerCenter);
 
-    outerCenter->setPrev(pCtrl->getPoint("outerSwitchLeft"), 0, outerLeft);
+    outerCenter->setPrev(pCtrl->getPoint("upmaincrossovera"), 0, outerLeft);
+    outerCenter->setNext(dummyOuter);
 
-    outerToInnerLeft->setPrev(pCtrl->getPoint("outerSwitchLeft"), outerLeft, 0);
-    outerToInnerLeft->setNext(pCtrl->getPoint("innerSwitchLeft"), innerCenter, 0);
+    outerToInnerLeft->setPrev(pCtrl->getPoint("upmaincrossovera"), outerLeft, 0);
+    outerToInnerLeft->setNext(pCtrl->getPoint("upmaincrossoverb"), innerCenter, 0);
 
-    outerToInnerRight->setPrev(pCtrl->getPoint("outerSwitchRight"), 0, outerRight);
-    outerToInnerRight->setNext(pCtrl->getPoint("innerSwitchRight"), 0, innerBetweenPoints);
+    outerToInnerRight->setPrev(pCtrl->getPoint("downmaincrossovera"), 0, outerRight);
+    outerToInnerRight->setNext(pCtrl->getPoint("downmaincrossoverb"), 0, innerBetweenPoints);
 
     //////
 
-    dummyInner->setNext(pCtrl->getPoint("innerStationSwitch"), innerBetweenPoints, 0);
+    dummyInner->setNext(pCtrl->getPoint("stationentrancecrossovera"), innerBetweenPoints, 0);
+    dummyInner->setPrev(innerCenter);
 
-    innerBetweenPoints->setPrev(pCtrl->getPoint("innerStationSwitch"), dummyInner, innerToStation);
-    innerBetweenPoints->setNext(pCtrl->getPoint("innerSwitchRight"), innerRight, outerToInnerRight);
+    innerBetweenPoints->setPrev(pCtrl->getPoint("stationentrancecrossovera"), dummyInner, innerToStation);
+    innerBetweenPoints->setNext(pCtrl->getPoint("downmaincrossoverb"), innerRight, outerToInnerRight);
 
-    innerRight->setPrev(pCtrl->getPoint("innerSwitchRight"), innerBetweenPoints, 0);
+    innerRight->setPrev(pCtrl->getPoint("downmaincrossoverb"), innerBetweenPoints, 0);
     innerRight->setNext(innerLeft);
 
     innerLeft->setPrev(innerRight);
-    innerLeft->setNext(pCtrl->getPoint("innerSwitchLeft"), 0, innerCenter);
+    innerLeft->setNext(pCtrl->getPoint("upmaincrossoverb"), 0, innerCenter);
 
-    innerCenter->setPrev(pCtrl->getPoint("innerSwitchLeft"), outerToInnerLeft, innerLeft);
+    innerCenter->setPrev(pCtrl->getPoint("upmaincrossoverb"), outerToInnerLeft, innerLeft);
+    innerCenter->setNext(dummyInner);
 
-    innerToStation->setPrev(pCtrl->getPoint("innerStationSwitch"), 0, innerBetweenPoints);
-    innerToStation->setNext(pCtrl->getPoint("stationOuterEntrance"), 0, stationOuterBetweenPoints);
+    innerToStation->setPrev(pCtrl->getPoint("stationentrancecrossovera"), 0, innerBetweenPoints);
+    innerToStation->setNext(pCtrl->getPoint("stationentrancecrossoverb"), 0, stationOuterBetweenPoints);
 
     ///////
-    dummyStationOuter->setNext(pCtrl->getPoint("stationOuterLoopSwitchRight"), stationOuterBetweenPoints, 0);
+    dummyStationOuter->setNext(pCtrl->getPoint("downstationcrossovera"), stationOuterBetweenPoints, 0);
+    dummyStationOuter->setPrev(stationOuterCenter);
 
-    stationOuterBetweenPoints->setPrev(pCtrl->getPoint("stationOuterLoopSwitchRight"), dummyStationOuter, stationOuterToInnerRight);
-    stationOuterBetweenPoints->setNext(pCtrl->getPoint("stationOuterEntrance"), stationOuterRight, innerToStation);
+    stationOuterBetweenPoints->setPrev(pCtrl->getPoint("downstationcrossovera"), dummyStationOuter, stationOuterToInnerRight);
+    stationOuterBetweenPoints->setNext(pCtrl->getPoint("stationentrancecrossoverb"), stationOuterRight, innerToStation);
 
-    stationOuterRight->setPrev(pCtrl->getPoint("stationOuterEntrance"), stationOuterBetweenPoints, 0);
-    stationOuterRight->setNext(pCtrl->getPoint("stationOuterRightSiding1"), dummyRightBetweenSidings, stationSidingRight1);
+    stationOuterRight->setPrev(pCtrl->getPoint("stationentrancecrossoverb"), stationOuterBetweenPoints, 0);
+    stationOuterRight->setNext(pCtrl->getPoint("downsiding1"), dummyRightBetweenSidings, stationSidingRight1);
 
-    dummyRightBetweenSidings->setPrev(pCtrl->getPoint("stationOuterRightSiding1"), stationOuterRight, 0);
-    dummyRightBetweenSidings->setNext(pCtrl->getPoint("rightSidingSwitch2"), stationSidingRight3, stationSidingRight2);
+    dummyRightBetweenSidings->setPrev(pCtrl->getPoint("downsiding1"), stationOuterRight, 0);
+    dummyRightBetweenSidings->setNext(pCtrl->getPoint("downsiding2"), stationSidingRight3, stationSidingRight2);
 
-    stationSidingRight1->setPrev(pCtrl->getPoint("stationOuterRightSiding1"), 0, stationOuterRight);
-    stationSidingRight2->setPrev(pCtrl->getPoint("rightSidingSwitch2"), 0, dummyRightBetweenSidings);
-    stationSidingRight3->setPrev(pCtrl->getPoint("rightSidingSwitch2"), dummyRightBetweenSidings, 0);
+    stationSidingRight1->setPrev(pCtrl->getPoint("downsiding1"), 0, stationOuterRight);
+    stationSidingRight2->setPrev(pCtrl->getPoint("downsiding2"), 0, dummyRightBetweenSidings);
+    stationSidingRight3->setPrev(pCtrl->getPoint("downsiding2"), dummyRightBetweenSidings, 0);
 
-    stationOuterLeft->setNext(pCtrl->getPoint("stationOuterLoopSwitchLeft"), stationOuterToInnerLeft, stationOuterCenter);
+    stationOuterLeft->setNext(pCtrl->getPoint("upstationcrossovera"), stationOuterToInnerLeft, stationOuterCenter);
 
-    stationOuterLeft->setPrev(pCtrl->getPoint("stationOuterLoopSwitchLeft"), 0, stationOuterLeft);
+    stationOuterCenter->setNext(dummyStationOuter);
+    stationOuterCenter->setPrev(pCtrl->getPoint("upstationcrossovera"), 0, stationOuterLeft);
 
-    stationOuterToInnerLeft->setPrev(pCtrl->getPoint("stationOuterLoopSwitchLeft"), stationOuterLeft, 0);
-    stationOuterToInnerLeft->setNext(pCtrl->getPoint("stationInnerLoopSwitchLeft"), stationInnerCenter, 0);
+    stationOuterToInnerLeft->setPrev(pCtrl->getPoint("upstationcrossovera"), stationOuterLeft, 0);
+    stationOuterToInnerLeft->setNext(pCtrl->getPoint("upstationcrossoverb"), stationInnerCenter, 0);
 
-    stationOuterToInnerRight->setPrev(pCtrl->getPoint("stationOuterLoopSwitchRight"), 0, stationOuterBetweenPoints);
-    stationOuterToInnerRight->setNext(pCtrl->getPoint("stationInnerLoopSwitchRight"), 0, dummyStationInner);
+    stationOuterToInnerRight->setPrev(pCtrl->getPoint("downstationcrossovera"), 0, stationOuterBetweenPoints);
+    stationOuterToInnerRight->setNext(pCtrl->getPoint("downstationcrossoverb"), 0, dummyStationInner);
 
     //////
 
-    dummyStationInner->setNext(pCtrl->getPoint("stationInnerLoopSwitchRight"), stationInnerRight, stationOuterToInnerRight);
+    dummyStationInner->setNext(pCtrl->getPoint("downstationcrossoverb"), stationInnerRight, stationOuterToInnerRight);
+    dummyStationInner->setPrev(stationInnerCenter);
 
-    stationInnerRight->setPrev(pCtrl->getPoint("stationInnerLoopSwitchRight"), dummyStationInner, 0);
+    stationInnerRight->setPrev(pCtrl->getPoint("downstationcrossoverb"), dummyStationInner, 0);
 
-    stationInnerCenter->setPrev(pCtrl->getPoint("stationInnerLoopSwitchLeft"), stationOuterToInnerLeft, dummyLeftBetweenPoints);
+    stationInnerCenter->setPrev(pCtrl->getPoint("upstationcrossoverb"), stationOuterToInnerLeft, dummyLeftBetweenPoints);
+    stationInnerCenter->setNext(dummyStationInner);
 
-    dummyLeftBetweenPoints->setPrev(pCtrl->getPoint("leftSidingSwitch"), stationSidingLeft1, dummyLeftBetweenSidings);
-    dummyLeftBetweenPoints->setNext(pCtrl->getPoint("stationInnerLoopSwitchLeft"), 0, stationInnerCenter);
 
-    dummyLeftBetweenSidings->setPrev(pCtrl->getPoint("outerSwitchLeft"), stationSidingLeft2, stationSidingLeft3);
-    dummyLeftBetweenSidings->setNext(pCtrl->getPoint("leftSidingSwitch"), 0, dummyLeftBetweenPoints);
+    dummyLeftBetweenPoints->setPrev(pCtrl->getPoint("upsiding1"), stationSidingLeft1, dummyLeftBetweenSidings);
+    dummyLeftBetweenPoints->setNext(pCtrl->getPoint("upstationcrossoverb"), 0, stationInnerCenter);
 
-    stationSidingLeft1->setNext(pCtrl->getPoint("leftSidingSwitch"), dummyLeftBetweenPoints, 0);
-    stationSidingLeft2->setNext(pCtrl->getPoint("outerSwitchLeft"), dummyLeftBetweenPoints, 0);
-    stationSidingLeft3->setNext(pCtrl->getPoint("outerSwitchLeft"), 0, dummyLeftBetweenPoints);
+    dummyLeftBetweenSidings->setPrev(pCtrl->getPoint("upmaincrossovera"), stationSidingLeft2, stationSidingLeft3);
+    dummyLeftBetweenSidings->setNext(pCtrl->getPoint("upsiding1"), 0, dummyLeftBetweenPoints);
+
+    stationSidingLeft1->setNext(pCtrl->getPoint("upsiding1"), dummyLeftBetweenPoints, 0);
+    stationSidingLeft2->setNext(pCtrl->getPoint("upmaincrossovera"), dummyLeftBetweenPoints, 0);
+    stationSidingLeft3->setNext(pCtrl->getPoint("upmaincrossovera"), 0, dummyLeftBetweenPoints);
 
     m_AllNodes.insert("dummyOuter", dummyOuter);
     m_AllNodes.insert("outerRight", outerRight);
@@ -165,21 +176,23 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     LayoutNode* pInnerStationController = new LayoutNode();
 
     pOuterController->setNext(dummyOuter);
-    pOuterController->setNext(outerCenter);
+    pOuterController->setPrev(outerCenter);
 
     pInnerController->setNext(dummyInner);
-    pInnerController->setNext(innerCenter);
+    pInnerController->setPrev(innerCenter);
 
     pOuterStationController->setNext(dummyStationOuter);
-    pOuterStationController->setNext(stationOuterCenter);
+    pOuterStationController->setPrev(stationOuterCenter);
 
     pInnerStationController->setNext(dummyStationInner);
-    pInnerStationController->setNext(stationInnerCenter);
+    pInnerStationController->setPrev(stationInnerCenter);
 
     m_ControlNodes.insert(pCtrl->getController("outerLoop"), pOuterController);
     m_ControlNodes.insert(pCtrl->getController("innerLoop"), pInnerController);
     m_ControlNodes.insert(pCtrl->getController("stationOuter"), pOuterStationController);
     m_ControlNodes.insert(pCtrl->getController("stationInner"), pInnerStationController);
+
+    refresh();
 }
 
 PanelBoard::~PanelBoard()
@@ -228,6 +241,7 @@ void PanelBoard::updateNode(LayoutNode *pNode, int value)
     {
         if (pNode->state()!=value)
         {
+            pNode->setState(value);
             updateNode(pNode->next(), value);
             updateNode(pNode->prev(), value);
         }

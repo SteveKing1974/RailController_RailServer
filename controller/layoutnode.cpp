@@ -76,6 +76,10 @@ LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const PointContr
     {
         if (pPnt==0)
         {
+            return pLeft;
+        }
+        else
+        {
             if (pPnt->direction()==PointController::ePointLeft)
             {
                 return pLeft;
@@ -84,10 +88,7 @@ LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const PointContr
             {
                 return pRight;
             }
-        }
-        else
-        {
-            return pLeft;
+
         }
     }
     else

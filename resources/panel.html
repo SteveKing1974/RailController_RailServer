@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Signal Box Panel</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+    <script>
+        function togglePoint(name) {
+            $.ajax({
+                type: "PUT",
+                url: "/railControl/panel/" + name,
+                data: { "command": "toggle" },
+                dataType:"json",
+                success: function(data, textStatus, jqXHR) { console.log(data); handleReturn(data); },
+                error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+            });
+        }
+
+        function getState() {
+            $.ajax({
+                  type: "GET",
+                  url: "/railControl/panel",
+                  dataType:"json",
+                  success: function(data, textStatus, jqXHR) {
+                        handleReturn(data);
+                        },
+                  error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
+              });
+        }
+
+        function stateToImage(state) {
+            switch (state)
+            {
+            case 1: return "png/greenindicator.png"
+            case 2: return "png/redindicator.png"
+            case 3: return "png/blueindicator.png"
+            case 4: return "png/yellowindicator.png"
+            }
+            return "png/greyindicator.png"
+        }
+
+        function handleReturn(data) {
+            console.log(data.outerLeft)
+            $("#outerLeft").attr("src", stateToImage(data.outerLeft))
+
+            $("#outerCenter").attr("src", stateToImage(data.outerCenter))
+            $("#outerRight").attr("src", stateToImage(data.outerRight))
+            $("#outerToInnerLeft").attr("src", stateToImage(data.outerToInnerLeft))
+            $("#outerToInnerRight").attr("src", stateToImage(data.outerToInnerRight))
+            $("#innerLeft").attr("src", stateToImage(data.innerLeft))
+            $("#innerCenter").attr("src", stateToImage(data.innerCenter))
+            $("#innerRight").attr("src", stateToImage(data.innerRight))
+            $("#innerToStation").attr("src", stateToImage(data.innerToStation))
+            $("#stationOuterLeft").attr("src", stateToImage(data.stationOuterLeft))
+            $("#outerLeft").attr("src", stateToImage(data.outerLeft))
+            $("#stationOuterCenter").attr("src", stateToImage(data.stationOuterCenter))
+            $("#stationOuterRight").attr("src", stateToImage(data.stationOuterRight))
+            $("#stationSidingRight1").attr("src", stateToImage(data.stationSidingRight1))
+            $("#stationSidingRight2").attr("src", stateToImage(data.stationSidingRight2))
+            $("#stationSidingRight3").attr("src", stateToImage(data.stationSidingRight3))
+
+            $("#stationOuterToInnerLeft").attr("src", stateToImage(data.stationOuterToInnerLeft))
+            $("#stationOuterToInnerRight").attr("src", stateToImage(data.stationOuterToInnerRight))
+            $("#stationInnerCenter").attr("src", stateToImage(data.stationInnerCenter))
+            $("#stationInnerRight").attr("src", stateToImage(data.stationInnerRight))
+            $("#stationSidingLeft1").attr("src", stateToImage(data.stationSidingLeft1))
+            $("#stationSidingLeft2").attr("src", stateToImage(data.stationSidingLeft2))
+            $("#stationSidingLeft3").attr("src", stateToImage(data.stationSidingLeft3))
+        }
+
+        $(function() {
+            $("#upmaincrossover").click(function() {togglePoint("upmaincrossover")})
+            $("#downmaincrossover").click(function() {togglePoint("downmaincrossover")})
+            $("#stationentrancecrossover").click(function() {togglePoint("stationentrancecrossover")})
+            $("#downstationcrossover").click(function() {togglePoint("downstationcrossover")})
+            $("#upstationcrossover").click(function() {togglePoint("upstationcrossover")})
+            $("#upsiding1").click(function() {togglePoint("upsiding1")})
+            $("#upsiding2").click(function() {togglePoint("upsiding2")})
+            $("#downsiding1").click(function() {togglePoint("downsiding1")})
+            $("#downsiding2").click(function() {togglePoint("downsiding2")})
+
+            getState()
+            })
+    </script>
+</head>
+  
+<body>
+<div class="a" style="position:relative; height: 70px">
+<a class="btn btn-primary btn-lg" href="panel.html" role="button">Panel</a>
+<a class="btn btn-default btn-lg" href="controllers.html" role="button">Controllers</a>
+</div>
+
+<div class="paneldiv" style="position:relative; width: 100%; height: 280px">
+    <img src="png/panel.png" style="position: absolute; top:0; left:0; width:900px height: 250px">
+
+
+    <!-- Outer -->
+    <img id="outerLeft" src="png/greyindicator.png" style="position: absolute; top:208px; left:80px; width:16px height: 16px">
+    <img id="outerCenter" src="png/greyindicator.png" style="position: absolute; top:206px; left:400px; width:16px height: 16px">
+    <img id="outerRight" src="png/greyindicator.png" style="position: absolute; top:202px; left:820px; width:16px height: 16px">
+
+    <!-- Outer to inner -->
+    <img id="outerToInnerLeft" src="png/greyindicator.png" style="position: absolute; top:185px; left:198px; width:16px height: 16px">
+    <img id="outerToInnerRight" src="png/greyindicator.png" style="position: absolute; top:182px; left:667px; width:16px height: 16px">
+
+    <!-- Inner -->
+    <img id="innerLeft" src="png/greyindicator.png" style="position: absolute; top:163px; left:80px; width:16px height: 16px">
+    <img id="innerCenter" src="png/greyindicator.png" style="position: absolute; top:162px; left:400px; width:16px height: 16px">
+    <img id="innerRight" src="png/greyindicator.png" style="position: absolute; top:160px; left:820px; width:16px height: 16px">
+
+    <!-- Inner to station -->
+    <img id="innerToStation" src="png/greyindicator.png" style="position: absolute; top:140px; left:595px; width:16px height: 16px">
+
+    <!-- Station Outer -->
+    <img id="stationOuterLeft" src="png/greyindicator.png" style="position: absolute; top:121px; left:160px; width:16px height: 16px">
+    <img id="stationOuterCenter" src="png/greyindicator.png" style="position: absolute; top:119px; left:400px; width:16px height: 16px">
+    <img id="stationOuterRight" src="png/greyindicator.png" style="position: absolute; top:117px; left:625px; width:16px height: 16px">
+
+    <!-- Sidings right -->
+    <img id="stationSidingRight1" src="png/greyindicator.png" style="position: absolute; top:116px; left:770px; width:16px height: 16px">
+    <img id="stationSidingRight2" src="png/greyindicator.png" style="position: absolute; top:78px; left:770px; width:16px height: 16px">
+    <img id="stationSidingRight3" src="png/greyindicator.png" style="position: absolute; top:44px; left:770px; width:16px height: 16px">
+
+
+    <!-- Outer to inner -->
+    <img id="stationOuterToInnerLeft" src="png/greyindicator.png" style="position: absolute; top:100px; left:268px; width:16px height: 16px">
+    <img id="stationOuterToInnerRight" src="png/greyindicator.png" style="position: absolute; top:98px; left:518px; width:16px height: 16px">
+
+
+    <!-- Station Inner -->
+    <img id="stationInnerCenter" src="png/greyindicator.png" style="position: absolute; top:77px; left:400px; width:16px height: 16px">
+    <img id="stationInnerRight" src="png/greyindicator.png" style="position: absolute; top:75px; left:555px; width:16px height: 16px">
+
+    <!-- Sidings 1 -->
+    <img id="stationSidingLeft1" src="png/greyindicator.png" style="position: absolute; top:79px; left:120px; width:16px height: 16px">
+    <img id="stationSidingLeft2" src="png/greyindicator.png" style="position: absolute; top:39px; left:120px; width:16px height: 16px">
+    <img id="stationSidingLeft3" src="png/greyindicator.png" style="position: absolute; top:7px; left:120px; width:16px height: 16px">
+
+</div>
+ 
+<div style="position:relative">
+ <div id="upmaincrossover" style="display: inline-block"><img src="png/upmaincrossover_off.png"></div>
+ <div id="downmaincrossover" style="display: inline-block"><img src="png/downmaincrossover_off.png"></div>
+ <div id="stationentrancecrossover" style="display: inline-block"><img src="png/stationentrancecrossover_off.png"></div>
+ <div id="downstationcrossover" style="display: inline-block"><img src="png/downstationcrossover_off.png"></div>
+ <div id="upstationcrossover" style="display: inline-block"><img src="png/upstationcrossover_off.png"></div>
+ <div id="upsiding1" style="display: inline-block"><img src="png/upsiding1_off.png"></div>
+ <div id="upsiding2" style="display: inline-block"><img src="png/upsiding2_off.png"></div>
+ <div id="downsiding1" style="display: inline-block"><img src="png/downsiding1_off.png"></div>
+ <div id="downsiding2" style="display: inline-block"><img src="png/downsiding2_off.png"></div>
+</div>
+</body>
+</html>

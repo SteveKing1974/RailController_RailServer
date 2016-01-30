@@ -89,21 +89,21 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     m_Controllers.insert("stationInner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4));
 
 
-    m_Points.insert("innerStationSwitch", new PointController(RELAY_1, RELAY_2));
-    m_Points.insert("innerSwitchLeft", new PointController(RELAY_3, RELAY_4));
-    m_Points.insert("innerSwitchRight", new PointController(RELAY_5, RELAY_6));
-    m_Points.insert("leftSidingSwitch", new PointController(RELAY_7, RELAY_8));
-    m_Points.insert("leftSidingSwitch2", new PointController(RELAY_9, RELAY_10));
-    m_Points.insert("outerSwitchLeft", new PointController(RELAY_11, RELAY_12));
-    m_Points.insert("outerSwitchRight", new PointController(RELAY_13, RELAY_14));
-    m_Points.insert("rightSidingSwitch2", new PointController(RELAY_15, RELAY_16));
+    m_Points.insert("stationentrancecrossovera", new PointController(RELAY_1, RELAY_2));
+    m_Points.insert("upmaincrossoverb", new PointController(RELAY_3, RELAY_4, PointController::ePointRight));
+    m_Points.insert("downmaincrossoverb", new PointController(RELAY_5, RELAY_6));
+    m_Points.insert("upsiding1", new PointController(RELAY_7, RELAY_8));
+    m_Points.insert("upsiding2", new PointController(RELAY_9, RELAY_10));
+    m_Points.insert("upmaincrossovera", new PointController(RELAY_11, RELAY_12, PointController::ePointRight));
+    m_Points.insert("downmaincrossovera", new PointController(RELAY_13, RELAY_14));
+    m_Points.insert("downsiding2", new PointController(RELAY_15, RELAY_16));
 
-    m_Points.insert("stationInnerLoopSwitchLeft", new PointController(RELAY_17, RELAY_18));
-    m_Points.insert("stationInnerLoopSwitchRight", new PointController(RELAY_19, RELAY_20));
-    m_Points.insert("stationOuterEntrance", new PointController(RELAY_21, RELAY_22));
-    m_Points.insert("stationOuterLoopSwitchLeft", new PointController(RELAY_23, RELAY_24));
-    m_Points.insert("stationOuterRightSiding1", new PointController(RELAY_25, RELAY_26));
-    m_Points.insert("stationOuterLoopSwitchRight", new PointController(RELAY_27, RELAY_28));
+    m_Points.insert("upstationcrossoverb", new PointController(RELAY_17, RELAY_18, PointController::ePointRight));
+    m_Points.insert("downstationcrossoverb", new PointController(RELAY_19, RELAY_20));
+    m_Points.insert("stationentrancecrossoverb", new PointController(RELAY_21, RELAY_22));
+    m_Points.insert("upstationcrossovera", new PointController(RELAY_23, RELAY_24, PointController::ePointRight));
+    m_Points.insert("downsiding1", new PointController(RELAY_25, RELAY_26));
+    m_Points.insert("downstationcrossovera", new PointController(RELAY_27, RELAY_28));
 
     // Controllers can come out of standby now
     digitalWrite(CONTROLLER1_2_STDBY, HIGH);
