@@ -40,7 +40,7 @@ SpeedController::SpeedDirection SpeedController::direction() const
 
 bool SpeedController::setSpeed(int speed)
 {
-    if (speed<0 || speed >100)
+    if (speed<0 || speed >100 || !m_Enabled)
     {
         return false;
     }
@@ -80,6 +80,26 @@ int SpeedController::speed() const
 {
     return m_Speed;
 }
+
+bool SpeedController::enabled() const
+{
+    return m_Enabled;
+}
+
+void SpeedController::setEnabled(bool newVal)
+{
+    if (newVal != m_Enabled)
+    {
+        m_Enabled = newVal;
+
+        if (!m_Enabled)
+        {
+            setSpeed(0);
+        }
+    }
+}
+
+
 
 int SpeedController::id() const
 {

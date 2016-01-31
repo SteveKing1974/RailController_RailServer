@@ -3,7 +3,7 @@
 
 #include <QByteArray>
 
-#include "pointcontroller.h"
+#include "basepointcontroller.h"
 #include "switchcontroller.h"
 
 class LayoutNode
@@ -13,11 +13,11 @@ public:
 
     void setNext(LayoutNode* node);
     void setNext(const SwitchController* switchCtrl, LayoutNode* node);
-    void setNext(const PointController* pointCtl, LayoutNode* leftNode, LayoutNode* rightNode);
+    void setNext(const BasePointController* pointCtl, LayoutNode* leftNode, LayoutNode* rightNode);
 
     void setPrev(LayoutNode* node);
     void setPrev(const SwitchController* switchCtrl, LayoutNode* node);
-    void setPrev(const PointController* pointCtl, LayoutNode* leftNode, LayoutNode* rightNode);
+    void setPrev(const BasePointController* pointCtl, LayoutNode* leftNode, LayoutNode* rightNode);
 
     LayoutNode* prev();
     LayoutNode* next();
@@ -28,8 +28,8 @@ public:
 private:
     const SwitchController* m_PrevSwitch;
     const SwitchController* m_NextSwitch;
-    const PointController* m_PrevPoint;
-    const PointController* m_NextPoint;
+    const BasePointController* m_PrevPoint;
+    const BasePointController* m_NextPoint;
 
     LayoutNode* m_PrevNodeLeft;
     LayoutNode* m_PrevNodeRight;
@@ -38,7 +38,7 @@ private:
 
     int m_State;
 
-    LayoutNode* calcOutput(const SwitchController* pSw, const PointController* pPnt, LayoutNode* pLeft, LayoutNode* pRight) const;
+    LayoutNode* calcOutput(const SwitchController* pSw, const BasePointController* pPnt, LayoutNode* pLeft, LayoutNode* pRight) const;
 };
 
 #endif // LAYOUTNODE_H

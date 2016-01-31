@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QByteArray>
 #include <QHash>
-#include "pointcontroller.h"
+#include "basepointcontroller.h"
 #include "speedcontroller.h"
 
 class HardwareController : public QObject
@@ -17,7 +17,7 @@ public:
     QList<QByteArray> allPoints() const;
     QList<QByteArray> allControllers() const;
 
-    PointController* getPoint(const QByteArray& name) const;
+    BasePointController* getPoint(const QByteArray& name) const;
     SpeedController* getController(const QByteArray& name) const;
 
 signals:
@@ -25,7 +25,7 @@ signals:
 public slots:
 
 private:
-    QHash<QByteArray, PointController*> m_Points;
+    QHash<QByteArray, BasePointController*> m_Points;
     QHash<QByteArray, SpeedController*> m_Controllers;
 };
 

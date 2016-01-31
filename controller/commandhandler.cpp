@@ -45,12 +45,21 @@ QByteArray CommandHandler::getCommand(const QByteArray &url) const
     {
         if (splitPath.at(2) == "panel")
         {
+            QJsonObject nodes;
             const QList<QByteArray> keys = m_pPanel->allNodes();
             foreach (const QByteArray& key, keys)
             {
-                obj.insert(key, m_pPanel->getLightState(key));
+                nodes.insert(key, m_pPanel->getLightState(key));
             }
 
+            QJsonObject points;
+            const QList<QByteArray> allPoints = m_pController->allPoints();
+            foreach (const QByteArray& point, allPoints)
+            {
+                points.insert(point, m_pController->getPoint(point)->direction());
+            }
+            obj.insert("nodes", nodes);
+            obj.insert("points", points);
         }
         else if (splitPath.at(2) == "controller")
         {
@@ -100,16 +109,26 @@ QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &d
     {
         if (splitPath.at(2) == "panel")
         {
-            PointController* pPoint = m_pController->getPoint(splitPath.at(3));
+            BasePointController* pPoint = m_pController->getPoint(splitPath.at(3));
             if (pPoint)
             {
                 pPoint->toggle();
                 m_pPanel->refresh();
+                QJsonObject nodes;
                 const QList<QByteArray> keys = m_pPanel->allNodes();
                 foreach (const QByteArray& key, keys)
                 {
-                    obj.insert(key, m_pPanel->getLightState(key));
+                    nodes.insert(key, m_pPanel->getLightState(key));
                 }
+
+                QJsonObject points;
+                const QList<QByteArray> allPoints = m_pController->allPoints();
+                foreach (const QByteArray& point, allPoints)
+                {
+                    points.insert(point, m_pController->getPoint(point)->direction());
+                }
+                obj.insert("nodes", nodes);
+                obj.insert("points", points);
             }
             else
             {

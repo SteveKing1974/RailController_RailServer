@@ -3,10 +3,11 @@
 #include "wiringPi.h"
 
 #include <QDebug>
-PointController::PointController() :
-    m_Direction(ePointLeft),
-    m_PowerLine(-1),
-    m_ControlLine(-1)
+
+PointController::PointController(int powerLine, int controlLine, PointDirection defaultDirection) :
+    BasePointController(static_cast<PointDirection>(-1)),
+    m_PowerLine(powerLine),
+    m_ControlLine(controlLine)
 {
     if (m_PowerLine>=0 && m_ControlLine>=0)
     {
@@ -16,14 +17,6 @@ PointController::PointController() :
         pinMode (m_ControlLine, OUTPUT) ;
         digitalWrite (m_ControlLine, HIGH);
     }
-}
-
-PointController::PointController(int powerLine, int controlLine, PointDirection defaultDirection) :
-    m_Direction(static_cast<PointDirection>(-1)),
-    m_PowerLine(powerLine),
-    m_ControlLine(controlLine)
-{
-    digitalWrite (m_PowerLine, HIGH);
 
     setDirection(defaultDirection);
 }
@@ -48,20 +41,4 @@ void PointController::setDirection(PointController::PointDirection dir)
     digitalWrite (m_PowerLine, HIGH);
 }
 
-PointController::PointDirection PointController::direction() const
-{
-    return m_Direction;
-}
-
-void PointController::toggle()
-{
-    if (m_Direction==ePointLeft)
-    {
-        setDirection(ePointRight);
-    }
-    else
-    {
-        setDirection(ePointLeft);
-    }
-}
 

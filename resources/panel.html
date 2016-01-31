@@ -15,7 +15,7 @@
                 url: "/railControl/panel/" + name,
                 data: { "command": "toggle" },
                 dataType:"json",
-                success: function(data, textStatus, jqXHR) { console.log(data); handleReturn(data); },
+                success: function(data, textStatus, jqXHR) { handleReturn(data); },
                 error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
             });
         }
@@ -44,32 +44,42 @@
         }
 
         function handleReturn(data) {
-            console.log(data.outerLeft)
-            $("#outerLeft").attr("src", stateToImage(data.outerLeft))
+            $("#outerLeft").attr("src", stateToImage(data.nodes.outerLeft))
 
-            $("#outerCenter").attr("src", stateToImage(data.outerCenter))
-            $("#outerRight").attr("src", stateToImage(data.outerRight))
-            $("#outerToInnerLeft").attr("src", stateToImage(data.outerToInnerLeft))
-            $("#outerToInnerRight").attr("src", stateToImage(data.outerToInnerRight))
-            $("#innerLeft").attr("src", stateToImage(data.innerLeft))
-            $("#innerCenter").attr("src", stateToImage(data.innerCenter))
-            $("#innerRight").attr("src", stateToImage(data.innerRight))
-            $("#innerToStation").attr("src", stateToImage(data.innerToStation))
-            $("#stationOuterLeft").attr("src", stateToImage(data.stationOuterLeft))
-            $("#outerLeft").attr("src", stateToImage(data.outerLeft))
-            $("#stationOuterCenter").attr("src", stateToImage(data.stationOuterCenter))
-            $("#stationOuterRight").attr("src", stateToImage(data.stationOuterRight))
-            $("#stationSidingRight1").attr("src", stateToImage(data.stationSidingRight1))
-            $("#stationSidingRight2").attr("src", stateToImage(data.stationSidingRight2))
-            $("#stationSidingRight3").attr("src", stateToImage(data.stationSidingRight3))
+            $("#outerCenter").attr("src", stateToImage(data.nodes.outerCenter))
+            $("#outerRight").attr("src", stateToImage(data.nodes.outerRight))
+            $("#outerToInnerLeft").attr("src", stateToImage(data.nodes.outerToInnerLeft))
+            $("#outerToInnerRight").attr("src", stateToImage(data.nodes.outerToInnerRight))
+            $("#innerLeft").attr("src", stateToImage(data.nodes.innerLeft))
+            $("#innerCenter").attr("src", stateToImage(data.nodes.innerCenter))
+            $("#innerRight").attr("src", stateToImage(data.nodes.innerRight))
+            $("#innerToStation").attr("src", stateToImage(data.nodes.innerToStation))
+            $("#stationOuterLeft").attr("src", stateToImage(data.nodes.stationOuterLeft))
+            $("#outerLeft").attr("src", stateToImage(data.nodes.outerLeft))
+            $("#stationOuterCenter").attr("src", stateToImage(data.nodes.stationOuterCenter))
+            $("#stationOuterRight").attr("src", stateToImage(data.nodes.stationOuterRight))
+            $("#stationSidingRight1").attr("src", stateToImage(data.nodes.stationSidingRight1))
+            $("#stationSidingRight2").attr("src", stateToImage(data.nodes.stationSidingRight2))
+            $("#stationSidingRight3").attr("src", stateToImage(data.nodes.stationSidingRight3))
 
-            $("#stationOuterToInnerLeft").attr("src", stateToImage(data.stationOuterToInnerLeft))
-            $("#stationOuterToInnerRight").attr("src", stateToImage(data.stationOuterToInnerRight))
-            $("#stationInnerCenter").attr("src", stateToImage(data.stationInnerCenter))
-            $("#stationInnerRight").attr("src", stateToImage(data.stationInnerRight))
-            $("#stationSidingLeft1").attr("src", stateToImage(data.stationSidingLeft1))
-            $("#stationSidingLeft2").attr("src", stateToImage(data.stationSidingLeft2))
-            $("#stationSidingLeft3").attr("src", stateToImage(data.stationSidingLeft3))
+            $("#stationOuterToInnerLeft").attr("src", stateToImage(data.nodes.stationOuterToInnerLeft))
+            $("#stationOuterToInnerRight").attr("src", stateToImage(data.nodes.stationOuterToInnerRight))
+            $("#stationInnerCenter").attr("src", stateToImage(data.nodes.stationInnerCenter))
+            $("#stationInnerRight").attr("src", stateToImage(data.nodes.stationInnerRight))
+            $("#stationSidingLeft1").attr("src", stateToImage(data.nodes.stationSidingLeft1))
+            $("#stationSidingLeft2").attr("src", stateToImage(data.nodes.stationSidingLeft2))
+            $("#stationSidingLeft3").attr("src", stateToImage(data.nodes.stationSidingLeft3))
+
+
+            $("#upmaincrossover_img").attr("src", "png/upmaincrossover_" + (data.points.upmaincrossover == 0 ? "off" : "on") + ".png")
+            $("#downmaincrossover_img").attr("src", "png/downmaincrossover_" + (data.points.downmaincrossover == 0 ? "off" : "on") + ".png")
+            $("#stationentrancecrossover_img").attr("src", "png/stationentrancecrossover_" + (data.points.stationentrancecrossover == 0 ? "off" : "on") + ".png")
+            $("#downstationcrossover_img").attr("src", "png/downstationcrossover_" + (data.points.downstationcrossover == 0 ? "off" : "on") + ".png")
+            $("#upstationcrossover_img").attr("src", "png/upstationcrossover_" + (data.points.upstationcrossover == 0 ? "off" : "on") + ".png")
+            $("#upsiding1_img").attr("src", "png/upsiding1_" + (data.points.upsiding1 == 0 ? "off" : "on") + ".png")
+            $("#upsiding2_img").attr("src", "png/upsiding2_" + (data.points.upsiding2 == 0 ? "off" : "on") + ".png")
+            $("#downsiding1_img").attr("src", "png/downsiding1_" + (data.points.downsiding1 == 0 ? "off" : "on") + ".png")
+            $("#downsiding2_img").attr("src", "png/downsiding2_" + (data.points.downsiding2 == 0 ? "off" : "on") + ".png")
         }
 
         $(function() {
@@ -89,7 +99,7 @@
 </head>
   
 <body>
-<div class="a" style="position:relative; height: 70px">
+<div class="a" style="position:relative; height: 70px; margin-left: 50px">
 <a class="btn btn-primary btn-lg" href="panel.html" role="button">Panel</a>
 <a class="btn btn-default btn-lg" href="controllers.html" role="button">Controllers</a>
 </div>
@@ -142,16 +152,16 @@
 
 </div>
  
-<div style="position:relative">
- <div id="upmaincrossover" style="display: inline-block"><img src="png/upmaincrossover_off.png"></div>
- <div id="downmaincrossover" style="display: inline-block"><img src="png/downmaincrossover_off.png"></div>
- <div id="stationentrancecrossover" style="display: inline-block"><img src="png/stationentrancecrossover_off.png"></div>
- <div id="downstationcrossover" style="display: inline-block"><img src="png/downstationcrossover_off.png"></div>
- <div id="upstationcrossover" style="display: inline-block"><img src="png/upstationcrossover_off.png"></div>
- <div id="upsiding1" style="display: inline-block"><img src="png/upsiding1_off.png"></div>
- <div id="upsiding2" style="display: inline-block"><img src="png/upsiding2_off.png"></div>
- <div id="downsiding1" style="display: inline-block"><img src="png/downsiding1_off.png"></div>
- <div id="downsiding2" style="display: inline-block"><img src="png/downsiding2_off.png"></div>
+<div style="position:relative; margin-left: 50px">
+ <div id="upmaincrossover" style="display: inline-block"><img           id="upmaincrossover_img" src="png/upmaincrossover_off.png"></div>
+ <div id="downmaincrossover" style="display: inline-block"><img         id="downmaincrossover_img" src="png/downmaincrossover_off.png"></div>
+ <div id="stationentrancecrossover" style="display: inline-block"><img  id="stationentrancecrossover_img" src="png/stationentrancecrossover_off.png"></div>
+ <div id="downstationcrossover" style="display: inline-block"><img      id="downstationcrossover_img" src="png/downstationcrossover_off.png"></div>
+ <div id="upstationcrossover" style="display: inline-block"><img        id="upstationcrossover_img" src="png/upstationcrossover_off.png"></div>
+ <div id="upsiding1" style="display: inline-block"><img                 id="upsiding1_img" src="png/upsiding1_off.png"></div>
+ <div id="upsiding2" style="display: inline-block"><img                 id="upsiding2_img" src="png/upsiding2_off.png"></div>
+ <div id="downsiding1" style="display: inline-block"><img               id="downsiding1_img" src="png/downsiding1_off.png"></div>
+ <div id="downsiding2" style="display: inline-block"><img               id="downsiding2_img" src="png/downsiding2_off.png"></div>
 </div>
 </body>
 </html>

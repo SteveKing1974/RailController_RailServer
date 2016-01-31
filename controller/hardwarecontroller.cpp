@@ -2,6 +2,8 @@
 #include "wiringPi.h"
 #include "mcp23s17.h"
 #include "softPwm.h"
+#include "pointgroup.h"
+#include "pointcontroller.h"
 
 const int k_PortsPerExtender = 16;
 enum {
@@ -89,21 +91,43 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     m_Controllers.insert("stationInner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4));
 
 
-    m_Points.insert("stationentrancecrossovera", new PointController(RELAY_1, RELAY_2));
-    m_Points.insert("upmaincrossoverb", new PointController(RELAY_3, RELAY_4, PointController::ePointRight));
-    m_Points.insert("downmaincrossoverb", new PointController(RELAY_5, RELAY_6));
+    PointController* pA = new PointController(RELAY_1, RELAY_2);
+    BasePointController* pB = new BasePointController();
+    m_Points.insert("stationentrancecrossovera", pA);
+    m_Points.insert("stationentrancecrossoverb", pB);
+    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB));
+
+    pA = new PointController(RELAY_11, RELAY_12, PointController::ePointRight);
+    pB = new BasePointController();
+    m_Points.insert("upmaincrossovera", pA);
+    m_Points.insert("upmaincrossoverb", pB);
+    m_Points.insert("upmaincrossover", new PointGroup(pA, pB));
+
+    pA = new PointController(RELAY_13, RELAY_14);
+    pB = new BasePointController();
+    m_Points.insert("downmaincrossovera", pA);
+    m_Points.insert("downmaincrossoverb", pB);
+    m_Points.insert("downmaincrossover", new PointGroup(pA, pB));
+
+    pA = new PointController(RELAY_23, RELAY_24, PointController::ePointRight);
+    pB = new BasePointController();
+    m_Points.insert("upstationcrossovera", pA);
+    m_Points.insert("upstationcrossoverb", pB);
+    m_Points.insert("upstationcrossover", new PointGroup(pA, pB));
+
+    pA = new PointController(RELAY_27, RELAY_28);
+    pB = new BasePointController();
+    m_Points.insert("downstationcrossovera", pA);
+    m_Points.insert("downstationcrossoverb", pB);
+    m_Points.insert("downstationcrossover", new PointGroup(pA, pB));
+
+
     m_Points.insert("upsiding1", new PointController(RELAY_7, RELAY_8));
     m_Points.insert("upsiding2", new PointController(RELAY_9, RELAY_10));
-    m_Points.insert("upmaincrossovera", new PointController(RELAY_11, RELAY_12, PointController::ePointRight));
-    m_Points.insert("downmaincrossovera", new PointController(RELAY_13, RELAY_14));
+
+    m_Points.insert("downsiding1", new PointController(RELAY_25, RELAY_26));
     m_Points.insert("downsiding2", new PointController(RELAY_15, RELAY_16));
 
-    m_Points.insert("upstationcrossoverb", new PointController(RELAY_17, RELAY_18, PointController::ePointRight));
-    m_Points.insert("downstationcrossoverb", new PointController(RELAY_19, RELAY_20));
-    m_Points.insert("stationentrancecrossoverb", new PointController(RELAY_21, RELAY_22));
-    m_Points.insert("upstationcrossovera", new PointController(RELAY_23, RELAY_24, PointController::ePointRight));
-    m_Points.insert("downsiding1", new PointController(RELAY_25, RELAY_26));
-    m_Points.insert("downstationcrossovera", new PointController(RELAY_27, RELAY_28));
 
     // Controllers can come out of standby now
     digitalWrite(CONTROLLER1_2_STDBY, HIGH);
@@ -126,7 +150,7 @@ QList<QByteArray> HardwareController::allControllers() const
     return m_Controllers.keys();
 }
 
-PointController *HardwareController::getPoint(const QByteArray &name) const
+BasePointController *HardwareController::getPoint(const QByteArray &name) const
 {
     if (m_Points.contains(name))
     {

@@ -25,7 +25,7 @@ void LayoutNode::setNext(const SwitchController *switchCtrl, LayoutNode *node)
     m_NextNodeLeft = node;
 }
 
-void LayoutNode::setNext(const PointController *pointCtl, LayoutNode *leftNode, LayoutNode *rightNode)
+void LayoutNode::setNext(const BasePointController *pointCtl, LayoutNode *leftNode, LayoutNode *rightNode)
 {
     m_NextPoint = pointCtl;
     m_NextNodeLeft = leftNode;
@@ -43,7 +43,7 @@ void LayoutNode::setPrev(const SwitchController *switchCtrl, LayoutNode *node)
     m_PrevNodeLeft = node;
 }
 
-void LayoutNode::setPrev(const PointController *pointCtl, LayoutNode *leftNode, LayoutNode *rightNode)
+void LayoutNode::setPrev(const BasePointController *pointCtl, LayoutNode *leftNode, LayoutNode *rightNode)
 {
     m_PrevPoint = pointCtl;
     m_PrevNodeLeft = leftNode;
@@ -70,7 +70,7 @@ void LayoutNode::setState(int newState)
     m_State = newState;
 }
 
-LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const PointController *pPnt, LayoutNode *pLeft, LayoutNode *pRight) const
+LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const BasePointController *pPnt, LayoutNode *pLeft, LayoutNode *pRight) const
 {
     if (pSw==0)
     {
@@ -80,7 +80,7 @@ LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const PointContr
         }
         else
         {
-            if (pPnt->direction()==PointController::ePointLeft)
+            if (pPnt->direction()==BasePointController::ePointLeft)
             {
                 return pLeft;
             }

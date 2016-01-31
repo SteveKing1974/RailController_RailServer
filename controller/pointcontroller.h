@@ -2,24 +2,16 @@
 #define POINTCONTROLLER_H
 
 #include <QString>
+#include "basepointcontroller.h"
 
-class PointController
+class PointController : public BasePointController
 {
 public:
-    enum PointDirection {
-        ePointLeft,
-        ePointRight
-    };
-
-    PointController();
-    PointController(int powerLine, int controlLine, PointDirection defaultDirection = ePointLeft);
+    PointController(int powerLine = -1, int controlLine = -1, PointDirection defaultDirection = ePointLeft);
 
     void setDirection(PointController::PointDirection dir);
-    PointController::PointDirection direction() const;
-    void toggle();
 
 private:
-    PointDirection m_Direction;
     const int m_PowerLine;
     const int m_ControlLine;
 };

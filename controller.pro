@@ -28,7 +28,10 @@ SOURCES += ./server/webserver.c \
     controller/commandhandler.cpp \
     controller/layoutnode.cpp \
     controller/switchcontroller.cpp \
-    controller/panelboard.cpp
+    controller/panelboard.cpp \
+    controller/basepointcontroller.cpp \
+    controller/pointgroup.cpp \
+    controller/interlockhandling.cpp
 
 SOURCES +=  ./controller/hardwarecontroller.cpp \
             ./controller/pointcontroller.cpp
@@ -40,7 +43,10 @@ HEADERS +=  ./controller/hardwarecontroller.h \
     controller/layoutnode.h \
     controller/switchcontroller.h \
     controller/panelboard.h \
-    dummyWiringPi/softPwm.h
+    dummyWiringPi/softPwm.h \
+    controller/basepointcontroller.h \
+    controller/pointgroup.h \
+    controller/interlockhandling.h
 
 SOURCES += main.cpp
 
