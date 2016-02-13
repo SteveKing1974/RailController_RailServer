@@ -5,6 +5,7 @@
 #include "commandhandler.h"
 #include "hardwarecontroller.h"
 #include "panelboard.h"
+#include "interlockhandling.h"
 
 extern "C" {
 #include "webserver.h"
@@ -43,7 +44,9 @@ int main(int argc, char *argv[])
 {
     HardwareController hardwareControl;
     PanelBoard panelBoard(&hardwareControl);
-    g_Handler = new CommandHandler(&hardwareControl, &panelBoard);
+    InterlockHandling interlock(&hardwareControl);
+
+    g_Handler = new CommandHandler(&hardwareControl, &panelBoard, &interlock);
 
     int i = serverMain(argc, argv, handlePost, handleGet);
 

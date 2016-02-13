@@ -4,36 +4,13 @@
 
 #include <QDebug>
 
-CommandHandler::CommandHandler(HardwareController *pControl, PanelBoard* pPanel) :
+CommandHandler::CommandHandler(HardwareController *pControl, PanelBoard* pPanel, InterlockHandling *pInterlock) :
     m_pController(pControl),
-    m_pPanel(pPanel)
+    m_pPanel(pPanel),
+    m_pInterlock(pInterlock)
 {
 }
 
-SpeedController* CommandHandler::controllerFromUrl(const QByteArray& url, QJsonObject& obj) const
-{
-    const QList<QByteArray> splitPath = url.split('/');
-
-    if (splitPath.length()>2)
-    {
-        SpeedController* pCtrl = m_pController->getController(splitPath.at(2));
-
-        if (pCtrl != 0)
-        {
-            return pCtrl;
-        }
-        else
-        {
-            obj.insert("error", QString("Invalid controller: " + splitPath.at(2)));
-        }
-    }
-    else
-    {
-        obj.insert("error", QString("Badly formed path: " + url));
-    }
-
-    return 0;
-}
 
 QByteArray CommandHandler::getCommand(const QByteArray &url) const
 {
@@ -112,7 +89,7 @@ QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &d
             BasePointController* pPoint = m_pController->getPoint(splitPath.at(3));
             if (pPoint)
             {
-                pPoint->toggle();
+                m_pInterlock->togglePoint(splitPath.at(3));
                 m_pPanel->refresh();
                 QJsonObject nodes;
                 const QList<QByteArray> keys = m_pPanel->allNodes();
@@ -151,10 +128,8 @@ QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &d
                     copyOfCommand.push_back("\" }");
                     QJsonDocument doc = QJsonDocument::fromJson(copyOfCommand);
 
-                    qDebug() << doc.toJson() << doc.object().value("speed").toString().toInt();
-                    pCtrl->setSpeed(doc.object().value("speed").toString().toInt());
                     pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(doc.object().value("direction").toString().toInt()));
-
+                    m_pInterlock->setSpeed(splitPath.at(3), doc.object().value("speed").toString().toInt());
 
                     obj.insert("speed", pCtrl->speed());
                     obj.insert("direction", pCtrl->direction());

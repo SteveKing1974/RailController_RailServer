@@ -1,7 +1,8 @@
 #include "basepointcontroller.h"
 
 BasePointController::BasePointController(PointDirection defaultDirection) :
-    m_Direction(defaultDirection)
+    m_Direction(defaultDirection),
+    m_Enabled(true)
 {
 
 }
@@ -27,4 +28,14 @@ void BasePointController::toggle()
     {
         setDirection(ePointLeft);
     }
+}
+
+bool BasePointController::enabled() const
+{
+    return m_Enabled;
+}
+
+void BasePointController::setEnabled(bool newVal)
+{
+    m_Enabled = newVal;
 }

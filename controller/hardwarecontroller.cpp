@@ -85,10 +85,10 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     pinMode(CONTROLLER3_4_STDBY, OUTPUT);
     digitalWrite(CONTROLLER3_4_STDBY, LOW);
 
-    m_Controllers.insert("outerLoop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1));
-    m_Controllers.insert("innerLoop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2));
-    m_Controllers.insert("stationOuter", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3));
-    m_Controllers.insert("stationInner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4));
+    m_Controllers.insert("outerloop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1));
+    m_Controllers.insert("innerloop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2));
+    m_Controllers.insert("stationouter", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3));
+    m_Controllers.insert("stationinner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4));
 
 
     PointController* pA = new PointController(RELAY_1, RELAY_2);

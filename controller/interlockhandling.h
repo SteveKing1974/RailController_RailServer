@@ -3,19 +3,20 @@
 
 #include <QByteArray>
 #include <QList>
+#include "hardwarecontroller.h"
 
 class InterlockHandling
 {
 public:
-    InterlockHandling();
+    InterlockHandling(HardwareController *pControl);
 
-    void togglePoint(const QByteArray& point);
-    void setSpeed(const QByteArray& controller, int value);
+    void togglePoint(const QByteArray& pointName);
+    void setSpeed(const QByteArray &controller, int newSpeed);
 
 private:
-    QList<QByteArray> m_DontCarePoints;
-
-
+    HardwareController* m_pController;
+    bool isValidMask(quint8 mask) const;
+    void updateEnabled();
 };
 
 #endif // INTERLOCKHANDLING_H

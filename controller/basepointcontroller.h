@@ -17,8 +17,11 @@ public:
     PointDirection direction() const;
     void toggle();
 
+    bool enabled() const;
+    void setEnabled(bool newVal);
 protected:
     PointDirection m_Direction;
+    bool m_Enabled;
 };
 
 #endif // BASEPOINTCONTROLLER_H
