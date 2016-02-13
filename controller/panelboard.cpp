@@ -187,10 +187,10 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     pInnerStationController->setNext(dummyStationInner);
     pInnerStationController->setPrev(stationInnerCenter);
 
-    m_ControlNodes.insert(pCtrl->getController("outerLoop"), pOuterController);
-    m_ControlNodes.insert(pCtrl->getController("innerLoop"), pInnerController);
-    m_ControlNodes.insert(pCtrl->getController("stationOuter"), pOuterStationController);
-    m_ControlNodes.insert(pCtrl->getController("stationInner"), pInnerStationController);
+    m_ControlNodes.insert(pCtrl->getController("outerloop"), pOuterController);
+    m_ControlNodes.insert(pCtrl->getController("innerloop"), pInnerController);
+    m_ControlNodes.insert(pCtrl->getController("stationouter"), pOuterStationController);
+    m_ControlNodes.insert(pCtrl->getController("stationinner"), pInnerStationController);
 
     refresh();
 }

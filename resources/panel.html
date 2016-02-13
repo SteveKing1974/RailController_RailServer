@@ -71,15 +71,32 @@
             $("#stationSidingLeft3").attr("src", stateToImage(data.nodes.stationSidingLeft3))
 
 
-            $("#upmaincrossover_img").attr("src", "png/upmaincrossover_" + (data.points.upmaincrossover == 0 ? "off" : "on") + ".png")
-            $("#downmaincrossover_img").attr("src", "png/downmaincrossover_" + (data.points.downmaincrossover == 0 ? "off" : "on") + ".png")
-            $("#stationentrancecrossover_img").attr("src", "png/stationentrancecrossover_" + (data.points.stationentrancecrossover == 0 ? "off" : "on") + ".png")
-            $("#downstationcrossover_img").attr("src", "png/downstationcrossover_" + (data.points.downstationcrossover == 0 ? "off" : "on") + ".png")
-            $("#upstationcrossover_img").attr("src", "png/upstationcrossover_" + (data.points.upstationcrossover == 0 ? "off" : "on") + ".png")
-            $("#upsiding1_img").attr("src", "png/upsiding1_" + (data.points.upsiding1 == 0 ? "off" : "on") + ".png")
-            $("#upsiding2_img").attr("src", "png/upsiding2_" + (data.points.upsiding2 == 0 ? "off" : "on") + ".png")
-            $("#downsiding1_img").attr("src", "png/downsiding1_" + (data.points.downsiding1 == 0 ? "off" : "on") + ".png")
-            $("#downsiding2_img").attr("src", "png/downsiding2_" + (data.points.downsiding2 == 0 ? "off" : "on") + ".png")
+            $("#upmaincrossover_img").attr("src", "png/upmaincrossover_" + (data.points.upmaincrossover.direction == 0 ? "off" : "on") + ".png")
+            $("#upmaincrossover_img").attr("style", (data.points.upmaincrossover.enabled ? "" : "opacity: 0.5") )
+
+            $("#downmaincrossover_img").attr("src", "png/downmaincrossover_" + (data.points.downmaincrossover.direction == 0 ? "off" : "on") + ".png")
+            $("#downmaincrossover_img").attr("style", (data.points.downmaincrossover.enabled ? "" : "opacity: 0.5") )
+
+            $("#stationentrancecrossover_img").attr("src", "png/stationentrancecrossover_" + (data.points.stationentrancecrossover.direction == 0 ? "off" : "on") + ".png")
+            $("#stationentrancecrossover_img").attr("style", (data.points.stationentrancecrossover.enabled ? "" : "opacity: 0.5") )
+
+            $("#downstationcrossover_img").attr("src", "png/downstationcrossover_" + (data.points.downstationcrossover.direction == 0 ? "off" : "on") + ".png")
+            $("#downstationcrossover_img").attr("style", (data.points.downstationcrossover.enabled ? "" : "opacity: 0.5") )
+
+            $("#upstationcrossover_img").attr("src", "png/upstationcrossover_" + (data.points.upstationcrossover.direction == 0 ? "off" : "on") + ".png")
+            $("#upstationcrossover_img").attr("style", (data.points.upstationcrossover.enabled ? "" : "opacity: 0.5") )
+
+            $("#upsiding1_img").attr("src", "png/upsiding1_" + (data.points.upsiding1.direction == 0 ? "off" : "on") + ".png")
+            $("#upsiding1_img").attr("style", (data.points.upsiding1.enabled ? "" : "opacity: 0.5") )
+
+            $("#upsiding2_img").attr("src", "png/upsiding2_" + (data.points.upsiding2.direction == 0 ? "off" : "on") + ".png")
+            $("#upsiding2_img").attr("style", (data.points.upsiding2.enabled ? "" : "opacity: 0.5") )
+
+            $("#downsiding1_img").attr("src", "png/downsiding1_" + (data.points.downsiding1.direction == 0 ? "off" : "on") + ".png")
+            $("#downsiding1_img").attr("style", (data.points.downsiding1.enabled ? "" : "opacity: 0.5") )
+
+            $("#downsiding2_img").attr("src", "png/downsiding2_" + (data.points.downsiding2.direction == 0 ? "off" : "on") + ".png")
+            $("#downsiding2_img").attr("style", (data.points.downsiding2.enabled ? "" : "opacity: 0.5") )
         }
 
         $(function() {

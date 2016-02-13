@@ -98,7 +98,7 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB));
 
     pA = new PointController(RELAY_11, RELAY_12, PointController::ePointRight);
-    pB = new BasePointController();
+    pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upmaincrossovera", pA);
     m_Points.insert("upmaincrossoverb", pB);
     m_Points.insert("upmaincrossover", new PointGroup(pA, pB));
@@ -110,7 +110,7 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     m_Points.insert("downmaincrossover", new PointGroup(pA, pB));
 
     pA = new PointController(RELAY_23, RELAY_24, PointController::ePointRight);
-    pB = new BasePointController();
+    pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upstationcrossovera", pA);
     m_Points.insert("upstationcrossoverb", pB);
     m_Points.insert("upstationcrossover", new PointGroup(pA, pB));

@@ -3,6 +3,7 @@
 #include "speedcontroller.h"
 
 #include <QSet>
+#include <QDebug>
 
 enum BITMASKS {
     OUTERLOOP       = 0x1,
@@ -35,6 +36,7 @@ void InterlockHandling::setSpeed(const QByteArray &controller, int newSpeed)
     SpeedController* pCtrl = m_pController->getController(controller);
     if (pCtrl->enabled())
     {
+        qDebug() << "Setting speed to " << newSpeed;
         pCtrl->setSpeed(newSpeed);
         updateEnabled();
     }

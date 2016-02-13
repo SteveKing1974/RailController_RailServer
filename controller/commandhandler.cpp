@@ -11,6 +11,50 @@ CommandHandler::CommandHandler(HardwareController *pControl, PanelBoard* pPanel,
 {
 }
 
+QJsonObject CommandHandler::getPanelData() const
+{
+    QJsonObject obj;
+    QJsonObject nodes;
+    const QList<QByteArray> keys = m_pPanel->allNodes();
+    foreach (const QByteArray& key, keys)
+    {
+        nodes.insert(key, m_pPanel->getLightState(key));
+    }
+
+    QJsonObject points;
+    const QList<QByteArray> allPoints = m_pController->allPoints();
+    foreach (const QByteArray& point, allPoints)
+    {
+        QJsonObject pt;
+        pt.insert("direction", m_pController->getPoint(point)->direction());
+        pt.insert("enabled", m_pController->getPoint(point)->enabled());
+        points.insert(point, pt);
+    }
+    obj.insert("nodes", nodes);
+    obj.insert("points", points);
+
+    return obj;
+}
+
+QJsonObject CommandHandler::getControllerData() const
+{
+    QJsonObject obj;
+
+    foreach (const QByteArray& name, m_pController->allControllers())
+    {
+        SpeedController* pCtrl = m_pController->getController(name);
+
+        QJsonObject control;
+        control.insert("speed", pCtrl->speed());
+        control.insert("direction", pCtrl->direction());
+        control.insert("directionEnabled", pCtrl->speed()==0);
+        control.insert("speedEnabled", pCtrl->enabled());
+
+        obj.insert(name, control);
+    }
+
+    return obj;
+}
 
 QByteArray CommandHandler::getCommand(const QByteArray &url) const
 {
@@ -22,44 +66,11 @@ QByteArray CommandHandler::getCommand(const QByteArray &url) const
     {
         if (splitPath.at(2) == "panel")
         {
-            QJsonObject nodes;
-            const QList<QByteArray> keys = m_pPanel->allNodes();
-            foreach (const QByteArray& key, keys)
-            {
-                nodes.insert(key, m_pPanel->getLightState(key));
-            }
-
-            QJsonObject points;
-            const QList<QByteArray> allPoints = m_pController->allPoints();
-            foreach (const QByteArray& point, allPoints)
-            {
-                points.insert(point, m_pController->getPoint(point)->direction());
-            }
-            obj.insert("nodes", nodes);
-            obj.insert("points", points);
+            obj = getPanelData();
         }
         else if (splitPath.at(2) == "controller")
         {
-            if (splitPath.length()>=4)
-            {
-                SpeedController* pCtrl = m_pController->getController(splitPath.at(3));
-
-                if (pCtrl != 0)
-                {
-                    obj.insert("speed", pCtrl->speed());
-                    obj.insert("direction", pCtrl->direction());
-                    obj.insert("directionEnabled", pCtrl->speed()==0);
-                    obj.insert("speedEnabled", true);
-                }
-                else
-                {
-                    obj.insert("error", QString("Invalid controller: " + splitPath.at(3)));
-                }
-            }
-            else
-            {
-                obj.insert("error", QString("Missing controller name"));
-            }
+            obj = getControllerData();
         }
         else
         {
@@ -91,21 +102,8 @@ QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &d
             {
                 m_pInterlock->togglePoint(splitPath.at(3));
                 m_pPanel->refresh();
-                QJsonObject nodes;
-                const QList<QByteArray> keys = m_pPanel->allNodes();
-                foreach (const QByteArray& key, keys)
-                {
-                    nodes.insert(key, m_pPanel->getLightState(key));
-                }
 
-                QJsonObject points;
-                const QList<QByteArray> allPoints = m_pController->allPoints();
-                foreach (const QByteArray& point, allPoints)
-                {
-                    points.insert(point, m_pController->getPoint(point)->direction());
-                }
-                obj.insert("nodes", nodes);
-                obj.insert("points", points);
+                obj = getPanelData();
             }
             else
             {
@@ -131,10 +129,7 @@ QByteArray CommandHandler::putCommand(const QByteArray &url, const QByteArray &d
                     pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(doc.object().value("direction").toString().toInt()));
                     m_pInterlock->setSpeed(splitPath.at(3), doc.object().value("speed").toString().toInt());
 
-                    obj.insert("speed", pCtrl->speed());
-                    obj.insert("direction", pCtrl->direction());
-                    obj.insert("directionEnabled", pCtrl->speed()==0);
-                    obj.insert("speedEnabled", true);
+                    obj = getControllerData();
                 }
                 else
                 {

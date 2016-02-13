@@ -18,6 +18,8 @@ private:
     HardwareController* m_pController;
     PanelBoard* m_pPanel;
     InterlockHandling* m_pInterlock;
+    QJsonObject getPanelData() const;
+    QJsonObject getControllerData() const;
 };
 
 #endif // COMMANDHANDLER_H

@@ -12,26 +12,39 @@
     <script>
 
         function handlerServerData(data) {
-                                    $("#forwardButton").prop("checked", data.direction == 0)
-                                    $("#backwardButton").prop("checked", data.direction == 1)
-                                    $("#forwardButton").prop("disabled", data.directionEnabled!=true)
-                                    $("#backwardButton").prop("disabled", data.directionEnabled!=true)
-                                    $( "#slider-vertical" ).prop("value", data.speed)
+        console.log(data)
+            var controllerNames = ["outerloop", "innerloop", "stationouter", "stationinner"]
 
-                                    $( "#amount" ).val( data.speed );
+            if (controllerNames[0] in data)
+            {
+                for (var i=0; i<4; i++)
+                {
+                    $("#" + controllerNames[i] + "-forwardButton").prop("checked", data[controllerNames[i]].direction == 0)
+                    $("#" + controllerNames[i] + "-backwardButton").prop("checked", data[controllerNames[i]].direction == 1)
+                    $("#" + controllerNames[i] + "-forwardButton").prop("disabled", data[controllerNames[i]].directionEnabled!=true)
+                    $("#" + controllerNames[i] + "-backwardButton").prop("disabled", data[controllerNames[i]].directionEnabled!=true)
 
+                    $("#" + controllerNames[i] + "-slider" ).slider("value", data[controllerNames[i]].speed)
 
-                                }
+                    $("#" + controllerNames[i] + "-slider" ).slider("option", "disabled", data[controllerNames[i]].speedEnabled==false)
 
-        function directionChanged() {
-            sliderChanged($( "#slider-vertical" ).prop("value"))
+                    $( "#" + controllerNames[i] + "-amount" ).val( data[controllerNames[i]].speed );
+                }
+            }
+         }
+
+        function directionChanged(controlName) {
+            var value = $( "#" + controlName + "-slider" ).prop("value")
+            if (value>=0)
+                sliderChanged($( "#" + controlName + "-slider" ).prop("value"), controlName)
         }
 
-        function sliderChanged(value) {
+        function sliderChanged(value, controlName) {
+            if (value<0) return
             $.ajax({
                 type: "PUT",
-                url: "/railControl/controller/outerLoop",
-                data: { "speed": value, "direction": $("#forwardButton").prop("checked") ? 0 : 1 },
+                url: "/railControl/controller/" + controlName,
+                data: { "speed": value, "direction": $("#" + controlName + "-forwardButton").prop("checked") ? 0 : 1 },
                 dataType:"json",
                 success: function(data, textStatus, jqXHR) { handlerServerData(data); },
                 error: function(jqXHR, textStatus, errorThrown) { console.log( "error " + errorThrown); }
@@ -41,7 +54,7 @@
        function getInitValue() {
                         $.ajax({
                                   type: "GET",
-                                  url: "/railControl/controller/outerLoop",
+                                  url: "/railControl/controller",
                                   dataType:"json",
                                   success: function(data, textStatus, jqXHR) {
                                         handlerServerData(data);
@@ -51,21 +64,28 @@
                          }
 
 
-          $(function() {
-              $("#forwardButton").on('change', directionChanged)
-              $("#backwardButton").on('change', directionChanged)
-              $( "#slider-vertical" ).slider({
-                orientation: "vertical",
-                range: "min",
-                min: 0,
-                max: 100,
-                value:   0
-            ,
+        function initialise(controlName) {
+            $("#" + controlName + "-forwardButton").on('change', directionChanged(controlName))
+            $("#" + controlName + "-backwardButton").on('change', directionChanged(controlName))
+            $("#" + controlName + "-slider" ).slider({
+              orientation: "vertical",
+              range: "min",
+              min: 0,
+              max: 100,
+              value:   -1,
 
-                slide: function( event, ui ) {
-                  sliderChanged(ui.value)
-              }
-            });
+              slide: function( event, ui ) {
+                sliderChanged(ui.value, controlName)
+            }
+          });
+        }
+
+          $(function() {
+            initialise("outerloop")
+            initialise("innerloop")
+            initialise("stationouter")
+            initialise("stationinner")
+
             getInitValue()
           });
 
@@ -78,21 +98,66 @@
     <a class="btn btn-primary btn-lg" href="controllers.html" role="button">Controllers</a>
 </div>
 
-<div style="width: 100%">
-    <div style="width: 50%; margin: 0 auto;">
-        <p>
-            <label for="amount">Speed:</label>
-            <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-        </p>
-        <p>
-            <div id="slider-vertical" style="height:200px;"></div>
-        </p>
-        <p>
-            <div id="radio">
-                <input type="radio" id="forwardButton" name="radio"><label for="radio1">Forward</label>
-                <input type="radio" id="backwardButton" name="radio"><label for="radio2">Backward</label>
-            </div>
-        </p>
+<div style="margin-left: 50px">
+        <div style="display: inline-block">
+            <p>
+                <label for="outerloop-amount">Outer Speed:</label>
+                <input type="text" id="outerloop-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            <p>
+                <div id="outerloop-slider" style="height:200px;"></div>
+            </p>
+            <p>
+                <div id="outerloop-radio">
+                    <input type="radio" id="outerloop-forwardButton" name="outerloop-radio"><label for="radio1">Forward</label>
+                    <input type="radio" id="outerloop-backwardButton" name="outerloop-radio"><label for="radio2">Backward</label>
+                </div>
+            </p>
+        </div>
+        <div style="display: inline-block">
+            <p>
+                <label for="innerloop-amount">Inner Speed:</label>
+                <input type="text" id="innerloop-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            <p>
+                <div id="innerloop-slider" style="height:200px;"></div>
+            </p>
+            <p>
+                <div id="innerloop-radio">
+                    <input type="radio" id="innerloop-forwardButton" name="innerloop-radio"><label for="radio1">Forward</label>
+                    <input type="radio" id="innerloop-backwardButton" name="innerloop-radio"><label for="radio2">Backward</label>
+                </div>
+            </p>
+        </div>
+        <div style="display: inline-block">
+            <p>
+                <label for="stationouter-amount">Station Outer Speed:</label>
+                <input type="text" id="stationouter-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            <p>
+                <div id="stationouter-slider" style="height:200px;"></div>
+            </p>
+            <p>
+                <div id="stationouter-radio">
+                    <input type="radio" id="stationouter-forwardButton" name="stationouter-radio"><label for="radio1">Forward</label>
+                    <input type="radio" id="stationouter-backwardButton" name="stationouter-radio"><label for="radio2">Backward</label>
+                </div>
+            </p>
+        </div>
+        <div style="display: inline-block">
+            <p>
+                <label for="stationinner-amount">Station Inner Speed:</label>
+                <input type="text" id="stationinner-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            <p>
+                <div id="stationinner-slider" style="height:200px;"></div>
+            </p>
+            <p>
+                <div id="stationinner-radio">
+                    <input type="radio" id="stationinner-forwardButton" name="stationinner-radio"><label for="radio1">Forward</label>
+                    <input type="radio" id="stationinner-backwardButton" name="stationinner-radio"><label for="radio2">Backward</label>
+                </div>
+            </p>
     </div>
 </div>
  
