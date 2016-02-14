@@ -54,9 +54,39 @@ SOURCES += main.cpp
     target.path = /home/pi/Rail
     INSTALLS += target
 
-    conf.files=./resources/test.html
-    conf.path=/home/pi/Rail
-    INSTALLS+=conf
+    html.files= ./resources/controllers.html \
+                ./resources/panel.html
+    html.path=/home/pi/Rail
+
+
+    png.files= ./resources/png/blueindicator.png \
+                ./resources/png/downmaincrossover_off.png \
+                ./resources/png/downmaincrossover_on.png \
+                ./resources/png/downsiding1_off.png \
+                ./resources/png/downsiding1_on.png \
+                ./resources/png/downsiding2_off.png \
+                ./resources/png/downsiding2_on.png \
+                ./resources/png/downstationcrossover_off.png \
+                ./resources/png/downstationcrossover_on.png \
+                ./resources/png/greenindicator.png \
+                ./resources/png/greyindicator.png \
+                ./resources/png/panel.png \
+                ./resources/png/redindicator.png \
+                ./resources/png/stationentrancecrossover_off.png \
+                ./resources/png/stationentrancecrossover_on.png \
+                ./resources/png/upmaincrossover_off.png \
+                ./resources/png/upmaincrossover_on.png \
+                ./resources/png/upsiding1_off.png \
+                ./resources/png/upsiding1_on.png \
+                ./resources/png/upsiding2_off.png \
+                ./resources/png/upsiding2_on.png \
+                ./resources/png/upstationcrossover_off.png \
+                ./resources/png/upstationcrossover_on.png \
+                ./resources/png/yellowindicator.png
+
+    png.path=/home/pi/Rail/png
+
+    INSTALLS+=html png
 
     INCLUDEPATH += ./wiringPi/wiringPi/
 

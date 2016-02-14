@@ -7,24 +7,24 @@
 
 const int k_PortsPerExtender = 16;
 enum {
-    CONTROLLER1_IN1 = 5,
-    CONTROLLER1_IN2 = 6,
-    CONTROLLER1_PWM = 13,
+    CONTROLLER1_IN1 = 21,
+    CONTROLLER1_IN2 = 22,
+    CONTROLLER1_PWM = 23,
 
-    CONTROLLER2_IN1 = 19,
-    CONTROLLER2_IN2 = 26,
-    CONTROLLER2_PWM = 12,
+    CONTROLLER2_IN1 = 24,
+    CONTROLLER2_IN2 = 25,
+    CONTROLLER2_PWM = 26,
 
-    CONTROLLER3_IN1 = 16,
-    CONTROLLER3_IN2 = 20,
-    CONTROLLER3_PWM = 21,
+    CONTROLLER3_IN1 = 27,
+    CONTROLLER3_IN2 = 28,
+    CONTROLLER3_PWM = 29,
 
-    CONTROLLER4_IN1 = 18,
-    CONTROLLER4_IN2 = 23,
-    CONTROLLER4_PWM = 24,
+    CONTROLLER4_IN1 = 1,
+    CONTROLLER4_IN2 = 4,
+    CONTROLLER4_PWM = 5,
 
-    CONTROLLER1_2_STDBY = 23,
-    CONTROLLER3_4_STDBY = 24,
+    CONTROLLER1_2_STDBY = 2,
+    CONTROLLER3_4_STDBY = 3,
 
     EXTENDERA       = 128,
     RELAY_1         = EXTENDERA,
@@ -75,9 +75,9 @@ enum {
 HardwareController::HardwareController(QObject *parent) : QObject(parent)
 {
     wiringPiSetup () ;
-    mcp23s17Setup(EXTENDERA, 0, 0);
-    mcp23s17Setup(EXTENDERB, 0, 1);
-    mcp23s17Setup(EXTENDERC, 0, 2);
+    //mcp23s17Setup(EXTENDERA, 0, 0);
+    //mcp23s17Setup(EXTENDERB, 0, 1);
+    //mcp23s17Setup(EXTENDERC, 0, 2);
 
     // Put controllers into standby until setup is done
     pinMode(CONTROLLER1_2_STDBY, OUTPUT);

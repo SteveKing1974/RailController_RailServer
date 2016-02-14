@@ -2,6 +2,8 @@
 #include "wiringPi.h"
 #include "softPwm.h"
 
+#include <QDebug>
+
 SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID) :
     m_Direction(SpeedController::eSpeedBackward),
     m_Speed(0),
@@ -10,10 +12,19 @@ SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID) :
     m_PWM(pwm),
     m_ID(controllerID)
 {
-    pinMode(m_In1, OUTPUT);
-    digitalWrite(m_In1, LOW);
-    pinMode(m_In2, OUTPUT);
-    digitalWrite(m_In2, LOW);
+    if (m_In1==21)
+    {
+        pinMode(m_In1, OUTPUT);
+        digitalWrite(m_In1, LOW);
+        pinMode(m_In2, OUTPUT);
+        digitalWrite(m_In2, LOW);
+
+        //pinMode(m_PWM, OUTPUT);
+        //digitalWrite(m_PWM, HIGH);
+
+        qDebug() << "All low";
+    }
+
     softPwmCreate(m_PWM, 100, 100);
 }
 
@@ -54,14 +65,16 @@ bool SpeedController::setSpeed(int speed)
         {
             digitalWrite(m_In1, LOW);
             digitalWrite(m_In2, LOW);
+
+            digitalWrite(m_PWM, LOW);
             softPwmWrite(m_PWM, 100);
         }
         else
         {
             if (m_Direction==eSpeedForward)
             {
-                digitalWrite(m_In1, LOW);
-                digitalWrite(m_In2, HIGH);
+               digitalWrite(m_In1, LOW);
+               digitalWrite(m_In2, HIGH);
             }
             else
             {
@@ -69,7 +82,9 @@ bool SpeedController::setSpeed(int speed)
                 digitalWrite(m_In2, LOW);
             }
 
+            //digitalWrite(m_PWM, HIGH);
             softPwmWrite(m_PWM, m_Speed);
+            qDebug() << "setting" << m_Speed;
         }
     }
 
