@@ -4,13 +4,15 @@
 
 #include <QDebug>
 
-SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID) :
+SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID, int line1, int line2) :
     m_Direction(SpeedController::eSpeedBackward),
     m_Speed(0),
     m_In1(in1),
     m_In2(in2),
     m_PWM(pwm),
-    m_ID(controllerID)
+    m_ID(controllerID),
+    m_Line1Switch(line1),
+    m_Line2Switch(line2)
 {
     if (m_In1==21)
     {

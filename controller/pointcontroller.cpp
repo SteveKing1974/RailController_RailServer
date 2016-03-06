@@ -11,10 +11,10 @@ PointController::PointController(int powerLine, int controlLine, PointDirection 
 {
     if (m_PowerLine>=0 && m_ControlLine>=0)
     {
-//        pinMode (m_PowerLine, OUTPUT) ;
+        pinMode (m_PowerLine, OUTPUT) ;
 //        digitalWrite (m_PowerLine, HIGH);
 
-//        pinMode (m_ControlLine, OUTPUT) ;
+        pinMode (m_ControlLine, OUTPUT) ;
 //        digitalWrite (m_ControlLine, HIGH);
     }
 

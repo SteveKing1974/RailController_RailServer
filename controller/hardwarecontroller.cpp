@@ -72,61 +72,63 @@ enum {
     RELAY_39,
     RELAY_40
 };
+
 HardwareController::HardwareController(QObject *parent) : QObject(parent)
 {
     wiringPiSetup () ;
-    //mcp23s17Setup(EXTENDERA, 0, 0);
-    //mcp23s17Setup(EXTENDERB, 0, 1);
-    //mcp23s17Setup(EXTENDERC, 0, 2);
+    mcp23s17Setup(EXTENDERA, 0, 0);
+    mcp23s17Setup(EXTENDERB, 0, 1);
+    mcp23s17Setup(EXTENDERC, 0, 2);
 
     // Put controllers into standby until setup is done
     pinMode(CONTROLLER1_2_STDBY, OUTPUT);
-    digitalWrite(CONTROLLER1_2_STDBY, LOW);
     pinMode(CONTROLLER3_4_STDBY, OUTPUT);
+
+    digitalWrite(CONTROLLER1_2_STDBY, LOW);
     digitalWrite(CONTROLLER3_4_STDBY, LOW);
 
-    m_Controllers.insert("outerloop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1));
-    m_Controllers.insert("innerloop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2));
-    m_Controllers.insert("stationouter", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3));
-    m_Controllers.insert("stationinner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4));
+    m_Controllers.insert("outerloop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1, RELAY_1, RELAY_2));
+    m_Controllers.insert("innerloop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2, RELAY_3, RELAY_4));
+    m_Controllers.insert("stationouter", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3, RELAY_5, RELAY_6));
+    m_Controllers.insert("stationinner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4, RELAY_7, RELAY_8));
 
 
-    PointController* pA = new PointController(RELAY_1, RELAY_2);
+    PointController* pA = new PointController(RELAY_9, RELAY_10);
     BasePointController* pB = new BasePointController();
     m_Points.insert("stationentrancecrossovera", pA);
     m_Points.insert("stationentrancecrossoverb", pB);
-    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB));
+    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB, RELAY_13, RELAY_14));
 
-    pA = new PointController(RELAY_11, RELAY_12, PointController::ePointRight);
+    pA = new PointController(RELAY_15, RELAY_16, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upmaincrossovera", pA);
     m_Points.insert("upmaincrossoverb", pB);
-    m_Points.insert("upmaincrossover", new PointGroup(pA, pB));
+    m_Points.insert("upmaincrossover", new PointGroup(pA, pB, RELAY_17, RELAY_18));
 
-    pA = new PointController(RELAY_13, RELAY_14);
+    pA = new PointController(RELAY_19, RELAY_20);
     pB = new BasePointController();
     m_Points.insert("downmaincrossovera", pA);
     m_Points.insert("downmaincrossoverb", pB);
-    m_Points.insert("downmaincrossover", new PointGroup(pA, pB));
+    m_Points.insert("downmaincrossover", new PointGroup(pA, pB, RELAY_21, RELAY_22));
 
     pA = new PointController(RELAY_23, RELAY_24, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upstationcrossovera", pA);
     m_Points.insert("upstationcrossoverb", pB);
-    m_Points.insert("upstationcrossover", new PointGroup(pA, pB));
+    m_Points.insert("upstationcrossover", new PointGroup(pA, pB, RELAY_25, RELAY_26));
 
     pA = new PointController(RELAY_27, RELAY_28);
     pB = new BasePointController();
     m_Points.insert("downstationcrossovera", pA);
     m_Points.insert("downstationcrossoverb", pB);
-    m_Points.insert("downstationcrossover", new PointGroup(pA, pB));
+    m_Points.insert("downstationcrossover", new PointGroup(pA, pB, RELAY_29, RELAY_30));
 
 
-    m_Points.insert("upsiding1", new PointController(RELAY_7, RELAY_8));
-    m_Points.insert("upsiding2", new PointController(RELAY_9, RELAY_10));
+    m_Points.insert("upsiding1", new PointController(RELAY_31, RELAY_32));
+    m_Points.insert("upsiding2", new PointController(RELAY_33, RELAY_34));
 
-    m_Points.insert("downsiding1", new PointController(RELAY_25, RELAY_26));
-    m_Points.insert("downsiding2", new PointController(RELAY_15, RELAY_16));
+    m_Points.insert("downsiding1", new PointController(RELAY_35, RELAY_36));
+    m_Points.insert("downsiding2", new PointController(RELAY_37, RELAY_38));
 
 
     // Controllers can come out of standby now
