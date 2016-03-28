@@ -38,6 +38,26 @@ int CommandLine::run()
                     digitalWrite(lineVal, onOff);
                 }
             }
+            else if (cmd[0]=="test")
+            {
+                for (int i=0; i<48; ++i)
+                {
+                    pinMode (128 + i, OUTPUT) ;
+                    digitalWrite(128 + i, 1);
+                }
+                for (int i=0; i<48; ++i)
+                {
+                    qDebug() << "Return to write to " << 128 +i;
+                    stream.readLine();
+                    digitalWrite(128 + i, 0);
+                }
+                qDebug() << "Done";
+                stream.readLine();
+                for (int i=0; i<48; ++i)
+                {
+                    digitalWrite(128 + i, 1);
+                }
+            }
             else if (cmd[0]=="toggleHigh")
             {
                 if (cmd.length()==2)

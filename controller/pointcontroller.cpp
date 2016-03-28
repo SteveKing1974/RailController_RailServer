@@ -11,11 +11,8 @@ PointController::PointController(int powerLine, int controlLine, PointDirection 
 {
     if (m_PowerLine>=0 && m_ControlLine>=0)
     {
-        pinMode (m_PowerLine, OUTPUT) ;
-//        digitalWrite (m_PowerLine, HIGH);
-
-        pinMode (m_ControlLine, OUTPUT) ;
-//        digitalWrite (m_ControlLine, HIGH);
+        digitalWrite (m_PowerLine, HIGH);
+        digitalWrite (m_ControlLine, HIGH);
     }
 
     setDirection(defaultDirection);
@@ -31,14 +28,12 @@ void PointController::setDirection(PointController::PointDirection dir)
     m_Direction = dir;
 
     const int val = (dir == ePointLeft) ? HIGH : LOW;
-    qDebug() << "Set control:" << val;
-    //digitalWrite (m_ControlLine, val);
+
+    digitalWrite (m_ControlLine, val);
     delay (500);
-    qDebug() << "Set power low";
-    //digitalWrite (m_PowerLine, LOW);
+    digitalWrite (m_PowerLine, LOW);
     delay(500);
-    qDebug() << "Set power high";
-    //digitalWrite (m_PowerLine, HIGH);
+    digitalWrite (m_PowerLine, HIGH);
 }
 
 

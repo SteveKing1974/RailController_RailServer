@@ -7,24 +7,24 @@
 
 const int k_PortsPerExtender = 16;
 enum {
-    CONTROLLER1_IN1 = 21,
-    CONTROLLER1_IN2 = 22,
-    CONTROLLER1_PWM = 23,
+    CONTROLLER1_IN1 = 2,
+    CONTROLLER1_IN2 = 3,
+    CONTROLLER1_PWM = 4,
 
-    CONTROLLER2_IN1 = 24,
-    CONTROLLER2_IN2 = 25,
+    CONTROLLER2_IN1 = 21,
+    CONTROLLER2_IN2 = 22,
     CONTROLLER2_PWM = 26,
 
-    CONTROLLER3_IN1 = 27,
-    CONTROLLER3_IN2 = 28,
-    CONTROLLER3_PWM = 29,
+    CONTROLLER3_IN1 = 23,
+    CONTROLLER3_IN2 = 24,
+    CONTROLLER3_PWM = 27,
 
-    CONTROLLER4_IN1 = 1,
-    CONTROLLER4_IN2 = 4,
-    CONTROLLER4_PWM = 5,
+    CONTROLLER4_IN1 = 25,
+    CONTROLLER4_IN2 = 28,
+    CONTROLLER4_PWM = 29,
 
-    CONTROLLER1_2_STDBY = 2,
-    CONTROLLER3_4_STDBY = 3,
+    CONTROLLER1_2_STDBY = 0,
+    CONTROLLER3_4_STDBY = 1,
 
     EXTENDERA       = 128,
     RELAY_1         = EXTENDERA,
@@ -80,10 +80,41 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     mcp23s17Setup(EXTENDERB, 0, 1);
     mcp23s17Setup(EXTENDERC, 0, 2);
 
-    // Put controllers into standby until setup is done
+    // Set everything to an output. Write high before the
+    // setting to output so it doesn't toggle the power on
+    for (int i=0; i<k_PortsPerExtender; ++i)
+    {
+        digitalWrite(EXTENDERA + i, HIGH);
+        pinMode (EXTENDERA + i, OUTPUT);
+    }
+    for (int i=0; i<k_PortsPerExtender; ++i)
+    {
+        digitalWrite(EXTENDERB + i, HIGH);
+        pinMode (EXTENDERB + i, OUTPUT);
+    }
+    for (int i=0; i<k_PortsPerExtender; ++i)
+    {
+        digitalWrite(EXTENDERC + i, HIGH);
+        pinMode (EXTENDERC + i, OUTPUT);
+    }
+
+    pinMode(CONTROLLER1_IN1, OUTPUT);
+    pinMode(CONTROLLER1_IN2, OUTPUT);
+    pinMode(CONTROLLER1_PWM, OUTPUT);
+    pinMode(CONTROLLER2_IN1, OUTPUT);
+    pinMode(CONTROLLER2_IN2, OUTPUT);
+    pinMode(CONTROLLER2_PWM, OUTPUT);
+    pinMode(CONTROLLER3_IN1, OUTPUT);
+    pinMode(CONTROLLER3_IN2, OUTPUT);
+    pinMode(CONTROLLER3_PWM, OUTPUT);
+    pinMode(CONTROLLER4_IN1, OUTPUT);
+    pinMode(CONTROLLER4_IN2, OUTPUT);
+    pinMode(CONTROLLER4_PWM, OUTPUT);
     pinMode(CONTROLLER1_2_STDBY, OUTPUT);
     pinMode(CONTROLLER3_4_STDBY, OUTPUT);
 
+
+    // Put controllers into standby until setup is done
     digitalWrite(CONTROLLER1_2_STDBY, LOW);
     digitalWrite(CONTROLLER3_4_STDBY, LOW);
 
@@ -97,38 +128,38 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     BasePointController* pB = new BasePointController();
     m_Points.insert("stationentrancecrossovera", pA);
     m_Points.insert("stationentrancecrossoverb", pB);
-    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB, RELAY_13, RELAY_14));
+    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB, RELAY_11, RELAY_12, PointController::ePointRight));
 
-    pA = new PointController(RELAY_15, RELAY_16, PointController::ePointRight);
+    pA = new PointController(RELAY_13, RELAY_14, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upmaincrossovera", pA);
     m_Points.insert("upmaincrossoverb", pB);
-    m_Points.insert("upmaincrossover", new PointGroup(pA, pB, RELAY_17, RELAY_18));
+    m_Points.insert("upmaincrossover", new PointGroup(pA, pB, RELAY_15, RELAY_16, PointController::ePointLeft));
 
-    pA = new PointController(RELAY_19, RELAY_20);
+    pA = new PointController(RELAY_17, RELAY_18);
     pB = new BasePointController();
     m_Points.insert("downmaincrossovera", pA);
     m_Points.insert("downmaincrossoverb", pB);
-    m_Points.insert("downmaincrossover", new PointGroup(pA, pB, RELAY_21, RELAY_22));
+    m_Points.insert("downmaincrossover", new PointGroup(pA, pB, RELAY_19, RELAY_20, PointController::ePointRight));
 
-    pA = new PointController(RELAY_23, RELAY_24, PointController::ePointRight);
+    pA = new PointController(RELAY_21, RELAY_22, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upstationcrossovera", pA);
     m_Points.insert("upstationcrossoverb", pB);
-    m_Points.insert("upstationcrossover", new PointGroup(pA, pB, RELAY_25, RELAY_26));
+    m_Points.insert("upstationcrossover", new PointGroup(pA, pB, RELAY_23, RELAY_24, PointController::ePointLeft));
 
-    pA = new PointController(RELAY_27, RELAY_28);
+    pA = new PointController(RELAY_25, RELAY_26);
     pB = new BasePointController();
     m_Points.insert("downstationcrossovera", pA);
     m_Points.insert("downstationcrossoverb", pB);
-    m_Points.insert("downstationcrossover", new PointGroup(pA, pB, RELAY_29, RELAY_30));
+    m_Points.insert("downstationcrossover", new PointGroup(pA, pB, RELAY_27, RELAY_28, PointController::ePointRight));
 
 
-    m_Points.insert("upsiding1", new PointController(RELAY_31, RELAY_32));
-    m_Points.insert("upsiding2", new PointController(RELAY_33, RELAY_34));
+    m_Points.insert("upsiding1", new PointController(RELAY_29, RELAY_30));
+    m_Points.insert("upsiding2", new PointController(RELAY_31, RELAY_32));
 
-    m_Points.insert("downsiding1", new PointController(RELAY_35, RELAY_36));
-    m_Points.insert("downsiding2", new PointController(RELAY_37, RELAY_38));
+    m_Points.insert("downsiding1", new PointController(RELAY_33, RELAY_34));
+    m_Points.insert("downsiding2", new PointController(RELAY_35, RELAY_36));
 
 
     // Controllers can come out of standby now

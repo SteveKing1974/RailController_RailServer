@@ -6,7 +6,7 @@
 class PointGroup : public BasePointController
 {
 public:
-    PointGroup(BasePointController* pPoint1, BasePointController* pPoint2, int line1, int line2);
+    PointGroup(BasePointController* pPoint1, BasePointController* pPoint2, int line1, int line2, PointDirection onDir);
 
     void setDirection(PointDirection dir);
 
@@ -16,6 +16,7 @@ private:
 
     const int m_Line1Switch;
     const int m_Line2Switch;
+    const PointDirection m_OnDirection;
 };
 
 #endif // POINTGROUP_H

@@ -84,7 +84,6 @@ bool SpeedController::setSpeed(int speed)
                 digitalWrite(m_In2, LOW);
             }
 
-            //digitalWrite(m_PWM, HIGH);
             softPwmWrite(m_PWM, m_Speed);
             qDebug() << "setting" << m_Speed;
         }
