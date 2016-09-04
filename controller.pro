@@ -25,14 +25,17 @@ SOURCES += ./server/webserver.c \
             $$GSOAPDIR/stdsoap2.c \
             ./server/soapC.c \
     controller/speedcontroller.cpp \
-    controller/commandhandler.cpp \
     controller/layoutnode.cpp \
     controller/switchcontroller.cpp \
     controller/panelboard.cpp \
     controller/basepointcontroller.cpp \
     controller/pointgroup.cpp \
     controller/interlockhandling.cpp \
-    commandline.cpp
+    commandline.cpp \
+    controller/testcommandhandler.cpp \
+    controller/fullcommandhandler.cpp \
+    controller/commandhandler.cpp \
+    testcommands.cpp
 
 SOURCES +=  ./controller/hardwarecontroller.cpp \
             ./controller/pointcontroller.cpp
@@ -48,7 +51,10 @@ HEADERS +=  ./controller/hardwarecontroller.h \
     controller/basepointcontroller.h \
     controller/pointgroup.h \
     controller/interlockhandling.h \
-    commandline.h
+    commandline.h \
+    controller/testcommandhandler.h \
+    controller/fullcommandhandler.h \
+    testcommands.h
 
 SOURCES += main.cpp
 
@@ -57,7 +63,8 @@ SOURCES += main.cpp
     INSTALLS += target
 
     html.files= ./resources/controllers.html \
-                ./resources/panel.html
+                ./resources/panel.html \
+                ./resources/test.html
     html.path=/home/pi/Rail
 
 

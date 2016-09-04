@@ -2,6 +2,7 @@
 #define COMMANDLINE_H
 
 #include <QObject>
+#include "testcommands.h"
 
 class CommandLine : public QObject
 {
@@ -13,6 +14,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    TestCommands m_CommandHandler;
 };
 
 #endif // COMMANDLINE_H

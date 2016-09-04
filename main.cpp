@@ -3,12 +3,14 @@
 #include <QString>
 #include <QCommandLineParser>
 
-#include "commandhandler.h"
+#include "fullcommandhandler.h"
 #include "hardwarecontroller.h"
 #include "panelboard.h"
 #include "interlockhandling.h"
 
 #include "commandline.h"
+#include "testcommandhandler.h"
+#include "fullcommandhandler.h"
 
 extern "C" {
 #include "webserver.h"
@@ -58,6 +60,9 @@ int main(int argc, char *argv[])
     QCommandLineOption testOption("test", QCoreApplication::translate("main", "Run test mode"));
     parser.addOption(testOption);
 
+    QCommandLineOption testServerOption("testServer", QCoreApplication::translate("main", "Run test mode"));
+    parser.addOption(testServerOption);
+
 
     parser.process(app);
 
@@ -65,17 +70,29 @@ int main(int argc, char *argv[])
 
     if (parser.isSet(testOption))
     {
+        qDebug() << "Test";
         CommandLine c;
         c.run();
     }
     else
     {
-        PanelBoard panelBoard(&hardwareControl);
-        InterlockHandling interlock(&hardwareControl);
+        PanelBoard *pPanelBoard;
+        InterlockHandling *pInterlock;
 
-        g_Handler = new CommandHandler(&hardwareControl, &panelBoard, &interlock);
+        if (parser.isSet(testServerOption))
+        {
+            qDebug() << "Test Server";
+            g_Handler = new TestCommandHandler();
+        }
+        else
+        {
+            pPanelBoard = new PanelBoard(&hardwareControl);
+            pInterlock = new InterlockHandling(&hardwareControl);
 
-        status = serverMain(argc, argv, handlePost, handleGet);
+            g_Handler = new FullCommandHandler(&hardwareControl, pPanelBoard, pInterlock);
+        }
+
+        status = serverMain(0, 0, handlePost, handleGet);
 
         delete g_Handler;
     }

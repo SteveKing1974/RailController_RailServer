@@ -1,25 +1,20 @@
 #ifndef COMMANDHANDLER_H
 #define COMMANDHANDLER_H
 
-#include "hardwarecontroller.h"
-#include "panelboard.h"
-#include "interlockhandling.h"
+#include <QByteArray>
+
+#include <QJsonDocument>
 
 class CommandHandler
 {
 public:
-    CommandHandler(HardwareController* pControl, PanelBoard *pPanel, InterlockHandling* pInterlock);
+    virtual ~CommandHandler() {}
 
-    QByteArray getCommand(const QByteArray& url) const;
+    virtual QByteArray getCommand(const QByteArray& url) const = 0;
+    virtual QByteArray putCommand(const QByteArray& url, const QByteArray& data) const = 0;
 
-    QByteArray putCommand(const QByteArray& url, const QByteArray& data) const;
-
-private:
-    HardwareController* m_pController;
-    PanelBoard* m_pPanel;
-    InterlockHandling* m_pInterlock;
-    QJsonObject getPanelData() const;
-    QJsonObject getControllerData() const;
+protected:
+    static QJsonDocument fromPUTData(const QByteArray& data);
 };
 
 #endif // COMMANDHANDLER_H
