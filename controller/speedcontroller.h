@@ -19,7 +19,7 @@ public:
     int speed() const;
 
     bool enabled() const;
-    void setEnabled(bool newVal);
+    void setEnabled(bool newVal, bool force=false);
 
     int id() const;
 

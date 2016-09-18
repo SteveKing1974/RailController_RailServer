@@ -19,7 +19,7 @@ int CommandLine::run()
     do {
         line = stream.readLine();
 
-        const QStringList cmd = line.split(QRegExp("\\s+"));
+        const QStringList cmd = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 
         if (cmd[0] == "quit")
         {
@@ -27,13 +27,8 @@ int CommandLine::run()
         }
         else if (!cmd.isEmpty())
         {
-            QList<QByteArray> byteCmds;
-            foreach (const QString& str, cmd)
-            {
-                byteCmds.push_back(str.toLatin1());
-            }
 
-            qDebug() << m_CommandHandler.handleCommand(byteCmds);
+            qDebug() << m_CommandHandler.handleCommand(cmd);
         }
 
     } while (!line.isNull());

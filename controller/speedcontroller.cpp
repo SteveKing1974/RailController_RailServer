@@ -14,20 +14,13 @@ SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID, in
     m_Line1Switch(line1),
     m_Line2Switch(line2)
 {
-    if (m_In1==21)
-    {
-        pinMode(m_In1, OUTPUT);
-        digitalWrite(m_In1, LOW);
-        pinMode(m_In2, OUTPUT);
-        digitalWrite(m_In2, LOW);
-
-        //pinMode(m_PWM, OUTPUT);
-        //digitalWrite(m_PWM, HIGH);
-
-        qDebug() << "All low";
-    }
+    pinMode(m_In1, OUTPUT);
+    digitalWrite(m_In1, LOW);
+    pinMode(m_In2, OUTPUT);
+    digitalWrite(m_In2, LOW);
 
     softPwmCreate(m_PWM, 100, 100);
+    setEnabled(false, true);
 }
 
 bool SpeedController::setDirection(SpeedController::SpeedDirection dir)
@@ -102,15 +95,24 @@ bool SpeedController::enabled() const
     return m_Enabled;
 }
 
-void SpeedController::setEnabled(bool newVal)
+void SpeedController::setEnabled(bool newVal, bool force)
 {
-    if (newVal != m_Enabled)
+    if (force || (newVal != m_Enabled))
     {
+        qDebug() << "Set enabled" << newVal;
         m_Enabled = newVal;
 
-        if (!m_Enabled)
+        setSpeed(0);
+
+        if (m_Enabled)
         {
-            setSpeed(0);
+            digitalWrite (m_Line1Switch, LOW);
+            digitalWrite (m_Line2Switch, LOW);
+        }
+        else
+        {
+            digitalWrite (m_Line1Switch, HIGH);
+            digitalWrite (m_Line2Switch, HIGH);
         }
     }
 }

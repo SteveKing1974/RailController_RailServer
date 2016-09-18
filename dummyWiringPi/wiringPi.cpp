@@ -10,9 +10,9 @@ void pinMode (int, int)
     qDebug() << "pinMode";
 }
 
-void digitalWrite (int, int)
+void digitalWrite (int a, int b)
 {
-    qDebug() << "digitalWrite";
+    qDebug() << "digitalWrite" << a << b;
 }
 
 void delay(int)
@@ -22,5 +22,8 @@ void delay(int)
 
 int  softPwmCreate (int pin, int value, int range)
 { return 0;}
-void softPwmWrite  (int pin, int value) {}
+void softPwmWrite  (int pin, int value)
+{
+    qDebug() << "PWM write" << pin << value;
+}
 void softPwmStop   (int pin) {}

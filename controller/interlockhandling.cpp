@@ -17,6 +17,7 @@ enum BITMASKS {
 InterlockHandling::InterlockHandling(HardwareController *pControl) :
     m_pController(pControl)
 {
+    updateEnabled();
 }
 
 void InterlockHandling::togglePoint(const QByteArray &pointName)

@@ -3,13 +3,14 @@
 
 #include <QList>
 #include <QByteArray>
+#include <QStringList>
 
 class TestCommands
 {
 public:
     TestCommands();
 
-    QByteArray handleCommand(const QList<QByteArray>& cmd) const;
+    QByteArray handleCommand(const QStringList &cmd) const;
 };
 
 #endif // TESTCOMMANDS_H

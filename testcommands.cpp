@@ -8,7 +8,7 @@ TestCommands::TestCommands()
 
 }
 
-QByteArray TestCommands::handleCommand(const QList<QByteArray> &cmd) const
+QByteArray TestCommands::handleCommand(const QStringList &cmd) const
 {
     if (cmd[0]=="set")
     {

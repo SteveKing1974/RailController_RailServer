@@ -3,7 +3,7 @@
 
 #include <QByteArray>
 
-#include <QJsonDocument>
+#include <QJsonObject>
 
 class CommandHandler
 {
@@ -14,7 +14,7 @@ public:
     virtual QByteArray putCommand(const QByteArray& url, const QByteArray& data) const = 0;
 
 protected:
-    static QJsonDocument fromPUTData(const QByteArray& data);
+    static QJsonObject fromPUTData(const QByteArray& data);
 };
 
 #endif // COMMANDHANDLER_H

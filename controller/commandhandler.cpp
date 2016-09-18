@@ -1,7 +1,8 @@
 #include "commandhandler.h"
 
+#include <QJsonDocument>
 
-QJsonDocument CommandHandler::fromPUTData(const QByteArray &data)
+QJsonObject CommandHandler::fromPUTData(const QByteArray &data)
 {
     QByteArray copyOfCommand = data;
     copyOfCommand.replace("=", "\": \"");
@@ -9,5 +10,5 @@ QJsonDocument CommandHandler::fromPUTData(const QByteArray &data)
     copyOfCommand.push_front("{ \"");
     copyOfCommand.push_back("\" }");
 
-    return QJsonDocument::fromJson(copyOfCommand);
+    return QJsonDocument::fromJson(copyOfCommand).object();
 }

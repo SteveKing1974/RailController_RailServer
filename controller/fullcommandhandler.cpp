@@ -119,10 +119,10 @@ QByteArray FullCommandHandler::putCommand(const QByteArray &url, const QByteArra
 
                 if (pCtrl != 0)
                 {
-                    QJsonDocument doc = fromPUTData(data);
+                    QJsonObject dataObj = fromPUTData(data);
 
-                    pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(doc.object().value("direction").toString().toInt()));
-                    m_pInterlock->setSpeed(splitPath.at(3), doc.object().value("speed").toString().toInt());
+                    pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(dataObj.value("direction").toString().toInt()));
+                    m_pInterlock->setSpeed(splitPath.at(3), dataObj.value("speed").toString().toInt());
 
                     obj = getControllerData();
                 }

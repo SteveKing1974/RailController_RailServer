@@ -20,16 +20,18 @@ QByteArray TestCommandHandler::getCommand(const QByteArray &url) const
 
 QByteArray TestCommandHandler::putCommand(const QByteArray &url, const QByteArray &data) const
 {
-    const QList<QByteArray> splitPath = url.toLower().split('/');
+    const QStringList splitPath = QString(url.toLower()).split('/', QString::SkipEmptyParts);
 
     QJsonObject obj;
-    QJsonDocument cmdData = fromPUTData(data);
+    QJsonObject cmdData = fromPUTData(data);
 
     qDebug() << "Put" << splitPath << cmdData;
 
-    if (splitPath.length()>=3)
+    if (splitPath[0]=="testcommand")
     {
-        const QByteArray res = m_TestHandler.handleCommand(splitPath);
+        const QStringList command = cmdData.value("command").toString().split("+", QString::SkipEmptyParts);
+        qDebug() << command;
+        const QByteArray res = m_TestHandler.handleCommand(command);
         obj.insert("result", QString(res));
     }
     else

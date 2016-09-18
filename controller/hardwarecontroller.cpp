@@ -27,20 +27,21 @@ enum {
     CONTROLLER3_4_STDBY = 1,
 
     EXTENDERA       = 128,
-    RELAY_1         = EXTENDERA,
-    RELAY_2,
-    RELAY_3,
-    RELAY_4,
-    RELAY_5,
-    RELAY_6,
-    RELAY_7,
-    RELAY_8,
-    RELAY_9,
-    RELAY_10,
-    RELAY_11,
-    RELAY_12,
-    RELAY_13,
-    RELAY_14,
+    ISOLATE_STATION_ENTRANCE_1         = EXTENDERA,
+    ISOLATE_STATION_ENTRANCE_2,
+    ISOLATE_UP_STATION_CROSSOVER_1,
+    ISOLATE_UP_STATION_CROSSOVER_2,
+    ISOLATE_UP_MAIN_CROSSOVER_1,
+    ISOLATE_UP_MAIN_CROSSOVER_2,
+    ISOLATE_DOWN_STATION_CROSSOVER_1,
+    ISOLATE_DOWN_STATION_CROSSOVER_2,
+    ISOLATE_DOWN_MAIN_CROSSOVER_1,
+    ISOLATE_DOWN_MAIN_CROSSOVER_2,
+    ISOLATE_TOP_SIDING_DOWN,
+    ISOLATE_BOTTOM_SIDING_DOWN,
+    ISOLATE_STATION_SIDING_DOWN,
+    ISOLATE_TOP_SIDING_UP,
+
     RELAY_15,
     RELAY_16,
 
@@ -63,14 +64,14 @@ enum {
     RELAY_32,
 
     EXTENDERC       = EXTENDERB + k_PortsPerExtender,
-    RELAY_33        = EXTENDERC,
-    RELAY_34,
-    RELAY_35,
-    RELAY_36,
-    RELAY_37,
-    RELAY_38,
-    RELAY_39,
-    RELAY_40
+    ISOLATE_CONTROLLER_1_1        = EXTENDERC,
+    ISOLATE_CONTROLLER_1_2,
+    ISOLATE_CONTROLLER_2_1,
+    ISOLATE_CONTROLLER_2_2,
+    ISOLATE_CONTROLLER_3_1,
+    ISOLATE_CONTROLLER_3_2,
+    ISOLATE_CONTROLLER_4_1,
+    ISOLATE_CONTROLLER_4_2
 };
 
 HardwareController::HardwareController(QObject *parent) : QObject(parent)
@@ -118,48 +119,48 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     digitalWrite(CONTROLLER1_2_STDBY, LOW);
     digitalWrite(CONTROLLER3_4_STDBY, LOW);
 
-    m_Controllers.insert("outerloop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1, RELAY_1, RELAY_2));
-    m_Controllers.insert("innerloop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2, RELAY_3, RELAY_4));
-    m_Controllers.insert("stationouter", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3, RELAY_5, RELAY_6));
-    m_Controllers.insert("stationinner", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4, RELAY_7, RELAY_8));
+    m_Controllers.insert("innerloop", new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1, ISOLATE_CONTROLLER_1_1, ISOLATE_CONTROLLER_1_2));
+    m_Controllers.insert("outerloop", new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2, ISOLATE_CONTROLLER_2_1, ISOLATE_CONTROLLER_2_2));
+    m_Controllers.insert("stationinner", new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3, ISOLATE_CONTROLLER_3_1, ISOLATE_CONTROLLER_3_2));
+    m_Controllers.insert("stationouter", new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4, ISOLATE_CONTROLLER_4_1, ISOLATE_CONTROLLER_4_2));
 
 
-    PointController* pA = new PointController(RELAY_9, RELAY_10);
+    PointController* pA = new PointController(RELAY_15, RELAY_16);
     BasePointController* pB = new BasePointController();
     m_Points.insert("stationentrancecrossovera", pA);
     m_Points.insert("stationentrancecrossoverb", pB);
-    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB, RELAY_11, RELAY_12, PointController::ePointRight));
+    m_Points.insert("stationentrancecrossover", new PointGroup(pA, pB, ISOLATE_STATION_ENTRANCE_1, ISOLATE_STATION_ENTRANCE_2, PointController::ePointRight));
 
-    pA = new PointController(RELAY_13, RELAY_14, PointController::ePointRight);
+    pA = new PointController(RELAY_17, RELAY_18, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upmaincrossovera", pA);
     m_Points.insert("upmaincrossoverb", pB);
-    m_Points.insert("upmaincrossover", new PointGroup(pA, pB, RELAY_15, RELAY_16, PointController::ePointLeft));
+    m_Points.insert("upmaincrossover", new PointGroup(pA, pB, ISOLATE_UP_MAIN_CROSSOVER_1, ISOLATE_UP_MAIN_CROSSOVER_2, PointController::ePointLeft));
 
-    pA = new PointController(RELAY_17, RELAY_18);
+    pA = new PointController(RELAY_19, RELAY_20);
     pB = new BasePointController();
     m_Points.insert("downmaincrossovera", pA);
     m_Points.insert("downmaincrossoverb", pB);
-    m_Points.insert("downmaincrossover", new PointGroup(pA, pB, RELAY_19, RELAY_20, PointController::ePointRight));
+    m_Points.insert("downmaincrossover", new PointGroup(pA, pB, ISOLATE_DOWN_MAIN_CROSSOVER_1, ISOLATE_DOWN_MAIN_CROSSOVER_2, PointController::ePointRight));
 
     pA = new PointController(RELAY_21, RELAY_22, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert("upstationcrossovera", pA);
     m_Points.insert("upstationcrossoverb", pB);
-    m_Points.insert("upstationcrossover", new PointGroup(pA, pB, RELAY_23, RELAY_24, PointController::ePointLeft));
+    m_Points.insert("upstationcrossover", new PointGroup(pA, pB, ISOLATE_UP_STATION_CROSSOVER_1, ISOLATE_UP_STATION_CROSSOVER_2, PointController::ePointLeft));
 
-    pA = new PointController(RELAY_25, RELAY_26);
+    pA = new PointController(RELAY_23, RELAY_24);
     pB = new BasePointController();
     m_Points.insert("downstationcrossovera", pA);
     m_Points.insert("downstationcrossoverb", pB);
-    m_Points.insert("downstationcrossover", new PointGroup(pA, pB, RELAY_27, RELAY_28, PointController::ePointRight));
+    m_Points.insert("downstationcrossover", new PointGroup(pA, pB, ISOLATE_DOWN_STATION_CROSSOVER_1, ISOLATE_DOWN_STATION_CROSSOVER_2, PointController::ePointRight));
 
 
-    m_Points.insert("upsiding1", new PointController(RELAY_29, RELAY_30));
-    m_Points.insert("upsiding2", new PointController(RELAY_31, RELAY_32));
+    m_Points.insert("upsiding1", new PointController(RELAY_25, RELAY_26));
+    m_Points.insert("upsiding2", new PointController(RELAY_27, RELAY_28));
 
-    m_Points.insert("downsiding1", new PointController(RELAY_33, RELAY_34));
-    m_Points.insert("downsiding2", new PointController(RELAY_35, RELAY_36));
+    m_Points.insert("downsiding1", new PointController(RELAY_29, RELAY_30));
+    m_Points.insert("downsiding2", new PointController(RELAY_31, RELAY_32));
 
 
     // Controllers can come out of standby now
