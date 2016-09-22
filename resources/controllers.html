@@ -129,7 +129,7 @@
 <div style="position: relative;width: 400px;height: 700px;">
         <div style="position: absolute;top: 0px;left: 0px;width: 200px;height: 600px;border: 3px solid #444444;">
             <label style="position: absolute;top: 2px;left: 10px;" for="outerloop-amount">Outer Speed:</label>
-            <input type="text" id="outerloop-amount" readonly style="border:0; color:#f6931f; font-weight:bold;width: 50px;position: absolute;top: 2px;right: 0px;">
+            <input type="text" id="outerloop-amount" readonly style="border:0; color:#f6931f; font-weight:bold;width: 20px;position: absolute;top: 2px;right: 0px;">
             <div id="outerloop-slider" style="position: absolute;top: 30px;left: 50px;height:500px;"></div>
             <div id="outerloop-radio" style="position: absolute;top: 550px;left: 10px;height:30px;width: 250px;">
                 <input type="radio" id="outerloop-forwardButton" name="outerloop-radio"><label for="radio1">Forward</label>
@@ -140,51 +140,44 @@
             <button id="outerloop-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
 
- <!--       <div style="display: inline-block">
-            <p>
-                <label for="innerloop-amount">Inner Speed:</label>
-                <input type="text" id="innerloop-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-            </p>
-            <p>
-                <div id="innerloop-slider" style="height:500px;"></div>
-            </p>
-            <p>
-                <div id="innerloop-radio">
-                    <input type="radio" id="innerloop-forwardButton" name="innerloop-radio"><label for="radio1">Forward</label>
-                    <input type="radio" id="innerloop-backwardButton" name="innerloop-radio"><label for="radio2">Backward</label>
-                </div>
-            </p>
+        <div style="position: absolute;top: 0px;left: 200px;width: 200px;height: 600px;border: 3px solid #444444;">
+            <label style="position: absolute;top: 2px;left: 10px;" for="innerloop-amount">Inner Speed:</label>
+            <input type="text" id="innerloop-amount" readonly style="border:0; color:#f6931f; font-weight:bold;width: 20px;position: absolute;top: 2px;right: 0px;">
+            <div id="innerloop-slider" style="position: absolute;top: 30px;left: 50px;height:500px;"></div>
+            <div id="innerloop-radio" style="position: absolute;top: 550px;left: 10px;height:30px;width: 250px;">
+                <input type="radio" id="innerloop-forwardButton" name="innerloop-radio"><label for="radio1">Forward</label>
+                <input type="radio" id="innerloop-backwardButton" name="innerloop-radio"><label for="radio2">Backward</label>
+            </div>
+            <button id="innerloop-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
+            <button id="innerloop-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
+            <button id="innerloop-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
-        <div style="display: inline-block">
-            <p>
-                <label for="stationouter-amount">Station Outer Speed:</label>
-                <input type="text" id="stationouter-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-            </p>
-            <p>
-                <div id="stationouter-slider" style="height:500px;"></div>
-            </p>
-            <p>
-                <div id="stationouter-radio">
-                    <input type="radio" id="stationouter-forwardButton" name="stationouter-radio"><label for="radio1">Forward</label>
-                    <input type="radio" id="stationouter-backwardButton" name="stationouter-radio"><label for="radio2">Backward</label>
-                </div>
-            </p>
+
+        <div style="position: absolute;top: 0px;left: 400px;width: 200px;height: 600px;border: 3px solid #444444;">
+            <label style="position: absolute;top: 2px;left: 10px;" for="stationouter-amount">Station Outer Speed:</label>
+            <input type="text" id="stationouter-amount" readonly style="border:0; color:#f6931f; font-weight:bold;width: 20px;position: absolute;top: 2px;right: 0px;">
+            <div id="stationouter-slider" style="position: absolute;top: 30px;left: 50px;height:500px;"></div>
+            <div id="stationouter-radio" style="position: absolute;top: 550px;left: 10px;height:30px;width: 250px;">
+                <input type="radio" id="stationouter-forwardButton" name="stationouter-radio"><label for="radio1">Forward</label>
+                <input type="radio" id="stationouter-backwardButton" name="stationouter-radio"><label for="radio2">Backward</label>
+            </div>
+            <button id="stationouter-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
+            <button id="stationouter-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
+            <button id="stationouter-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
-        <div style="display: inline-block">
-            <p>
-                <label for="stationinner-amount">Station Inner Speed:</label>
-                <input type="text" id="stationinner-amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-            </p>
-            <p>
-                <div id="stationinner-slider" style="height:500px;"></div>
-            </p>
-            <p>
-                <div id="stationinner-radio">
-                    <input type="radio" id="stationinner-forwardButton" name="stationinner-radio"><label for="radio1">Forward</label>
-                    <input type="radio" id="stationinner-backwardButton" name="stationinner-radio"><label for="radio2">Backward</label>
-                </div>
-            </p>
-    </div>-->
+
+        <div style="position: absolute;top: 0px;left: 600px;width: 200px;height: 600px;border: 3px solid #444444;">
+            <label style="position: absolute;top: 2px;left: 10px;" for="stationinner-amount">Station Inner Speed:</label>
+            <input type="text" id="stationinner-amount" readonly style="border:0; color:#f6931f; font-weight:bold;width: 20px;position: absolute;top: 2px;right: 0px;">
+            <div id="stationinner-slider" style="position: absolute;top: 30px;left: 50px;height:500px;"></div>
+            <div id="stationinner-radio" style="position: absolute;top: 550px;left: 10px;height:30px;width: 250px;">
+                <input type="radio" id="stationinner-forwardButton" name="stationinner-radio"><label for="radio1">Forward</label>
+                <input type="radio" id="stationinner-backwardButton" name="stationinner-radio"><label for="radio2">Backward</label>
+            </div>
+            <button id="stationinner-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
+            <button id="stationinner-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
+            <button id="stationinner-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
+        </div>
 </div>
  
 
