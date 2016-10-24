@@ -1,5 +1,6 @@
 #include "testcommands.h"
 
+#include "hardwarecontroller.h"
 
 #include "wiringPi.h"
 
@@ -17,7 +18,7 @@ QByteArray TestCommands::handleCommand(const QStringList &cmd) const
             int lineVal = cmd[1].toInt();
             int onOff = cmd[2].toInt();
 
-            digitalWrite(lineVal, onOff);
+            HardwareController::setLine(lineVal, onOff);
         }
     }
     else if (cmd[0]=="toggleHigh")
@@ -26,11 +27,11 @@ QByteArray TestCommands::handleCommand(const QStringList &cmd) const
         {
             int lineVal = cmd[1].toInt();
 
-            digitalWrite(lineVal, 1);
+            HardwareController::setLine(lineVal, 1);
 
             delay(500);
 
-            digitalWrite(lineVal, 0);
+            HardwareController::setLine(lineVal, 0);
         }
     }
     else if (cmd[0]=="toggleLow")
@@ -39,11 +40,11 @@ QByteArray TestCommands::handleCommand(const QStringList &cmd) const
         {
             int lineVal = cmd[1].toInt();
 
-            digitalWrite(lineVal, 1);
+            HardwareController::setLine(lineVal, 1);
 
             delay(500);
 
-            digitalWrite(lineVal, 0);
+            HardwareController::setLine(lineVal, 0);
         }
     }
 

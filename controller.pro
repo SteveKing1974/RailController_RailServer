@@ -35,7 +35,8 @@ SOURCES += ./server/webserver.c \
     controller/testcommandhandler.cpp \
     controller/fullcommandhandler.cpp \
     controller/commandhandler.cpp \
-    testcommands.cpp
+    testcommands.cpp \
+    controller/isolatorcontroller.cpp
 
 SOURCES +=  ./controller/hardwarecontroller.cpp \
             ./controller/pointcontroller.cpp
@@ -54,7 +55,8 @@ HEADERS +=  ./controller/hardwarecontroller.h \
     commandline.h \
     controller/testcommandhandler.h \
     controller/fullcommandhandler.h \
-    testcommands.h
+    testcommands.h \
+    controller/isolatorcontroller.h
 
 SOURCES += main.cpp
 

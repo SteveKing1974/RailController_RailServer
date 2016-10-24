@@ -11,6 +11,7 @@ public:
     };
 
     BasePointController(PointDirection defaultDirection = ePointLeft);
+    virtual ~BasePointController() {}
 
     virtual void setDirection(PointDirection dir);
 

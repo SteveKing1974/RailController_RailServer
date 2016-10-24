@@ -3,6 +3,7 @@
 #include "wiringPi.h"
 
 #include <QDebug>
+#include "hardwarecontroller.h"
 
 PointController::PointController(int powerLine, int controlLine, PointDirection defaultDirection) :
     BasePointController(static_cast<PointDirection>(-1)),
@@ -11,8 +12,8 @@ PointController::PointController(int powerLine, int controlLine, PointDirection 
 {
     if (m_PowerLine>=0 && m_ControlLine>=0)
     {
-        digitalWrite (m_PowerLine, HIGH);
-        digitalWrite (m_ControlLine, HIGH);
+        HardwareController::setLine (m_PowerLine, HIGH);
+        HardwareController::setLine (m_ControlLine, HIGH);
     }
 
     setDirection(defaultDirection);
@@ -29,11 +30,11 @@ void PointController::setDirection(PointController::PointDirection dir)
 
     const int val = (dir == ePointLeft) ? HIGH : LOW;
 
-    digitalWrite (m_ControlLine, val);
+    HardwareController::setLine (m_ControlLine, val);
     delay (500);
-    digitalWrite (m_PowerLine, LOW);
+    HardwareController::setLine (m_PowerLine, LOW);
     delay(500);
-    digitalWrite (m_PowerLine, HIGH);
+    HardwareController::setLine (m_PowerLine, HIGH);
 }
 
 

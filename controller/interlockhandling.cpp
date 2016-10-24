@@ -114,7 +114,11 @@ void InterlockHandling::updateEnabled()
     if (m_pController->getController("stationouter")->speed()!=0)   mask |= STATIONOUTER;
     if (m_pController->getController("stationinner")->speed()!=0)   mask |= STATIONINNER;
 
-    if (m_pController->getPoint("stationentrancecrossover")->direction()==BasePointController::ePointRight) mask |= ENTRANCE;
+    if (m_pController->getPoint("stationentrancecrossover")->direction()==BasePointController::ePointRight)
+    {
+        mask |= ENTRANCE;
+    }
+
     if (m_pController->getPoint("upstationcrossover")->direction()==BasePointController::ePointLeft ||
             m_pController->getPoint("downstationcrossover")->direction()==BasePointController::ePointRight)
     {
@@ -127,6 +131,8 @@ void InterlockHandling::updateEnabled()
     }
 
     Q_ASSERT_X(isValidMask(mask), "InterLock", "Invalid mask set");
+
+    qDebug() << mask << isValidMask(mask | OUTERLOOP) << isValidMask(mask | INNERLOOP);
 
     m_pController->getController("outerloop")->setEnabled(isValidMask(mask | OUTERLOOP));
     m_pController->getController("innerloop")->setEnabled(isValidMask(mask | INNERLOOP));

@@ -68,9 +68,9 @@
                          }
 
 
-        function upButtonClicked(controlName) {
+        function upButtonClicked(controlName, multi) {
             var curVal = $("#" + controlName + "-slider" ).slider("value")
-            curVal = curVal + $("#" + controlName + "-slider" ).slider("option", "step")
+            curVal = curVal + $("#" + controlName + "-slider" ).slider("option", "step") * multi
             if (curVal>$("#" + controlName + "-slider" ).slider("option", "max"))
             {
                 curVal = $("#" + controlName + "-slider" ).slider("option", "max")
@@ -78,17 +78,25 @@
             $("#" + controlName + "-slider" ).slider("option","value", curVal)
         }
 
-        function downButtonClicked(controlName) {
-            console.log(" clicked")
+        function downButtonClicked(controlName, multi) {
+            var curVal = $("#" + controlName + "-slider" ).slider("value")
+            curVal = curVal - $("#" + controlName + "-slider" ).slider("option", "step") * multi
+            if (curVal<0)
+            {
+                curVal = 0
+            }
+            $("#" + controlName + "-slider" ).slider("option","value", curVal)
         }
 
         function stopButtonClicked(controlName) {
-            console.log(" clicked")
+            $("#" + controlName + "-slider" ).slider("option","value", 0)
         }
 
         function initialise(controlName) {
-            $("#" + controlName + "-upbutton").click(function() {upButtonClicked(controlName)})
-            $("#" + controlName + "-downbutton").click(function() {downButtonClicked(controlName)})
+            $("#" + controlName + "-upbutton-step").click(function() {upButtonClicked(controlName, 10)})
+            $("#" + controlName + "-downbutton-step").click(function() {downButtonClicked(controlName, 10)})
+            $("#" + controlName + "-upbutton").click(function() {upButtonClicked(controlName, 1)})
+            $("#" + controlName + "-downbutton").click(function() {downButtonClicked(controlName, 1)})
             $("#" + controlName + "-stopbutton").click(function() {stopButtonClicked(controlName)})
 
             $("#" + controlName + "-forwardButton").on('change', directionChanged(controlName))
@@ -135,9 +143,11 @@
                 <input type="radio" id="outerloop-forwardButton" name="outerloop-radio"><label for="radio1">Forward</label>
                 <input type="radio" id="outerloop-backwardButton" name="outerloop-radio"><label for="radio2">Backward</label>
             </div>
-            <button id="outerloop-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
-            <button id="outerloop-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
-            <button id="outerloop-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
+            <button id="outerloop-upbutton-step" style="position: absolute;top: 140px;left: 120px;height:50px;width:50px">&#x21C8</button>
+            <button id="outerloop-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">&#x2191</button>
+            <button id="outerloop-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">&#x2193</button>
+            <button id="outerloop-downbutton-step" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">&#x21CA</button>
+            <button id="outerloop-stopbutton" style="position: absolute;top: 380px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
 
         <div style="position: absolute;top: 0px;left: 200px;width: 200px;height: 600px;border: 3px solid #444444;">
@@ -148,9 +158,11 @@
                 <input type="radio" id="innerloop-forwardButton" name="innerloop-radio"><label for="radio1">Forward</label>
                 <input type="radio" id="innerloop-backwardButton" name="innerloop-radio"><label for="radio2">Backward</label>
             </div>
-            <button id="innerloop-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
-            <button id="innerloop-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
-            <button id="innerloop-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
+            <button id="innerloop-upbutton-step" style="position: absolute;top: 140px;left: 120px;height:50px;width:50px">&#x21C8</button>
+            <button id="innerloop-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">&#x2191</button>
+            <button id="innerloop-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">&#x2193</button>
+            <button id="innerloop-downbutton-step" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">&#x21CA</button>
+            <button id="innerloop-stopbutton" style="position: absolute;top: 380px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
 
         <div style="position: absolute;top: 0px;left: 400px;width: 200px;height: 600px;border: 3px solid #444444;">
@@ -161,9 +173,11 @@
                 <input type="radio" id="stationouter-forwardButton" name="stationouter-radio"><label for="radio1">Forward</label>
                 <input type="radio" id="stationouter-backwardButton" name="stationouter-radio"><label for="radio2">Backward</label>
             </div>
-            <button id="stationouter-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
-            <button id="stationouter-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
-            <button id="stationouter-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
+            <button id="stationouter-upbutton-step" style="position: absolute;top: 140px;left: 120px;height:50px;width:50px">&#x21C8</button>
+            <button id="stationouter-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">&#x2191</button>
+            <button id="stationouter-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">&#x2193</button>
+            <button id="stationouter-downbutton-step" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">&#x21CA</button>
+            <button id="stationouter-stopbutton" style="position: absolute;top: 380px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
 
         <div style="position: absolute;top: 0px;left: 600px;width: 200px;height: 600px;border: 3px solid #444444;">
@@ -174,9 +188,11 @@
                 <input type="radio" id="stationinner-forwardButton" name="stationinner-radio"><label for="radio1">Forward</label>
                 <input type="radio" id="stationinner-backwardButton" name="stationinner-radio"><label for="radio2">Backward</label>
             </div>
-            <button id="stationinner-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">Up</button>
-            <button id="stationinner-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">Down</button>
-            <button id="stationinner-stopbutton" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">Stop</button>
+            <button id="stationinner-upbutton-step" style="position: absolute;top: 140px;left: 120px;height:50px;width:50px">&#x21C8</button>
+            <button id="stationinner-upbutton" style="position: absolute;top: 200px;left: 120px;height:50px;width:50px">&#x2191</button>
+            <button id="stationinner-downbutton" style="position: absolute;top: 260px;left: 120px;height:50px;width:50px">&#x2193</button>
+            <button id="stationinner-downbutton-step" style="position: absolute;top: 320px;left: 120px;height:50px;width:50px">&#x21CA</button>
+            <button id="stationinner-stopbutton" style="position: absolute;top: 380px;left: 120px;height:50px;width:50px">Stop</button>
         </div>
 </div>
  

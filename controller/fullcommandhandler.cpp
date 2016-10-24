@@ -107,7 +107,15 @@ QByteArray FullCommandHandler::putCommand(const QByteArray &url, const QByteArra
             }
             else
             {
-                obj.insert("error", QString("Invalid point: " + splitPath.at(3)));
+                IsolatorController *pIsol = m_pController->getIsolator(splitPath.at(3));
+                if (pIsol)
+                {
+                    pIsol->toggle();
+                }
+                else
+                {
+                    obj.insert("error", QString("Invalid point or isolator: " + splitPath.at(3)));
+                }
             }
 
         }

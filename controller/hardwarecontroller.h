@@ -6,6 +6,7 @@
 #include <QHash>
 #include "basepointcontroller.h"
 #include "speedcontroller.h"
+#include "isolatorcontroller.h"
 
 class HardwareController : public QObject
 {
@@ -16,9 +17,13 @@ public:
 
     QList<QByteArray> allPoints() const;
     QList<QByteArray> allControllers() const;
+    QList<QByteArray> allIsolators() const;
 
     BasePointController* getPoint(const QByteArray& name) const;
     SpeedController* getController(const QByteArray& name) const;
+    IsolatorController* getIsolator(const QByteArray& name) const;
+
+    static void setLine(int lineID, int value);
 
 signals:
 
@@ -27,6 +32,7 @@ public slots:
 private:
     QHash<QByteArray, BasePointController*> m_Points;
     QHash<QByteArray, SpeedController*> m_Controllers;
+    QHash<QByteArray, IsolatorController*> m_Isolators;
 };
 
 #endif // HARDWARECONTROLLER_H
