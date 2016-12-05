@@ -1,0 +1,97 @@
+.point {
+    position: absolute;
+    width:16px;
+    height: 16px;
+    background-image: url("png/greenindicator.png");
+    opacity: 0;
+}
+
+.up-main-crossover-lower {
+    top:217px;
+    left:160px;
+}
+
+.up-main-crossover-upper {
+    top:152px;
+    left:199px;
+}
+
+.down-main-crossover-lower {
+    top:213px;
+    left:672px;
+}
+
+.down-main-crossover-upper {
+    top:150px;
+    left:634px;
+}
+
+.station-entrance-lower {
+    top:171px;
+    left:604px;
+}
+
+.station-entrance-upper {
+    top:108px;
+    left:564px;
+}
+
+.up-station-crossover-lower {
+    top:130px;
+    left:244px;
+}
+
+.up-station-crossover-upper {
+    top:64px;
+    left:280px;
+}
+
+.down-station-crossover-lower {
+    top:128px;
+    left:526px;
+}
+
+.down-station-crossover-upper {
+    top:63px;
+    left:486px;
+}
+
+.up-isolator {
+    top:20px;
+    left:134px;
+}
+
+.up-siding-1 {
+    top:63px;
+    left:227px;
+}
+
+.up-siding-2 {
+    top:24px;
+    left:194px;
+}
+
+.station-isolator {
+    top:64px;
+    left:529px;
+}
+
+.down-siding-isolator-1 {
+    top:100px;
+    left:722px;
+}
+
+.down-siding-isolator-2 {
+    top:30px;
+    left:746px;
+}
+
+.down-siding-1 {
+    top:100px;
+    left:648px;
+}
+
+.down-siding-2 {
+    top:71px;
+    left:677px;
+}

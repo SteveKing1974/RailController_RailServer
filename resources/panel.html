@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="panel-style.css">
     <script>
         function togglePoint(name) {
             $.ajax({
@@ -43,72 +43,51 @@
             return "png/greyindicator.png"
         }
 
+        function setPointImage(name, value, upperAndLower)
+        {
+            if (upperAndLower)
+            {
+                $(name + "Lower").attr("style", (value ? "opacity: 0" : "opacity: 0.5"))
+                $(name + "Upper").attr("style", (value ? "opacity: 0" : "opacity: 0.5"))
+            }
+            else
+            {
+                $(name).attr("style", (value ? "opacity: 0" : "opacity: 0.5"))
+            }
+
+            $(name + "Lever_img").attr("src", "png/" + name.slice(1) + "Lever_" + (value == 0 ? "off" : "on") + ".png")
+        }
+
         function handleReturn(data) {
-            $("#outerLeft").attr("src", stateToImage(data.nodes.outerLeft))
 
-            $("#outerCenter").attr("src", stateToImage(data.nodes.outerCenter))
-            $("#outerRight").attr("src", stateToImage(data.nodes.outerRight))
-            $("#outerToInnerLeft").attr("src", stateToImage(data.nodes.outerToInnerLeft))
-            $("#outerToInnerRight").attr("src", stateToImage(data.nodes.outerToInnerRight))
-            $("#innerLeft").attr("src", stateToImage(data.nodes.innerLeft))
-            $("#innerCenter").attr("src", stateToImage(data.nodes.innerCenter))
-            $("#innerRight").attr("src", stateToImage(data.nodes.innerRight))
-            $("#innerToStation").attr("src", stateToImage(data.nodes.innerToStation))
-            $("#stationOuterLeft").attr("src", stateToImage(data.nodes.stationOuterLeft))
-            $("#outerLeft").attr("src", stateToImage(data.nodes.outerLeft))
-            $("#stationOuterCenter").attr("src", stateToImage(data.nodes.stationOuterCenter))
-            $("#stationOuterRight").attr("src", stateToImage(data.nodes.stationOuterRight))
-            $("#stationSidingRight1").attr("src", stateToImage(data.nodes.stationSidingRight1))
-            $("#stationSidingRight2").attr("src", stateToImage(data.nodes.stationSidingRight2))
-            $("#stationSidingRight3").attr("src", stateToImage(data.nodes.stationSidingRight3))
+            setPointImage("#upMainCrossOver", data.points.upmaincrossover.direction, true)
 
-            $("#stationOuterToInnerLeft").attr("src", stateToImage(data.nodes.stationOuterToInnerLeft))
-            $("#stationOuterToInnerRight").attr("src", stateToImage(data.nodes.stationOuterToInnerRight))
-            $("#stationInnerCenter").attr("src", stateToImage(data.nodes.stationInnerCenter))
-            $("#stationInnerRight").attr("src", stateToImage(data.nodes.stationInnerRight))
-            $("#stationSidingLeft1").attr("src", stateToImage(data.nodes.stationSidingLeft1))
-            $("#stationSidingLeft2").attr("src", stateToImage(data.nodes.stationSidingLeft2))
-            $("#stationSidingLeft3").attr("src", stateToImage(data.nodes.stationSidingLeft3))
+            setPointImage("#downMainCrossOver", data.points.downmaincrossover.direction, true)
 
+            setPointImage("#stationEntrance", data.points.stationentrancecrossover.direction, true)
 
-            $("#upmaincrossover_img").attr("src", "png/upmaincrossover_" + (data.points.upmaincrossover.direction == 0 ? "off" : "on") + ".png")
-            $("#upmaincrossover_img").attr("style", (data.points.upmaincrossover.enabled ? "" : "opacity: 0.5") )
+            setPointImage("#upStationCrossOver", data.points.upstationcrossover.direction, true)
 
-            $("#downmaincrossover_img").attr("src", "png/downmaincrossover_" + (data.points.downmaincrossover.direction == 0 ? "off" : "on") + ".png")
-            $("#downmaincrossover_img").attr("style", (data.points.downmaincrossover.enabled ? "" : "opacity: 0.5") )
+            setPointImage("#downStationCrossOver", data.points.downstationcrossover.direction, true)
 
-            $("#stationentrancecrossover_img").attr("src", "png/stationentrancecrossover_" + (data.points.stationentrancecrossover.direction == 0 ? "off" : "on") + ".png")
-            $("#stationentrancecrossover_img").attr("style", (data.points.stationentrancecrossover.enabled ? "" : "opacity: 0.5") )
+            setPointImage("#upSiding1", data.points.upsiding1.direction, false)
+            setPointImage("#upSiding2", data.points.upsiding2.direction, false)
 
-            $("#downstationcrossover_img").attr("src", "png/downstationcrossover_" + (data.points.downstationcrossover.direction == 0 ? "off" : "on") + ".png")
-            $("#downstationcrossover_img").attr("style", (data.points.downstationcrossover.enabled ? "" : "opacity: 0.5") )
+            setPointImage("#downSiding1", data.points.downsiding1.direction, false)
+            setPointImage("#downSiding2", data.points.downsiding2.direction, false)
 
-            $("#upstationcrossover_img").attr("src", "png/upstationcrossover_" + (data.points.upstationcrossover.direction == 0 ? "off" : "on") + ".png")
-            $("#upstationcrossover_img").attr("style", (data.points.upstationcrossover.enabled ? "" : "opacity: 0.5") )
-
-            $("#upsiding1_img").attr("src", "png/upsiding1_" + (data.points.upsiding1.direction == 0 ? "off" : "on") + ".png")
-            $("#upsiding1_img").attr("style", (data.points.upsiding1.enabled ? "" : "opacity: 0.5") )
-
-            $("#upsiding2_img").attr("src", "png/upsiding2_" + (data.points.upsiding2.direction == 0 ? "off" : "on") + ".png")
-            $("#upsiding2_img").attr("style", (data.points.upsiding2.enabled ? "" : "opacity: 0.5") )
-
-            $("#downsiding1_img").attr("src", "png/downsiding1_" + (data.points.downsiding1.direction == 0 ? "off" : "on") + ".png")
-            $("#downsiding1_img").attr("style", (data.points.downsiding1.enabled ? "" : "opacity: 0.5") )
-
-            $("#downsiding2_img").attr("src", "png/downsiding2_" + (data.points.downsiding2.direction == 0 ? "off" : "on") + ".png")
-            $("#downsiding2_img").attr("style", (data.points.downsiding2.enabled ? "" : "opacity: 0.5") )
         }
 
         $(function() {
-            $("#upmaincrossover").click(function() {togglePoint("upmaincrossover")})
-            $("#downmaincrossover").click(function() {togglePoint("downmaincrossover")})
-            $("#stationentrancecrossover").click(function() {togglePoint("stationentrancecrossover")})
-            $("#downstationcrossover").click(function() {togglePoint("downstationcrossover")})
-            $("#upstationcrossover").click(function() {togglePoint("upstationcrossover")})
-            $("#upsiding1").click(function() {togglePoint("upsiding1")})
-            $("#upsiding2").click(function() {togglePoint("upsiding2")})
-            $("#downsiding1").click(function() {togglePoint("downsiding1")})
-            $("#downsiding2").click(function() {togglePoint("downsiding2")})
+            $("#upMainCrossOverLever").click(function() {togglePoint("upmaincrossover")})
+            $("#downMainCrossOverLever").click(function() {togglePoint("downmaincrossover")})
+            $("#stationEntranceLever").click(function() {togglePoint("stationentrancecrossover")})
+            $("#downStationCrossOverLever").click(function() {togglePoint("downstationcrossover")})
+            $("#upStationCrossOverLever").click(function() {togglePoint("upstationcrossover")})
+            $("#upSiding1Lever").click(function() {togglePoint("upsiding1")})
+            $("#upSiding2Lever").click(function() {togglePoint("upsiding2")})
+            $("#downSiding1Lever").click(function() {togglePoint("downsiding1")})
+            $("#downSiding2Lever").click(function() {togglePoint("downsiding2")})
 
             getState()
             })
@@ -126,59 +105,44 @@
 
 
     <!-- Outer -->
-    <img id="outerLeft" src="png/greyindicator.png" style="position: absolute; top:208px; left:80px; width:16px height: 16px">
-    <img id="outerCenter" src="png/greyindicator.png" style="position: absolute; top:206px; left:400px; width:16px height: 16px">
-    <img id="outerRight" src="png/greyindicator.png" style="position: absolute; top:202px; left:820px; width:16px height: 16px">
+    <div id="upMainCrossOverLower" class="point up-main-crossover-lower"></div>
+    <div id="upMainCrossOverUpper" class="point up-main-crossover-upper"></div>
 
-    <!-- Outer to inner -->
-    <img id="outerToInnerLeft" src="png/greyindicator.png" style="position: absolute; top:185px; left:198px; width:16px height: 16px">
-    <img id="outerToInnerRight" src="png/greyindicator.png" style="position: absolute; top:182px; left:667px; width:16px height: 16px">
+    <div id="downMainCrossOverLower" class="point down-main-crossover-lower"></div>
+    <div id="downMainCrossOverUpper" class="point down-main-crossover-upper"></div>
 
-    <!-- Inner -->
-    <img id="innerLeft" src="png/greyindicator.png" style="position: absolute; top:163px; left:80px; width:16px height: 16px">
-    <img id="innerCenter" src="png/greyindicator.png" style="position: absolute; top:162px; left:400px; width:16px height: 16px">
-    <img id="innerRight" src="png/greyindicator.png" style="position: absolute; top:160px; left:820px; width:16px height: 16px">
+    <div id="stationEntranceLower" class="point station-entrance-lower"></div>
+    <div id="stationEntranceUpper" class="point station-entrance-upper"></div>
 
-    <!-- Inner to station -->
-    <img id="innerToStation" src="png/greyindicator.png" style="position: absolute; top:140px; left:595px; width:16px height: 16px">
+    <div id="upStationCrossOverLower" class="point up-station-crossover-lower"></div>
+    <div id="upStationCrossOverUpper" class="point up-station-crossover-upper"></div>
 
-    <!-- Station Outer -->
-    <img id="stationOuterLeft" src="png/greyindicator.png" style="position: absolute; top:121px; left:160px; width:16px height: 16px">
-    <img id="stationOuterCenter" src="png/greyindicator.png" style="position: absolute; top:119px; left:400px; width:16px height: 16px">
-    <img id="stationOuterRight" src="png/greyindicator.png" style="position: absolute; top:117px; left:625px; width:16px height: 16px">
+    <div id="downStationCrossOverLower" class="point down-station-crossover-lower"></div>
+    <div id="downStationCrossOverUpper" class="point down-station-crossover-upper"></div>
 
-    <!-- Sidings right -->
-    <img id="stationSidingRight1" src="png/greyindicator.png" style="position: absolute; top:116px; left:770px; width:16px height: 16px">
-    <img id="stationSidingRight2" src="png/greyindicator.png" style="position: absolute; top:78px; left:770px; width:16px height: 16px">
-    <img id="stationSidingRight3" src="png/greyindicator.png" style="position: absolute; top:44px; left:770px; width:16px height: 16px">
+    <div id="upIsolator" class="point up-isolator"></div>
+    <div id="upSiding1" class="point up-siding-1"></div>
+    <div id="upSiding2" class="point up-siding-2"></div>
 
+    <div id="stationIsolator" class="point station-isolator"></div>
+    <div id="downSidingIsolator1" class="point down-siding-isolator-1"></div>
+    <div id="downSidingIsolator2" class="point down-siding-isolator-2"></div>
 
-    <!-- Outer to inner -->
-    <img id="stationOuterToInnerLeft" src="png/greyindicator.png" style="position: absolute; top:100px; left:268px; width:16px height: 16px">
-    <img id="stationOuterToInnerRight" src="png/greyindicator.png" style="position: absolute; top:98px; left:518px; width:16px height: 16px">
-
-
-    <!-- Station Inner -->
-    <img id="stationInnerCenter" src="png/greyindicator.png" style="position: absolute; top:77px; left:400px; width:16px height: 16px">
-    <img id="stationInnerRight" src="png/greyindicator.png" style="position: absolute; top:75px; left:555px; width:16px height: 16px">
-
-    <!-- Sidings 1 -->
-    <img id="stationSidingLeft1" src="png/greyindicator.png" style="position: absolute; top:79px; left:120px; width:16px height: 16px">
-    <img id="stationSidingLeft2" src="png/greyindicator.png" style="position: absolute; top:39px; left:120px; width:16px height: 16px">
-    <img id="stationSidingLeft3" src="png/greyindicator.png" style="position: absolute; top:7px; left:120px; width:16px height: 16px">
+    <div id="downSiding1" class="point down-siding-1"></div>
+    <div id="downSiding2" class="point down-siding-2"></div>
 
 </div>
  
 <div style="position:relative; margin-left: 50px">
- <div id="upmaincrossover" style="display: inline-block"><img           id="upmaincrossover_img" src="png/upmaincrossover_off.png"></div>
- <div id="downmaincrossover" style="display: inline-block"><img         id="downmaincrossover_img" src="png/downmaincrossover_off.png"></div>
- <div id="stationentrancecrossover" style="display: inline-block"><img  id="stationentrancecrossover_img" src="png/stationentrancecrossover_off.png"></div>
- <div id="downstationcrossover" style="display: inline-block"><img      id="downstationcrossover_img" src="png/downstationcrossover_off.png"></div>
- <div id="upstationcrossover" style="display: inline-block"><img        id="upstationcrossover_img" src="png/upstationcrossover_off.png"></div>
- <div id="upsiding1" style="display: inline-block"><img                 id="upsiding1_img" src="png/upsiding1_off.png"></div>
- <div id="upsiding2" style="display: inline-block"><img                 id="upsiding2_img" src="png/upsiding2_off.png"></div>
- <div id="downsiding1" style="display: inline-block"><img               id="downsiding1_img" src="png/downsiding1_off.png"></div>
- <div id="downsiding2" style="display: inline-block"><img               id="downsiding2_img" src="png/downsiding2_off.png"></div>
+     <div id="upMainCrossOverLever" style="display: inline-block">       <img  id="upMainCrossOverLever_img" src="png/upMainCrossOverLever_off.png"></div>
+     <div id="downMainCrossOverLever" style="display: inline-block">     <img  id="downMainCrossOverLever_img" src="png/downMainCrossOverLever_off.png"></div>
+     <div id="stationEntranceLever" style="display: inline-block">       <img  id="stationEntranceLever_img" src="png/stationEntranceLever_off.png"></div>
+     <div id="downStationCrossOverLever" style="display: inline-block">  <img  id="downStationCrossOverLever_img" src="png/downStationCrossOverLever_off.png"></div>
+     <div id="upStationCrossOverLever" style="display: inline-block">    <img  id="upStationCrossOverLever_img" src="png/upStationCrossOverLever_off.png"></div>
+     <div id="upSiding1Lever" style="display: inline-block">             <img  id="upSiding1Lever_img" src="png/upSiding1Lever_off.png"></div>
+     <div id="upSiding2Lever" style="display: inline-block">             <img  id="upsiding2Lever_img" src="png/upSiding2Lever_off.png"></div>
+     <div id="downSiding1Lever" style="display: inline-block">           <img  id="downSiding1Lever_img" src="png/downSiding1Lever_off.png"></div>
+     <div id="downSiding2Lever" style="display: inline-block">           <img  id="downSiding2Lever_img" src="png/downSiding2Lever_off.png"></div>
 </div>
 </body>
 </html>

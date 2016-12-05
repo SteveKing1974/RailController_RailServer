@@ -859,6 +859,8 @@ int http_get_handler(struct soap *soap)
 //        return 403; /* HTTP forbidden */
     if (!soap_tag_cmp(soap->path, "*.html"))
         return copy_file(soap, soap->path + 1, "text/html");
+    if (!soap_tag_cmp(soap->path, "*.css"))
+        return copy_file(soap, soap->path + 1, "text/css");
     if (!soap_tag_cmp(soap->path, "*.xml"))
         return copy_file(soap, soap->path + 1, "text/xml");
     if (!soap_tag_cmp(soap->path, "*.jpg"))
