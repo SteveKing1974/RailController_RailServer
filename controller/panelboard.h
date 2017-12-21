@@ -7,7 +7,7 @@
 
 #include <QHash>
 #include <QList>
-#include <QByteArray>
+#include <QString>
 
 class PanelBoard
 {
@@ -17,16 +17,16 @@ public:
 
     void refresh();
 
-    int getLightState(const QByteArray& lightName) const;
+    int getLightState(const QString& lightName) const;
 
-    QList<QByteArray> allNodes() const;
+    QList<QString> allNodes() const;
 
 private:
     void updateNode(LayoutNode* pNode, int value);
 
     QHash<SpeedController*, LayoutNode*> m_ControlNodes;
 
-    QHash<QByteArray, LayoutNode*> m_AllNodes;
+    QHash<QString, LayoutNode*> m_AllNodes;
 };
 
 #endif // PANELBOARD_H

@@ -76,6 +76,11 @@
             setPointImage("#downSiding1", data.points.downsiding1.direction, false)
             setPointImage("#downSiding2", data.points.downsiding2.direction, false)
 
+            setPointImage("#upSiding", data.isolators.topsidingup.enabled, false)
+            setPointImage("#stationSiding", data.isolators.stationsidingdown.enabled, false)
+            setPointImage("#downSidingLower", data.isolators.bottomsidingdown.enabled, false)
+            setPointImage("#downSidingUpper", data.isolators.topsidingdown.enabled, false)
+
         }
 
         $(function() {
@@ -88,6 +93,11 @@
             $("#upSiding2Lever").click(function() {togglePoint("upsiding2")})
             $("#downSiding1Lever").click(function() {togglePoint("downsiding1")})
             $("#downSiding2Lever").click(function() {togglePoint("downsiding2")})
+
+            $("#upSidingLever").click(function() {togglePoint("topsidingup")})
+            $("#stationSidingLever").click(function() {togglePoint("stationsidingdown")})
+            $("#downSidingLowerLever").click(function() {togglePoint("bottomsidingdown")})
+            $("#downSidingUpperLever").click(function() {togglePoint("topsidingdown")})
 
             getState()
             })
@@ -120,13 +130,13 @@
     <div id="downStationCrossOverLower" class="point down-station-crossover-lower"></div>
     <div id="downStationCrossOverUpper" class="point down-station-crossover-upper"></div>
 
-    <div id="upIsolator" class="point up-isolator"></div>
+    <div id="upSiding" class="point up-isolator"></div>
     <div id="upSiding1" class="point up-siding-1"></div>
     <div id="upSiding2" class="point up-siding-2"></div>
 
-    <div id="stationIsolator" class="point station-isolator"></div>
-    <div id="downSidingIsolator1" class="point down-siding-isolator-1"></div>
-    <div id="downSidingIsolator2" class="point down-siding-isolator-2"></div>
+    <div id="stationSiding" class="point station-isolator"></div>
+    <div id="downSidingLower" class="point down-siding-isolator-1"></div>
+    <div id="downSidingUpper" class="point down-siding-isolator-2"></div>
 
     <div id="downSiding1" class="point down-siding-1"></div>
     <div id="downSiding2" class="point down-siding-2"></div>
@@ -143,6 +153,11 @@
      <div id="upSiding2Lever" style="display: inline-block">             <img  id="upsiding2Lever_img" src="png/upSiding2Lever_off.png"></div>
      <div id="downSiding1Lever" style="display: inline-block">           <img  id="downSiding1Lever_img" src="png/downSiding1Lever_off.png"></div>
      <div id="downSiding2Lever" style="display: inline-block">           <img  id="downSiding2Lever_img" src="png/downSiding2Lever_off.png"></div>
+
+     <div id="upSidingLever" style="display: inline-block">           <img  id="upSidingLever_img" src="png/upSidingLever_off.png"></div>
+     <div id="stationSidingLever" style="display: inline-block">           <img  id="stationSidingLever_img" src="png/stationSidingLever_off.png"></div>
+     <div id="downSidingLowerLever" style="display: inline-block">           <img  id="downSidingLowerLever_img" src="png/downSidingLowerLever_off.png"></div>
+     <div id="downSidingUpperLever" style="display: inline-block">           <img  id="downSidingUpperLever_img" src="png/downSidingUpperLever_off.png"></div>
 </div>
 </body>
 </html>

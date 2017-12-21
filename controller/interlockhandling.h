@@ -10,8 +10,8 @@ class InterlockHandling
 public:
     InterlockHandling(HardwareController *pControl);
 
-    void togglePoint(const QByteArray& pointName);
-    void setSpeed(const QByteArray &controller, int newSpeed);
+    void togglePoint(const QString &pointName);
+    void setSpeed(const QString &controller, int newSpeed);
 
 private:
     HardwareController* m_pController;

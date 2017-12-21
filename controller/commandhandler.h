@@ -4,17 +4,23 @@
 #include <QByteArray>
 
 #include <QJsonObject>
+#include <QObject>
 
-class CommandHandler
+class CommandHandler : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~CommandHandler() {}
 
-    virtual QByteArray getCommand(const QByteArray& url) const = 0;
-    virtual QByteArray putCommand(const QByteArray& url, const QByteArray& data) const = 0;
+    virtual QJsonObject getCommand(const QByteArray& data) const = 0;
+    virtual QJsonObject putCommand(const QByteArray& data) const = 0;
 
-protected:
-    static QJsonObject fromPUTData(const QByteArray& data);
+public slots:
+    void receiveData(const QByteArray& data);
+
+signals:
+    void sendData(const QByteArray& data);
 };
 
 #endif // COMMANDHANDLER_H

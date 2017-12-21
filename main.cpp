@@ -12,37 +12,34 @@
 #include "testcommandhandler.h"
 #include "fullcommandhandler.h"
 
-extern "C" {
-#include "webserver.h"
-}
+#include "clientsocket.h"
 
-static CommandHandler* g_Handler = 0;
 
-const char* handlePost(int isPost, const char* url, const char* data, int len, int* respLen)
-{
-    static QByteArray respData;
+//const char* handlePost(int isPost, const char* url, const char* data, int len, int* respLen)
+//{
+//    static QByteArray respData;
 
-    if (g_Handler)
-    {
-        respData = g_Handler->putCommand(QByteArray(url), QByteArray(data, len));
-    }
+//    if (g_Handler)
+//    {
+//        respData = g_Handler->putCommand(QByteArray(url), QByteArray(data, len));
+//    }
 
-    *respLen = respData.length();
-    return respData.data();
-}
+//    *respLen = respData.length();
+//    return respData.data();
+//}
 
-const char* handleGet(const char* url, const char* , int , int* respLen)
-{
-    static QByteArray respData;
+//const char* handleGet(const char* url, const char* , int , int* respLen)
+//{
+//    static QByteArray respData;
 
-    if (g_Handler)
-    {
-        respData = g_Handler->getCommand(QByteArray(url));
-    }
+//    if (g_Handler)
+//    {
+//        respData = g_Handler->getCommand(QByteArray(url));
+//    }
 
-    *respLen = respData.length();
-    return respData.data();
-}
+//    *respLen = respData.length();
+//    return respData.data();
+//}
 
 
 int main(int argc, char *argv[])
@@ -66,9 +63,7 @@ int main(int argc, char *argv[])
 
     parser.process(app);
 
-    HardwareController hardwareControl;
-
-    if (parser.isSet(testOption))
+   if (parser.isSet(testOption))
     {
         qDebug() << "Test";
         CommandLine c;
@@ -76,25 +71,31 @@ int main(int argc, char *argv[])
     }
     else
     {
+       HardwareController hardwareControl;
+
+        CommandHandler* pCmdHandler;
         PanelBoard *pPanelBoard;
         InterlockHandling *pInterlock;
+
+        ClientSocket* pCmdSocket = new ClientSocket(&hardwareControl);
 
         if (parser.isSet(testServerOption))
         {
             qDebug() << "Test Server";
-            g_Handler = new TestCommandHandler();
+            pCmdHandler = new TestCommandHandler();
         }
         else
         {
             pPanelBoard = new PanelBoard(&hardwareControl);
             pInterlock = new InterlockHandling(&hardwareControl);
 
-            g_Handler = new FullCommandHandler(&hardwareControl, pPanelBoard, pInterlock);
+            pCmdHandler = new FullCommandHandler(&hardwareControl, pPanelBoard, pInterlock);
         }
 
-        status = serverMain(0, 0, handlePost, handleGet);
+        QObject::connect(pCmdSocket, SIGNAL(dataReceived(QByteArray)), pCmdHandler, SLOT(receiveData(QByteArray)));
+        QObject::connect(pCmdHandler, SIGNAL(sendData(QByteArray)), pCmdSocket, SLOT(sendData(QByteArray)));
 
-        delete g_Handler;
+        app.exec();
     }
 
     return status;

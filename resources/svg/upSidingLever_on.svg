@@ -16,8 +16,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="downmaincrossover_on.svg"
-   inkscape:export-filename="/home/steve/Code/RailController/RailServer/resources/png/upsiding2.png"
+   sodipodi:docname="upSidingLever_on.svg"
+   inkscape:export-filename="/home/steve/Code/RailController/RailServer/resources/png/upSidingLever_on.png"
    inkscape:export-xdpi="40.56818"
    inkscape:export-ydpi="40.56818">
   <defs
@@ -108,7 +108,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="-74.813663"
+     inkscape:cx="-371.24223"
      inkscape:cy="642.85494"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
@@ -267,7 +267,7 @@
        inkscape:export-ydpi="40.56818"
        inkscape:export-filename="/home/steve/Code/RailController/RailServer/resources/png/stationentrancecrossover_on.png"><tspan
          sodipodi:role="line"
-         id="tspan4256">1</tspan></text>
+         id="tspan4205">9</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:27.65625px;line-height:100%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;writing-mode:lr;"
@@ -279,11 +279,9 @@
        inkscape:export-ydpi="40.56818"
        inkscape:export-filename="/home/steve/Code/RailController/RailServer/resources/png/stationentrancecrossover_on.png"><tspan
          sodipodi:role="line"
-         id="tspan4180">Up</tspan><tspan
+         id="tspan8032">Up</tspan><tspan
          sodipodi:role="line"
-         id="tspan4182">Top</tspan><tspan
-         sodipodi:role="line"
-         id="tspan4184">Siding</tspan></text>
+         id="tspan8034">Siding</tspan></text>
     <g
        id="g3418"
        transform="translate(0.71428569,20)"

@@ -1,4 +1,5 @@
 #include "fullcommandhandler.h"
+#include "jsonkeys.h"
 
 #include <QJsonDocument>
 
@@ -15,23 +16,34 @@ QJsonObject FullCommandHandler::getPanelData() const
 {
     QJsonObject obj;
     QJsonObject nodes;
-    const QList<QByteArray> keys = m_pPanel->allNodes();
-    foreach (const QByteArray& key, keys)
+    const QList<QString> keys = m_pPanel->allNodes();
+    foreach (const QString& key, keys)
     {
         nodes.insert(key, m_pPanel->getLightState(key));
     }
 
     QJsonObject points;
-    const QList<QByteArray> allPoints = m_pController->allPoints();
-    foreach (const QByteArray& point, allPoints)
+    const QList<QString> allPoints = m_pController->allPoints();
+    foreach (const QString& point, allPoints)
     {
         QJsonObject pt;
-        pt.insert("direction", m_pController->getPoint(point)->direction());
-        pt.insert("enabled", m_pController->getPoint(point)->enabled());
+        pt.insert(JsonKeys::direction(), m_pController->getPoint(point)->direction());
+        pt.insert(JsonKeys::enabled(), m_pController->getPoint(point)->enabled());
         points.insert(point, pt);
     }
-    obj.insert("nodes", nodes);
-    obj.insert("points", points);
+
+    QJsonObject isolators;
+    const QList<QString> allIsolators = m_pController->allIsolators();
+    foreach (const QString& isolator, allIsolators)
+    {
+        QJsonObject iso;
+        iso.insert(JsonKeys::enabled(), m_pController->getIsolator(isolator)->getState());
+        isolators.insert(isolator, iso);
+    }
+
+    obj.insert(JsonKeys::nodes(), nodes);
+    obj.insert(JsonKeys::points(), points);
+    obj.insert(JsonKeys::isolators(), isolators);
 
     return obj;
 }
@@ -40,15 +52,15 @@ QJsonObject FullCommandHandler::getControllerData() const
 {
     QJsonObject obj;
 
-    foreach (const QByteArray& name, m_pController->allControllers())
+    foreach (const QString& name, m_pController->allControllers())
     {
         SpeedController* pCtrl = m_pController->getController(name);
 
         QJsonObject control;
-        control.insert("speed", pCtrl->speed());
-        control.insert("direction", pCtrl->direction());
-        control.insert("directionEnabled", pCtrl->speed()==0);
-        control.insert("speedEnabled", pCtrl->enabled());
+        control.insert(JsonKeys::speed(), pCtrl->speed());
+        control.insert(JsonKeys::direction(), pCtrl->direction());
+        control.insert(JsonKeys::directionEnabled(), pCtrl->speed()==0);
+        control.insert(JsonKeys::speedEnabled(), pCtrl->enabled());
 
         obj.insert(name, control);
     }
@@ -56,38 +68,31 @@ QJsonObject FullCommandHandler::getControllerData() const
     return obj;
 }
 
-QByteArray FullCommandHandler::getCommand(const QByteArray &url) const
+QJsonObject FullCommandHandler::getCommand(const QByteArray& data) const
 {
-    const QList<QByteArray> splitPath = url.toLower().split('/');
+    const QString lowData = QLatin1String(data.toLower());
 
     QJsonObject obj;
 
-    if (splitPath.length()>=3)
+    if (lowData == JsonKeys::panel())
     {
-        if (splitPath.at(2) == "panel")
-        {
-            obj = getPanelData();
-        }
-        else if (splitPath.at(2) == "controller")
-        {
-            obj = getControllerData();
-        }
-        else
-        {
-            obj.insert("error", QString("Unknown object: " + splitPath.at(2)));
-        }
+        obj.insert(JsonKeys::panel(), getPanelData());
+    }
+    else if (lowData == JsonKeys::controller())
+    {
+        obj.insert(JsonKeys::controller(), getControllerData());
     }
     else
     {
-        obj.insert("error", QString("Badly formed path: " + url));
+        obj.insert(JsonKeys::error(), QLatin1String("Badly formed data: " + data));
     }
 
-    return QJsonDocument(obj).toJson();
+    return obj;
 }
 
-QByteArray FullCommandHandler::putCommand(const QByteArray &url, const QByteArray &data) const
+QJsonObject FullCommandHandler::putCommand(const QByteArray& data) const
 {
-    const QList<QByteArray> splitPath = url.toLower().split('/');
+    const QList<QString> splitPath = QString(QLatin1String(data)).toLower().split('/');
 
     QJsonObject obj;
 
@@ -95,7 +100,7 @@ QByteArray FullCommandHandler::putCommand(const QByteArray &url, const QByteArra
 
     if (splitPath.length()>=3)
     {
-        if (splitPath.at(2) == "panel")
+        if (splitPath.at(2) == JsonKeys::panel())
         {
             BasePointController* pPoint = m_pController->getPoint(splitPath.at(3));
             if (pPoint)
@@ -111,15 +116,18 @@ QByteArray FullCommandHandler::putCommand(const QByteArray &url, const QByteArra
                 if (pIsol)
                 {
                     pIsol->toggle();
+                    m_pPanel->refresh();
+
+                    obj = getPanelData();
                 }
                 else
                 {
-                    obj.insert("error", QString("Invalid point or isolator: " + splitPath.at(3)));
+                    obj.insert(JsonKeys::error(), QString("Invalid point or isolator: " + splitPath.at(3)));
                 }
             }
 
         }
-        else if (splitPath.at(2) == "controller")
+        else if (splitPath.at(2) == JsonKeys::controller())
         {
             if (splitPath.length()>=4)
             {
@@ -127,34 +135,34 @@ QByteArray FullCommandHandler::putCommand(const QByteArray &url, const QByteArra
 
                 if (pCtrl != 0)
                 {
-                    QJsonObject dataObj = fromPUTData(data);
+                    QJsonObject dataObj; // = fromPUTData(data);
 
-                    pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(dataObj.value("direction").toString().toInt()));
-                    m_pInterlock->setSpeed(splitPath.at(3), dataObj.value("speed").toString().toInt());
+                    pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(dataObj.value(JsonKeys::direction()).toString().toInt()));
+                    m_pInterlock->setSpeed(splitPath.at(3), dataObj.value(JsonKeys::speed()).toString().toInt());
 
                     obj = getControllerData();
                 }
                 else
                 {
-                    obj.insert("error", QString("Invalid controller: " + splitPath.at(3)));
+                    obj.insert(JsonKeys::error(), QString("Invalid controller: " + splitPath.at(3)));
                 }
             }
             else
             {
-                obj.insert("error", QString("Missing controller name"));
+                obj.insert(JsonKeys::error(), QString("Missing controller name"));
             }
         }
         else
         {
-            obj.insert("error", QString("Unknown object: " + splitPath.at(2)));
+            obj.insert(JsonKeys::error(), QString("Unknown object: " + splitPath.at(2)));
         }
     }
     else
     {
-        obj.insert("error", QString("Badly formed path: " + url));
+        obj.insert(JsonKeys::error(), QLatin1String("Badly formed path: " + data));
     }
 
-    return QJsonDocument(obj).toJson();
+    return obj;
 }
 
 

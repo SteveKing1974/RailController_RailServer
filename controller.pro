@@ -1,4 +1,4 @@
-QT += core
+QT += core network
 QT -= gui
 
 TARGET = controller
@@ -7,23 +7,15 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-#DEFINES += WITH_NONAMESPACES
+DEFINES += CONTROLLER QT_RESTRICTED_CAST_FROM_ASCII
 
-GSOAPDIR = ../../gsoap-2.8/gsoap
-
-INCLUDEPATH += $$GSOAPDIR/plugin \
+INCLUDEPATH += \
                 ./server \
                 ./controller \
-                /usr/local/include
+                ../Common
 
-SOURCES += ./server/webserver.c \
-            ./server/options.c \
-            $$GSOAPDIR/plugin/httpget.c \
-            $$GSOAPDIR/plugin/httppost.c \
-            $$GSOAPDIR/plugin/httpform.c \
-            $$GSOAPDIR/plugin/logging.c \
-            $$GSOAPDIR/stdsoap2.c \
-            ./server/soapC.c \
+SOURCES += \
+    ../Common/clientsocket.cpp \
     controller/speedcontroller.cpp \
     controller/layoutnode.cpp \
     controller/switchcontroller.cpp \
@@ -56,11 +48,12 @@ HEADERS +=  ./controller/hardwarecontroller.h \
     controller/testcommandhandler.h \
     controller/fullcommandhandler.h \
     testcommands.h \
-    controller/isolatorcontroller.h
+    controller/isolatorcontroller.h \
+    ../Common/clientsocket.h
 
 SOURCES += main.cpp
 
-*pi*: {
+linux-rasp-pi-g++: {
     target.path = /home/pi/Rail
     INSTALLS += target
 
@@ -71,28 +64,36 @@ SOURCES += main.cpp
 
 
     png.files= ./resources/png/blueindicator.png \
-                ./resources/png/downmaincrossover_off.png \
-                ./resources/png/downmaincrossover_on.png \
-                ./resources/png/downsiding1_off.png \
-                ./resources/png/downsiding1_on.png \
-                ./resources/png/downsiding2_off.png \
-                ./resources/png/downsiding2_on.png \
-                ./resources/png/downstationcrossover_off.png \
-                ./resources/png/downstationcrossover_on.png \
+                ./resources/png/downMainCrossOverLever_off.png \
+                ./resources/png/downMainCrossOverLever_on.png \
+                ./resources/png/downSiding1Lever_off.png \
+                ./resources/png/downSiding1Lever_on.png \
+                ./resources/png/downSiding2Lever_off.png \
+                ./resources/png/downSiding2Lever_on.png \
+                ./resources/png/downSidingLowerLever_off.png \
+                ./resources/png/downSidingLowerLever_on.png \
+                ./resources/png/downSidingUpperLever_off.png \
+                ./resources/png/downSidingUpperLever_on.png \
+                ./resources/png/downStationCrossOverLever_off.png \
+                ./resources/png/downStationCrossOverLever_on.png \
                 ./resources/png/greenindicator.png \
                 ./resources/png/greyindicator.png \
                 ./resources/png/panel.png \
                 ./resources/png/redindicator.png \
-                ./resources/png/stationentrancecrossover_off.png \
-                ./resources/png/stationentrancecrossover_on.png \
-                ./resources/png/upmaincrossover_off.png \
-                ./resources/png/upmaincrossover_on.png \
-                ./resources/png/upsiding1_off.png \
-                ./resources/png/upsiding1_on.png \
-                ./resources/png/upsiding2_off.png \
-                ./resources/png/upsiding2_on.png \
-                ./resources/png/upstationcrossover_off.png \
-                ./resources/png/upstationcrossover_on.png \
+                ./resources/png/stationEntranceLever_off.png \
+                ./resources/png/stationEntranceLever_on.png \
+                ./resources/png/stationSidingLever_off.png \
+                ./resources/png/stationSidingLever_on.png \
+                ./resources/png/upMainCrossOverLever_off.png \
+                ./resources/png/upMainCrossOverLever_on.png \
+                ./resources/png/upSiding1Lever_off.png \
+                ./resources/png/upSiding1Lever_on.png \
+                ./resources/png/upSiding2Lever_off.png \
+                ./resources/png/upSiding2Lever_on.png \
+                ./resources/png/upSidingLever_off.png \
+                ./resources/png/upSidingLever_on.png \
+                ./resources/png/upStationCrossOverLever_off.png \
+                ./resources/png/upStationCrossOverLever_on.png \
                 ./resources/png/yellowindicator.png
 
     png.path=/home/pi/Rail/png

@@ -20,7 +20,7 @@ InterlockHandling::InterlockHandling(HardwareController *pControl) :
     updateEnabled();
 }
 
-void InterlockHandling::togglePoint(const QByteArray &pointName)
+void InterlockHandling::togglePoint(const QString &pointName)
 {
     BasePointController* pPoint = m_pController->getPoint(pointName);
 
@@ -32,7 +32,7 @@ void InterlockHandling::togglePoint(const QByteArray &pointName)
 }
 
 
-void InterlockHandling::setSpeed(const QByteArray &controller, int newSpeed)
+void InterlockHandling::setSpeed(const QString &controller, int newSpeed)
 {
     SpeedController* pCtrl = m_pController->getController(controller);
     if (pCtrl->enabled())
