@@ -11,8 +11,7 @@ class TestCommandHandler : public CommandHandler
 public:
     TestCommandHandler();
 
-    QJsonObject getCommand(const QByteArray& data) const;
-    QJsonObject putCommand(const QByteArray& data) const;
+    QJsonObject handleCommand(const QJsonObject& data);
 
 
 private:

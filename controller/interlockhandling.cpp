@@ -1,6 +1,7 @@
 #include "interlockhandling.h"
 #include "basepointcontroller.h"
 #include "speedcontroller.h"
+#include "jsonkeys.h"
 
 #include <QSet>
 #include <QDebug>
@@ -32,15 +33,24 @@ void InterlockHandling::togglePoint(const QString &pointName)
 }
 
 
-void InterlockHandling::setSpeed(const QString &controller, int newSpeed)
+bool InterlockHandling::updateController(const QJsonObject& obj)
 {
-    SpeedController* pCtrl = m_pController->getController(controller);
-    if (pCtrl->enabled())
+    bool retVal = false;
+    SpeedController* pCtrl = m_pController->getController(obj.value(JsonKeys::controller()).toString());
+
+    if (pCtrl)
     {
-        qDebug() << "Setting speed to " << newSpeed;
-        pCtrl->setSpeed(newSpeed);
-        updateEnabled();
+        retVal = pCtrl->fromJson(obj);
+
+        if (retVal)
+        {
+            updateEnabled();
+        }
     }
+
+    qDebug() << "Update" << obj.value(JsonKeys::controller()).toString() << retVal;
+
+    return retVal;
 }
 
 bool InterlockHandling::isValidMask(quint8 mask) const
@@ -105,14 +115,24 @@ bool InterlockHandling::isValidMask(quint8 mask) const
     return !invalidMasks.contains(mask);
 }
 
+BaseController::ControllerState InterlockHandling::maskToState(quint8 mask) const
+{
+    if (isValidMask(mask))
+    {
+        return BaseController::CONTROLLER_ON;
+    }
+
+    return BaseController::CONTROLLER_OFF;
+}
+
 void InterlockHandling::updateEnabled()
 {
     quint8 mask = 0x0;
 
-    if (m_pController->getController("outerloop")->speed()!=0)   mask |= OUTERLOOP;
-    if (m_pController->getController("innerloop")->speed()!=0)   mask |= INNERLOOP;
-    if (m_pController->getController("stationouter")->speed()!=0)   mask |= STATIONOUTER;
-    if (m_pController->getController("stationinner")->speed()!=0)   mask |= STATIONINNER;
+    if (m_pController->getController("outerloop")->controlValue()!=0)   mask |= OUTERLOOP;
+    if (m_pController->getController("innerloop")->controlValue()!=0)   mask |= INNERLOOP;
+    if (m_pController->getController("stationouter")->controlValue()!=0)   mask |= STATIONOUTER;
+    if (m_pController->getController("stationinner")->controlValue()!=0)   mask |= STATIONINNER;
 
     if (m_pController->getPoint("stationentrancecrossover")->direction()==BasePointController::ePointRight)
     {
@@ -134,10 +154,10 @@ void InterlockHandling::updateEnabled()
 
     qDebug() << mask << isValidMask(mask | OUTERLOOP) << isValidMask(mask | INNERLOOP);
 
-    m_pController->getController("outerloop")->setEnabled(isValidMask(mask | OUTERLOOP));
-    m_pController->getController("innerloop")->setEnabled(isValidMask(mask | INNERLOOP));
-    m_pController->getController("stationouter")->setEnabled(isValidMask(mask | STATIONOUTER));
-    m_pController->getController("stationinner")->setEnabled(isValidMask(mask | STATIONINNER));
+    m_pController->getController("outerloop")->setState(maskToState(mask | OUTERLOOP));
+    m_pController->getController("innerloop")->setState(maskToState(mask | INNERLOOP));
+    m_pController->getController("stationouter")->setState(maskToState(mask | STATIONOUTER));
+    m_pController->getController("stationinner")->setState(maskToState(mask | STATIONINNER));
 
     m_pController->getPoint("stationentrancecrossover")->setEnabled(isValidMask(mask | ENTRANCE));
     m_pController->getPoint("upstationcrossover")->setEnabled(isValidMask(mask | STATION));

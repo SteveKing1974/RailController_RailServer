@@ -13,9 +13,7 @@ class FullCommandHandler : public CommandHandler
 public:
     FullCommandHandler(HardwareController* pControl, PanelBoard *pPanel, InterlockHandling* pInterlock);
 
-    QJsonObject getCommand(const QByteArray& data) const;
-    QJsonObject putCommand(const QByteArray& data) const;
-
+    QJsonObject handleCommand(const QJsonObject& data);
 
 private:
     HardwareController* m_pController;

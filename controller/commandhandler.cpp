@@ -2,30 +2,21 @@
 #include "jsonkeys.h"
 
 #include <QJsonDocument>
+#include <QDebug>
 
 void CommandHandler::receiveData(const QByteArray &data)
 {
-    QJsonObject obj;
+    QJsonParseError err;
+    QJsonObject obj = QJsonDocument::fromJson(data, &err).object();
 
-    const QList<QByteArray> splitData = data.toLower().split(JsonKeys::seperator().toLatin1());
-    if (splitData.length()==2)
+    if (err.error == QJsonParseError::NoError )
     {
-        if (splitData.at(0)==JsonKeys::get().toLatin1())
-        {
-            obj = getCommand(splitData.at(1));
-        }
-        else if (splitData.at(0)==JsonKeys::put().toLatin1())
-        {
-            obj = putCommand(splitData.at(1));
-        }
-        else
-        {
-            obj.insert(JsonKeys::error(), QLatin1String("Invalid command: " + splitData.at(0)));
-        }
+        qDebug() << "Got" << obj.keys();
+        obj = handleCommand(obj);
     }
     else
     {
-        obj.insert(JsonKeys::error(), QLatin1String("Invalid format: " + data));
+        obj.insert(JsonKeys::error(), err.errorString());
     }
 
 

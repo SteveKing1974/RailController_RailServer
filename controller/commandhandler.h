@@ -13,8 +13,7 @@ class CommandHandler : public QObject
 public:
     virtual ~CommandHandler() {}
 
-    virtual QJsonObject getCommand(const QByteArray& data) const = 0;
-    virtual QJsonObject putCommand(const QByteArray& data) const = 0;
+    virtual QJsonObject handleCommand(const QJsonObject& data) = 0;
 
 public slots:
     void receiveData(const QByteArray& data);

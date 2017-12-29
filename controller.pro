@@ -28,7 +28,8 @@ SOURCES += \
     controller/fullcommandhandler.cpp \
     controller/commandhandler.cpp \
     testcommands.cpp \
-    controller/isolatorcontroller.cpp
+    controller/isolatorcontroller.cpp \
+    ../Common/basecontroller.cpp
 
 SOURCES +=  ./controller/hardwarecontroller.cpp \
             ./controller/pointcontroller.cpp
@@ -49,7 +50,8 @@ HEADERS +=  ./controller/hardwarecontroller.h \
     controller/fullcommandhandler.h \
     testcommands.h \
     controller/isolatorcontroller.h \
-    ../Common/clientsocket.h
+    ../Common/clientsocket.h \
+    ../Common/basecontroller.h
 
 SOURCES += main.cpp
 

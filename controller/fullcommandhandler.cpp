@@ -54,65 +54,52 @@ QJsonObject FullCommandHandler::getControllerData() const
 
     foreach (const QString& name, m_pController->allControllers())
     {
-        SpeedController* pCtrl = m_pController->getController(name);
-
-        QJsonObject control;
-        control.insert(JsonKeys::speed(), pCtrl->speed());
-        control.insert(JsonKeys::direction(), pCtrl->direction());
-        control.insert(JsonKeys::directionEnabled(), pCtrl->speed()==0);
-        control.insert(JsonKeys::speedEnabled(), pCtrl->enabled());
-
-        obj.insert(name, control);
+        const SpeedController* pCtrl = m_pController->getController(name);
+        obj.insert(name, pCtrl->toJson());
     }
 
     return obj;
 }
 
-QJsonObject FullCommandHandler::getCommand(const QByteArray& data) const
+QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
 {
-    const QString lowData = QLatin1String(data.toLower());
-
     QJsonObject obj;
 
-    if (lowData == JsonKeys::panel())
+    if (data.value(JsonKeys::command()) == JsonKeys::get())
     {
-        obj.insert(JsonKeys::panel(), getPanelData());
-    }
-    else if (lowData == JsonKeys::controller())
-    {
-        obj.insert(JsonKeys::controller(), getControllerData());
-    }
-    else
-    {
-        obj.insert(JsonKeys::error(), QLatin1String("Badly formed data: " + data));
-    }
-
-    return obj;
-}
-
-QJsonObject FullCommandHandler::putCommand(const QByteArray& data) const
-{
-    const QList<QString> splitPath = QString(QLatin1String(data)).toLower().split('/');
-
-    QJsonObject obj;
-
-    qDebug() << "Put" << splitPath;
-
-    if (splitPath.length()>=3)
-    {
-        if (splitPath.at(2) == JsonKeys::panel())
+        qDebug() << "Get";
+        if (data.value(JsonKeys::data()) == JsonKeys::panel())
         {
-            BasePointController* pPoint = m_pController->getPoint(splitPath.at(3));
+            obj.insert(JsonKeys::panel(), getPanelData());
+        }
+        else if (data.value(JsonKeys::data()) == JsonKeys::controller())
+        {
+            obj.insert(JsonKeys::controller(), getControllerData());
+        }
+        else
+        {
+            obj.insert(JsonKeys::error(), QLatin1String("Badly formed get: ") + data.value(JsonKeys::data()).toString());
+        }
+    }
+    else if (data.value(JsonKeys::command()) == JsonKeys::put())
+    {
+        qDebug() << "Put" << data.value(JsonKeys::data()).toString();
+
+        if (data.value(JsonKeys::data()) == JsonKeys::panel())
+        {
+            BasePointController* pPoint = m_pController->getPoint(data.value(JsonKeys::points()).toString());
+
             if (pPoint)
             {
-                m_pInterlock->togglePoint(splitPath.at(3));
+                m_pInterlock->togglePoint(data.value(JsonKeys::points()).toString());
                 m_pPanel->refresh();
 
                 obj = getPanelData();
             }
             else
             {
-                IsolatorController *pIsol = m_pController->getIsolator(splitPath.at(3));
+                IsolatorController *pIsol = m_pController->getIsolator(data.value(JsonKeys::isolators()).toString());
+
                 if (pIsol)
                 {
                     pIsol->toggle();
@@ -122,47 +109,34 @@ QJsonObject FullCommandHandler::putCommand(const QByteArray& data) const
                 }
                 else
                 {
-                    obj.insert(JsonKeys::error(), QString("Invalid point or isolator: " + splitPath.at(3)));
+                    obj.insert(JsonKeys::error(), QString("Invalid point or isolator: " + data.value(JsonKeys::points()).toString()
+                                                          + data.value(JsonKeys::isolators()).toString()));
                 }
             }
-
         }
-        else if (splitPath.at(2) == JsonKeys::controller())
+        else if (data.value(JsonKeys::data()) == JsonKeys::controller())
         {
-            if (splitPath.length()>=4)
+            if (m_pInterlock->updateController(data))
             {
-                SpeedController* pCtrl = m_pController->getController(splitPath.at(3));
-
-                if (pCtrl != 0)
-                {
-                    QJsonObject dataObj; // = fromPUTData(data);
-
-                    pCtrl->setDirection(static_cast<SpeedController::SpeedDirection>(dataObj.value(JsonKeys::direction()).toString().toInt()));
-                    m_pInterlock->setSpeed(splitPath.at(3), dataObj.value(JsonKeys::speed()).toString().toInt());
-
-                    obj = getControllerData();
-                }
-                else
-                {
-                    obj.insert(JsonKeys::error(), QString("Invalid controller: " + splitPath.at(3)));
-                }
+                obj = getControllerData();
             }
             else
             {
-                obj.insert(JsonKeys::error(), QString("Missing controller name"));
+                obj.insert(JsonKeys::error(), QLatin1String("Invalid controller: ") + data.value(JsonKeys::controller()).toString());
             }
         }
         else
         {
-            obj.insert(JsonKeys::error(), QString("Unknown object: " + splitPath.at(2)));
+            obj.insert(JsonKeys::error(), QLatin1String("Badly formed put: ") + data.value(JsonKeys::data()).toString());
         }
     }
     else
     {
-        obj.insert(JsonKeys::error(), QLatin1String("Badly formed path: " + data));
+        obj.insert(JsonKeys::error(), QLatin1String("Unknown command: ") + data.value(JsonKeys::command()).toString());
     }
 
     return obj;
 }
+
 
 
