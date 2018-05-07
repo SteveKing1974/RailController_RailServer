@@ -94,7 +94,7 @@ QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
                 m_pInterlock->togglePoint(data.value(JsonKeys::points()).toString());
                 m_pPanel->refresh();
 
-                obj = getPanelData();
+                obj.insert(JsonKeys::panel(), getPanelData());
             }
             else
             {
@@ -105,7 +105,7 @@ QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
                     pIsol->toggle();
                     m_pPanel->refresh();
 
-                    obj = getPanelData();
+                    obj.insert(JsonKeys::panel(), getPanelData());
                 }
                 else
                 {
@@ -118,7 +118,7 @@ QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
         {
             if (m_pInterlock->updateController(data))
             {
-                obj = getControllerData();
+                obj.insert(JsonKeys::controller(), getControllerData());
             }
             else
             {
