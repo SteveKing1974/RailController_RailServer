@@ -2,6 +2,7 @@
 #define LAYOUTNODE_H
 
 #include <QByteArray>
+#include <QString>
 
 #include "basepointcontroller.h"
 #include "switchcontroller.h"
@@ -22,8 +23,8 @@ public:
     LayoutNode* prev();
     LayoutNode* next();
 
-    int state() const;
-    void setState(int newState);
+    QString nodeController() const;
+    void setNodeController(const QString& newController);
 
 private:
     const SwitchController* m_PrevSwitch;
@@ -36,7 +37,7 @@ private:
     LayoutNode* m_NextNodeLeft;
     LayoutNode* m_NextNodeRight;
 
-    int m_State;
+    QString m_NodeController;
 
     LayoutNode* calcOutput(const SwitchController* pSw, const BasePointController* pPnt, LayoutNode* pLeft, LayoutNode* pRight) const;
 };

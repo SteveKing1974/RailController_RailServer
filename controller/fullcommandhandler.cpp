@@ -19,7 +19,7 @@ QJsonObject FullCommandHandler::getPanelData() const
     const QList<QString> keys = m_pPanel->allNodes();
     foreach (const QString& key, keys)
     {
-        nodes.insert(key, m_pPanel->getLightState(key));
+        nodes.insert(key, m_pPanel->nodeController(key));
     }
 
     QJsonObject points;

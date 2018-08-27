@@ -60,14 +60,14 @@ LayoutNode* LayoutNode::next()
     return calcOutput(m_NextSwitch, m_NextPoint, m_NextNodeLeft, m_NextNodeRight);
 }
 
-int LayoutNode::state() const
+QString LayoutNode::nodeController() const
 {
-    return m_State;
+    return m_NodeController;
 }
 
-void LayoutNode::setState(int newState)
+void LayoutNode::setNodeController(const QString &newController)
 {
-    m_State = newState;
+    m_NodeController = newController;
 }
 
 LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const BasePointController *pPnt, LayoutNode *pLeft, LayoutNode *pRight) const

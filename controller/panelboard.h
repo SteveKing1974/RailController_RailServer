@@ -17,14 +17,14 @@ public:
 
     void refresh();
 
-    int getLightState(const QString& lightName) const;
+    QString nodeController(const QString &nodeName) const;
 
     QList<QString> allNodes() const;
 
 private:
-    void updateNode(LayoutNode* pNode, int value);
+    void updateNode(LayoutNode* pNode, const QString &nodeController);
 
-    QHash<SpeedController*, LayoutNode*> m_ControlNodes;
+    QHash<QString, LayoutNode*> m_ControlNodes;
 
     QHash<QString, LayoutNode*> m_AllNodes;
 };

@@ -9,7 +9,7 @@ class SpeedController : public BaseController
 
 public:
 
-    SpeedController(int in1, int in2, int pwm, int controllerID, int line1, int line2);
+    SpeedController(int in1, int in2, int pwm, int line1, int line2);
 
     int id() const;
 
@@ -22,7 +22,6 @@ private:
     const int m_In1;
     const int m_In2;
     const int m_PWM;
-    const int m_ID;
 
     const int m_Line1Switch;
     const int m_Line2Switch;

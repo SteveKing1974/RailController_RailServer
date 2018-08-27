@@ -49,7 +49,7 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     LayoutNode* stationSidingLeft3 = new LayoutNode();
 
 
-    dummyOuter->setNext(pCtrl->getPoint(JsonKeys::downMainCrossoverA()), outerRight, 0);
+    dummyOuter->setNext(pCtrl->getPoint(JsonKeys::downMainCrossoverA()), outerRight, nullptr);
     dummyOuter->setPrev(outerCenter);
 
     outerRight->setPrev(pCtrl->getPoint(JsonKeys::downMainCrossoverA()), dummyOuter, outerToInnerRight);
@@ -58,83 +58,83 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     outerLeft->setPrev(outerRight);
     outerLeft->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), outerToInnerLeft, outerCenter);
 
-    outerCenter->setPrev(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), 0, outerLeft);
+    outerCenter->setPrev(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), nullptr, outerLeft);
     outerCenter->setNext(dummyOuter);
 
-    outerToInnerLeft->setPrev(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), outerLeft, 0);
-    outerToInnerLeft->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverB()), innerCenter, 0);
+    outerToInnerLeft->setPrev(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), outerLeft, nullptr);
+    outerToInnerLeft->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverB()), innerCenter, nullptr);
 
-    outerToInnerRight->setPrev(pCtrl->getPoint(JsonKeys::downMainCrossoverA()), 0, outerRight);
-    outerToInnerRight->setNext(pCtrl->getPoint(JsonKeys::downMainCrossoverB()), 0, innerBetweenPoints);
+    outerToInnerRight->setPrev(pCtrl->getPoint(JsonKeys::downMainCrossoverA()), nullptr, outerRight);
+    outerToInnerRight->setNext(pCtrl->getPoint(JsonKeys::downMainCrossoverB()), nullptr, innerBetweenPoints);
 
     //////
 
-    dummyInner->setNext(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverA()), innerBetweenPoints, 0);
+    dummyInner->setNext(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverA()), innerBetweenPoints, nullptr);
     dummyInner->setPrev(innerCenter);
 
     innerBetweenPoints->setPrev(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverA()), dummyInner, innerToStation);
     innerBetweenPoints->setNext(pCtrl->getPoint(JsonKeys::downMainCrossoverB()), innerRight, outerToInnerRight);
 
-    innerRight->setPrev(pCtrl->getPoint(JsonKeys::downMainCrossoverB()), innerBetweenPoints, 0);
+    innerRight->setPrev(pCtrl->getPoint(JsonKeys::downMainCrossoverB()), innerBetweenPoints, nullptr);
     innerRight->setNext(innerLeft);
 
     innerLeft->setPrev(innerRight);
-    innerLeft->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverB()), 0, innerCenter);
+    innerLeft->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverB()), nullptr, innerCenter);
 
     innerCenter->setPrev(pCtrl->getPoint(JsonKeys::upMainCrossoverB()), outerToInnerLeft, innerLeft);
     innerCenter->setNext(dummyInner);
 
-    innerToStation->setPrev(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverA()), 0, innerBetweenPoints);
-    innerToStation->setNext(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverB()), 0, stationOuterBetweenPoints);
+    innerToStation->setPrev(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverA()), nullptr, innerBetweenPoints);
+    innerToStation->setNext(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverB()), nullptr, stationOuterBetweenPoints);
 
     ///////
-    dummyStationOuter->setNext(pCtrl->getPoint(JsonKeys::downStationCrossoverA()), stationOuterBetweenPoints, 0);
+    dummyStationOuter->setNext(pCtrl->getPoint(JsonKeys::downStationCrossoverA()), stationOuterBetweenPoints, nullptr);
     dummyStationOuter->setPrev(stationOuterCenter);
 
     stationOuterBetweenPoints->setPrev(pCtrl->getPoint(JsonKeys::downStationCrossoverA()), dummyStationOuter, stationOuterToInnerRight);
     stationOuterBetweenPoints->setNext(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverB()), stationOuterRight, innerToStation);
 
-    stationOuterRight->setPrev(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverB()), stationOuterBetweenPoints, 0);
+    stationOuterRight->setPrev(pCtrl->getPoint(JsonKeys::stationEntranceCrossoverB()), stationOuterBetweenPoints, nullptr);
     stationOuterRight->setNext(pCtrl->getPoint(JsonKeys::downSiding1()), dummyRightBetweenSidings, stationSidingRight1);
 
-    dummyRightBetweenSidings->setPrev(pCtrl->getPoint(JsonKeys::downSiding1()), stationOuterRight, 0);
+    dummyRightBetweenSidings->setPrev(pCtrl->getPoint(JsonKeys::downSiding1()), stationOuterRight, nullptr);
     dummyRightBetweenSidings->setNext(pCtrl->getPoint(JsonKeys::downSiding2()), stationSidingRight3, stationSidingRight2);
 
-    stationSidingRight1->setPrev(pCtrl->getPoint(JsonKeys::downSiding1()), 0, stationOuterRight);
-    stationSidingRight2->setPrev(pCtrl->getPoint(JsonKeys::downSiding2()), 0, dummyRightBetweenSidings);
-    stationSidingRight3->setPrev(pCtrl->getPoint(JsonKeys::downSiding2()), dummyRightBetweenSidings, 0);
+    stationSidingRight1->setPrev(pCtrl->getPoint(JsonKeys::downSiding1()), nullptr, stationOuterRight);
+    stationSidingRight2->setPrev(pCtrl->getPoint(JsonKeys::downSiding2()), nullptr, dummyRightBetweenSidings);
+    stationSidingRight3->setPrev(pCtrl->getPoint(JsonKeys::downSiding2()), dummyRightBetweenSidings, nullptr);
 
     stationOuterLeft->setNext(pCtrl->getPoint(JsonKeys::upStationCrossoverA()), stationOuterToInnerLeft, stationOuterCenter);
 
     stationOuterCenter->setNext(dummyStationOuter);
-    stationOuterCenter->setPrev(pCtrl->getPoint(JsonKeys::upStationCrossoverA()), 0, stationOuterLeft);
+    stationOuterCenter->setPrev(pCtrl->getPoint(JsonKeys::upStationCrossoverA()), nullptr, stationOuterLeft);
 
-    stationOuterToInnerLeft->setPrev(pCtrl->getPoint(JsonKeys::upStationCrossoverA()), stationOuterLeft, 0);
-    stationOuterToInnerLeft->setNext(pCtrl->getPoint(JsonKeys::upStationCrossoverB()), stationInnerCenter, 0);
+    stationOuterToInnerLeft->setPrev(pCtrl->getPoint(JsonKeys::upStationCrossoverA()), stationOuterLeft, nullptr);
+    stationOuterToInnerLeft->setNext(pCtrl->getPoint(JsonKeys::upStationCrossoverB()), stationInnerCenter, nullptr);
 
-    stationOuterToInnerRight->setPrev(pCtrl->getPoint(JsonKeys::downStationCrossoverA()), 0, stationOuterBetweenPoints);
-    stationOuterToInnerRight->setNext(pCtrl->getPoint(JsonKeys::downStationCrossoverB()), 0, dummyStationInner);
+    stationOuterToInnerRight->setPrev(pCtrl->getPoint(JsonKeys::downStationCrossoverA()), nullptr, stationOuterBetweenPoints);
+    stationOuterToInnerRight->setNext(pCtrl->getPoint(JsonKeys::downStationCrossoverB()), nullptr, dummyStationInner);
 
     //////
 
     dummyStationInner->setNext(pCtrl->getPoint(JsonKeys::downStationCrossoverB()), stationInnerRight, stationOuterToInnerRight);
     dummyStationInner->setPrev(stationInnerCenter);
 
-    stationInnerRight->setPrev(pCtrl->getPoint(JsonKeys::downStationCrossoverB()), dummyStationInner, 0);
+    stationInnerRight->setPrev(pCtrl->getPoint(JsonKeys::downStationCrossoverB()), dummyStationInner, nullptr);
 
     stationInnerCenter->setPrev(pCtrl->getPoint(JsonKeys::upStationCrossoverB()), stationOuterToInnerLeft, dummyLeftBetweenPoints);
     stationInnerCenter->setNext(dummyStationInner);
 
 
     dummyLeftBetweenPoints->setPrev(pCtrl->getPoint(JsonKeys::upSiding1()), stationSidingLeft1, dummyLeftBetweenSidings);
-    dummyLeftBetweenPoints->setNext(pCtrl->getPoint(JsonKeys::upStationCrossoverB()), 0, stationInnerCenter);
+    dummyLeftBetweenPoints->setNext(pCtrl->getPoint(JsonKeys::upStationCrossoverB()), nullptr, stationInnerCenter);
 
     dummyLeftBetweenSidings->setPrev(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), stationSidingLeft2, stationSidingLeft3);
-    dummyLeftBetweenSidings->setNext(pCtrl->getPoint(JsonKeys::upSiding1()), 0, dummyLeftBetweenPoints);
+    dummyLeftBetweenSidings->setNext(pCtrl->getPoint(JsonKeys::upSiding1()), nullptr, dummyLeftBetweenPoints);
 
-    stationSidingLeft1->setNext(pCtrl->getPoint(JsonKeys::upSiding1()), dummyLeftBetweenPoints, 0);
-    stationSidingLeft2->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), dummyLeftBetweenPoints, 0);
-    stationSidingLeft3->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), 0, dummyLeftBetweenPoints);
+    stationSidingLeft1->setNext(pCtrl->getPoint(JsonKeys::upSiding1()), dummyLeftBetweenPoints, nullptr);
+    stationSidingLeft2->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), dummyLeftBetweenPoints, nullptr);
+    stationSidingLeft3->setNext(pCtrl->getPoint(JsonKeys::upMainCrossoverA()), nullptr, dummyLeftBetweenPoints);
 
     m_AllNodes.insert(JsonKeys::dummyOuter(), dummyOuter);
     m_AllNodes.insert(JsonKeys::outerRight(), outerRight);
@@ -189,10 +189,10 @@ PanelBoard::PanelBoard(const HardwareController *pCtrl)
     pInnerStationController->setNext(dummyStationInner);
     pInnerStationController->setPrev(stationInnerCenter);
 
-    m_ControlNodes.insert(pCtrl->getController(JsonKeys::outerLoop()), pOuterController);
-    m_ControlNodes.insert(pCtrl->getController(JsonKeys::innerLoop()), pInnerController);
-    m_ControlNodes.insert(pCtrl->getController(JsonKeys::stationOuter()), pOuterStationController);
-    m_ControlNodes.insert(pCtrl->getController(JsonKeys::stationInner()), pInnerStationController);
+    m_ControlNodes.insert(JsonKeys::outerLoop(), pOuterController);
+    m_ControlNodes.insert(JsonKeys::innerLoop(), pInnerController);
+    m_ControlNodes.insert(JsonKeys::stationOuter(), pOuterStationController);
+    m_ControlNodes.insert(JsonKeys::stationInner(), pInnerStationController);
 
     refresh();
 }
@@ -208,28 +208,27 @@ void PanelBoard::refresh()
     QHash<QString, LayoutNode*>::iterator i = m_AllNodes.begin();
     while (i!=m_AllNodes.end())
     {
-        i.value()->setState(0);
+        i.value()->setNodeController("");
         ++i;
     }
 
-    QHash<SpeedController*, LayoutNode*>::iterator ctrl = m_ControlNodes.begin();
+    QHash<QString, LayoutNode*>::iterator ctrl = m_ControlNodes.begin();
     while (ctrl!=m_ControlNodes.end())
     {
-        const int id = ctrl.key()->id();
-        updateNode(ctrl.value()->next(), id);
-        updateNode(ctrl.value()->prev(), id);
+        updateNode(ctrl.value()->next(), ctrl.key());
+        updateNode(ctrl.value()->prev(), ctrl.key());
         ++ctrl;
     }
 }
 
-int PanelBoard::getLightState(const QString &lightName) const
+QString PanelBoard::nodeController(const QString &nodeName) const
 {
-    if (m_AllNodes.contains(lightName))
+    if (m_AllNodes.contains(nodeName))
     {
-        return m_AllNodes.value(lightName)->state();
+        return m_AllNodes.value(nodeName)->nodeController();
     }
 
-    return 0;
+    return QString();
 }
 
 QList<QString> PanelBoard::allNodes() const
@@ -237,15 +236,15 @@ QList<QString> PanelBoard::allNodes() const
     return m_AllNodes.keys();
 }
 
-void PanelBoard::updateNode(LayoutNode *pNode, int value)
+void PanelBoard::updateNode(LayoutNode *pNode, const QString& nodeController)
 {
     if (pNode)
     {
-        if (pNode->state()!=value)
+        if (pNode->nodeController()!=nodeController)
         {
-            pNode->setState(value);
-            updateNode(pNode->next(), value);
-            updateNode(pNode->prev(), value);
+            pNode->setNodeController(nodeController);
+            updateNode(pNode->next(), nodeController);
+            updateNode(pNode->prev(), nodeController);
         }
     }
 }

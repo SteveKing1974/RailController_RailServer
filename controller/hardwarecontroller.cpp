@@ -125,10 +125,10 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     setLine(CONTROLLER1_2_STDBY, LOW);
     setLine(CONTROLLER3_4_STDBY, LOW);
 
-    m_Controllers.insert(JsonKeys::innerLoop(), new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, 1, ISOLATE_CONTROLLER_1_1, ISOLATE_CONTROLLER_1_2));
-    m_Controllers.insert(JsonKeys::outerLoop(), new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, 2, ISOLATE_CONTROLLER_2_1, ISOLATE_CONTROLLER_2_2));
-    m_Controllers.insert(JsonKeys::stationInner(), new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, 3, ISOLATE_CONTROLLER_3_1, ISOLATE_CONTROLLER_3_2));
-    m_Controllers.insert(JsonKeys::stationOuter(), new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, 4, ISOLATE_CONTROLLER_4_1, ISOLATE_CONTROLLER_4_2));
+    m_Controllers.insert(JsonKeys::innerLoop(), new SpeedController(CONTROLLER1_IN1, CONTROLLER1_IN2, CONTROLLER1_PWM, ISOLATE_CONTROLLER_1_1, ISOLATE_CONTROLLER_1_2));
+    m_Controllers.insert(JsonKeys::outerLoop(), new SpeedController(CONTROLLER2_IN1, CONTROLLER2_IN2, CONTROLLER2_PWM, ISOLATE_CONTROLLER_2_1, ISOLATE_CONTROLLER_2_2));
+    m_Controllers.insert(JsonKeys::stationInner(), new SpeedController(CONTROLLER3_IN1, CONTROLLER3_IN2, CONTROLLER3_PWM, ISOLATE_CONTROLLER_3_1, ISOLATE_CONTROLLER_3_2));
+    m_Controllers.insert(JsonKeys::stationOuter(), new SpeedController(CONTROLLER4_IN1, CONTROLLER4_IN2, CONTROLLER4_PWM, ISOLATE_CONTROLLER_4_1, ISOLATE_CONTROLLER_4_2));
 
     // Add isolators
     m_Isolators.insert(JsonKeys::topSidingDown(), new IsolatorController(ISOLATE_TOP_SIDING_DOWN));
@@ -210,7 +210,7 @@ BasePointController *HardwareController::getPoint(const QString &name) const
         return m_Points.value(name);
     }
 
-    return 0;
+    return nullptr;
 }
 
 SpeedController *HardwareController::getController(const QString &name) const
@@ -220,7 +220,7 @@ SpeedController *HardwareController::getController(const QString &name) const
         return m_Controllers.value(name);
     }
 
-    return 0;
+    return nullptr;
 }
 
 IsolatorController *HardwareController::getIsolator(const QString &name) const
@@ -230,7 +230,7 @@ IsolatorController *HardwareController::getIsolator(const QString &name) const
         return m_Isolators.value(name);
     }
 
-    return 0;
+    return nullptr;
 }
 
 void HardwareController::setLine(int lineID, int value)

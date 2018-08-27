@@ -6,12 +6,11 @@
 
 #include "hardwarecontroller.h"
 
-SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID, int line1, int line2) :
+SpeedController::SpeedController(int in1, int in2, int pwm, int line1, int line2) :
     BaseController(0),
     m_In1(in1),
     m_In2(in2),
     m_PWM(pwm),
-    m_ID(controllerID),
     m_Line1Switch(line1),
     m_Line2Switch(line2)
 {
@@ -28,11 +27,6 @@ SpeedController::SpeedController(int in1, int in2, int pwm, int controllerID, in
     setState(CONTROLLER_OFF, true);
 }
 
-
-int SpeedController::id() const
-{
-    return m_ID;
-}
 
 void SpeedController::updateHW()
 {
