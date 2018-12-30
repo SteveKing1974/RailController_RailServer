@@ -85,8 +85,6 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     mcp23s17Setup(EXTENDERB, 0, 1);
     mcp23s17Setup(EXTENDERC, 0, 2);
 
-    qDebug() << "Test";
-
     // Set everything to an output. Write high before the
     // setting to output so it doesn't toggle the power on
     for (int i=0; i<k_PortsPerExtender; ++i)
@@ -147,7 +145,7 @@ HardwareController::HardwareController(QObject *parent) : QObject(parent)
     pA = new PointController(RELAY_18, RELAY_17, PointController::ePointRight);
     pB = new BasePointController(PointController::ePointRight);
     m_Points.insert(JsonKeys::upMainCrossoverA(), pA);
-    m_Points.insert(JsonKeys::upStationCrossoverB(), pB);
+    m_Points.insert(JsonKeys::upMainCrossoverB(), pB);
     m_Points.insert(JsonKeys::upMainCrossover(), new PointGroup(pA, pB, ISOLATE_UP_MAIN_CROSSOVER_1, ISOLATE_UP_MAIN_CROSSOVER_2, PointController::ePointLeft));
 
     pA = new PointController(RELAY_20, RELAY_19);
@@ -235,7 +233,7 @@ IsolatorController *HardwareController::getIsolator(const QString &name) const
 
 void HardwareController::setLine(int lineID, int value)
 {
-    qDebug() << "Setting line " << lineID << " to " << value;
+    //qDebug() << "Setting line " << lineID << " to " << value;
     digitalWrite(lineID, value);
 }
 

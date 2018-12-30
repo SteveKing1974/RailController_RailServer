@@ -30,6 +30,7 @@ QJsonObject FullCommandHandler::getPanelData() const
         pt.insert(JsonKeys::direction(), m_pController->getPoint(point)->direction());
         pt.insert(JsonKeys::enabled(), m_pController->getPoint(point)->enabled());
         points.insert(point, pt);
+//        qDebug() << point << ((m_pController->getPoint(point)->direction()==BasePointController::ePointLeft) ? "Left" : "Right");
     }
 
     QJsonObject isolators;
@@ -37,8 +38,9 @@ QJsonObject FullCommandHandler::getPanelData() const
     foreach (const QString& isolator, allIsolators)
     {
         QJsonObject iso;
-        iso.insert(JsonKeys::enabled(), m_pController->getIsolator(isolator)->getState());
+        iso.insert(JsonKeys::enabled(), m_pController->getIsolator(isolator)->state());
         isolators.insert(isolator, iso);
+//        qDebug() << isolator << ((m_pController->getIsolator(isolator)->state()==IsolatorController::CONNECTED) ? "Connected" : "Disconnected");
     }
 
     obj.insert(JsonKeys::nodes(), nodes);
@@ -67,7 +69,6 @@ QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
 
     if (data.value(JsonKeys::command()) == JsonKeys::get())
     {
-        qDebug() << "Get";
         if (data.value(JsonKeys::data()) == JsonKeys::panel())
         {
             obj.insert(JsonKeys::panel(), getPanelData());
@@ -83,7 +84,7 @@ QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
     }
     else if (data.value(JsonKeys::command()) == JsonKeys::put())
     {
-        qDebug() << "Put" << data.value(JsonKeys::data()).toString();
+        //qDebug() << "Put" << data.value(JsonKeys::data()).toString();
 
         if (data.value(JsonKeys::data()) == JsonKeys::panel())
         {
@@ -136,6 +137,12 @@ QJsonObject FullCommandHandler::handleCommand(const QJsonObject& data)
     }
 
     return obj;
+}
+
+void FullCommandHandler::test()
+{
+//    qDebug() << getPanelData();
+//    qDebug() << getControllerData();
 }
 
 

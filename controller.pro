@@ -18,7 +18,6 @@ SOURCES += \
     ../Common/clientsocket.cpp \
     controller/speedcontroller.cpp \
     controller/layoutnode.cpp \
-    controller/switchcontroller.cpp \
     controller/panelboard.cpp \
     controller/basepointcontroller.cpp \
     controller/pointgroup.cpp \

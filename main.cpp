@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     parser.process(app);
 
-   if (parser.isSet(testOption))
+    if (parser.isSet(testOption))
     {
         qDebug() << "Test";
         CommandLine c;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-       HardwareController hardwareControl;
+        HardwareController hardwareControl;
 
         CommandHandler* pCmdHandler;
         PanelBoard *pPanelBoard;
@@ -90,6 +90,8 @@ int main(int argc, char *argv[])
             pInterlock = new InterlockHandling(&hardwareControl);
 
             pCmdHandler = new FullCommandHandler(&hardwareControl, pPanelBoard, pInterlock);
+
+            dynamic_cast<FullCommandHandler*>(pCmdHandler)->test();
         }
 
         QObject::connect(pCmdSocket, SIGNAL(dataReceived(QByteArray)), pCmdHandler, SLOT(receiveData(QByteArray)));

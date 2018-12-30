@@ -1,14 +1,15 @@
 #include "layoutnode.h"
+#include <QDebug>
 
 LayoutNode::LayoutNode() :
-    m_PrevSwitch(0),
-    m_NextSwitch(0),
-    m_PrevPoint(0),
-    m_NextPoint(0),
-    m_PrevNodeLeft(0),
-    m_PrevNodeRight(0),
-    m_NextNodeLeft(0),
-    m_NextNodeRight(0)
+    m_PrevSwitch(nullptr),
+    m_NextSwitch(nullptr),
+    m_PrevPoint(nullptr),
+    m_NextPoint(nullptr),
+    m_PrevNodeLeft(nullptr),
+    m_PrevNodeRight(nullptr),
+    m_NextNodeLeft(nullptr),
+    m_NextNodeRight(nullptr)
 {
 
 }
@@ -19,7 +20,7 @@ void LayoutNode::setNext(LayoutNode *node)
     m_NextNodeLeft = node;
 }
 
-void LayoutNode::setNext(const SwitchController *switchCtrl, LayoutNode *node)
+void LayoutNode::setNext(const IsolatorController *switchCtrl, LayoutNode *node)
 {
     m_NextSwitch = switchCtrl;
     m_NextNodeLeft = node;
@@ -37,7 +38,7 @@ void LayoutNode::setPrev(LayoutNode *node)
     m_PrevNodeLeft = node;
 }
 
-void LayoutNode::setPrev(const SwitchController *switchCtrl, LayoutNode *node)
+void LayoutNode::setPrev(const IsolatorController *switchCtrl, LayoutNode *node)
 {
     m_PrevSwitch = switchCtrl;
     m_PrevNodeLeft = node;
@@ -70,11 +71,19 @@ void LayoutNode::setNodeController(const QString &newController)
     m_NodeController = newController;
 }
 
-LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const BasePointController *pPnt, LayoutNode *pLeft, LayoutNode *pRight) const
+void LayoutNode::show(const QHash<QString, LayoutNode *> &nameTable) const
 {
-    if (pSw==0)
+    qDebug() << nameTable.key(m_PrevNodeLeft, "none") << "\t\t\t" << nameTable.key(m_NextNodeLeft, "none");
+    qDebug() << "\t\t" << nameTable.key(const_cast<LayoutNode*>(this), "none");
+    qDebug() << nameTable.key(m_PrevNodeRight, "none") << "\t\t\t" << nameTable.key(m_NextNodeRight, "none");
+    qDebug() << "  -- ";
+}
+
+LayoutNode *LayoutNode::calcOutput(const IsolatorController *pSw, const BasePointController *pPnt, LayoutNode *pLeft, LayoutNode *pRight) const
+{
+    if (pSw==nullptr)
     {
-        if (pPnt==0)
+        if (pPnt==nullptr)
         {
             return pLeft;
         }
@@ -93,8 +102,9 @@ LayoutNode *LayoutNode::calcOutput(const SwitchController *pSw, const BasePointC
     }
     else
     {
-        if (pSw->state()==SwitchController::eSwitchClosed)
+        if (pSw->state()==IsolatorController::CONNECTED)
         {
+            qDebug() << "Connected";
             return pLeft;
         }
 

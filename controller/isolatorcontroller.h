@@ -14,7 +14,7 @@ public:
 
     void setState(IsolatorController::State newVal);
     void toggle();
-    IsolatorController::State getState() const { return m_State; }
+    IsolatorController::State state() const { return m_State; }
 
 private:
     int m_ControlLine;

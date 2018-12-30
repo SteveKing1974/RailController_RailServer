@@ -5,7 +5,7 @@
 #include <QString>
 
 #include "basepointcontroller.h"
-#include "switchcontroller.h"
+#include "isolatorcontroller.h"
 
 class LayoutNode
 {
@@ -13,11 +13,11 @@ public:
     LayoutNode();
 
     void setNext(LayoutNode* node);
-    void setNext(const SwitchController* switchCtrl, LayoutNode* node);
+    void setNext(const IsolatorController* switchCtrl, LayoutNode* node);
     void setNext(const BasePointController* pointCtl, LayoutNode* leftNode, LayoutNode* rightNode);
 
     void setPrev(LayoutNode* node);
-    void setPrev(const SwitchController* switchCtrl, LayoutNode* node);
+    void setPrev(const IsolatorController* switchCtrl, LayoutNode* node);
     void setPrev(const BasePointController* pointCtl, LayoutNode* leftNode, LayoutNode* rightNode);
 
     LayoutNode* prev();
@@ -26,9 +26,11 @@ public:
     QString nodeController() const;
     void setNodeController(const QString& newController);
 
+    void show(const QHash<QString, LayoutNode*>& nameTable) const;
+
 private:
-    const SwitchController* m_PrevSwitch;
-    const SwitchController* m_NextSwitch;
+    const IsolatorController* m_PrevSwitch;
+    const IsolatorController* m_NextSwitch;
     const BasePointController* m_PrevPoint;
     const BasePointController* m_NextPoint;
 
@@ -39,7 +41,7 @@ private:
 
     QString m_NodeController;
 
-    LayoutNode* calcOutput(const SwitchController* pSw, const BasePointController* pPnt, LayoutNode* pLeft, LayoutNode* pRight) const;
+    LayoutNode* calcOutput(const IsolatorController* pSw, const BasePointController* pPnt, LayoutNode* pLeft, LayoutNode* pRight) const;
 };
 
 #endif // LAYOUTNODE_H

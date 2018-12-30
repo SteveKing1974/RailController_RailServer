@@ -15,6 +15,8 @@ public:
 
     QJsonObject handleCommand(const QJsonObject& data);
 
+    void test();
+
 private:
     HardwareController* m_pController;
     PanelBoard* m_pPanel;
